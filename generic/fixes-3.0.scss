@@ -1,0 +1,366 @@
+$_fix-size: if(variable-exists("fix-size"), $fix-size, 6px);
+$_button-radius: if(variable-exists("button-radius"), $button-radius, 12px);
+
+$_headerbar-size-left: if(variable-exists("headerbar-size-left"), $headerbar-size-left, 9px);
+$_headerbar-size-right: if(variable-exists("headerbar-size-right"), $headerbar-size-right, 9px);
+$_button_fix_multiplier: if(variable-exists("button_fix_multiplier"), if(length($button_fix_multiplier) == 1, nth($button_fix_multiplier, 1), nth($button_fix_multiplier, 2)), 0.25);
+
+
+
+
+headerbar, stack, leaflet,
+.default-decoration, .default-decoration:backdrop,
+.titlebar, .titlebar:backdrop, stack.titlebar,
+.titlebar.default-decoration, .titlebar.default-decoration:backdrop,
+.titlebar .titlebar,
+.default-decoration .default-decoration,
+.titlebar .default-decoration,
+.default-decoration .titlebar
+{
+	window &, .background &, .csd &, .background.csd &, & {
+		&, &:not(.empty):dir(ltr), &:not(.empty), &:dir(ltr),
+		&:not(.empty).start:dir(ltr), &:not(.empty).end:dir(rtl),
+		&:not(.empty).start:dir(rtl), &:not(.empty).end:dir(ltr)
+		{
+			padding-left: 0;
+			padding-right: 0;
+			margin-left: 0;
+			margin-right: 0;
+			button.titlebutton {
+				&.close {
+					margin-left: 0;
+				}
+			}
+			> box,
+			> *:not(button)
+			{
+				&, &.titlebar, & .titlebar, &.left, &.right, &.horizontal {
+					padding-left: 0;
+					padding-right: 0;
+					margin-left: 0;
+					margin-right: 0;
+				}
+			}
+		}
+	}
+
+	// &, & > box {
+	// 	&, &.titlebar, & .titlebar, &.left, &.right {
+	// 		padding-left: 0;
+	// 		padding-right: 0;
+	// 		margin-left: 0;
+	// 		margin-right: 0;
+	// 	}
+	// }
+}
+
+headerbar.titlebar, headerbar.default-decoration, headerbar {
+	// min-height: 6 * $_fix-size;
+	min-height: calc(1.7rem + #{2*$_fix-size});
+	> button {
+		margin-top: calc(#{$_fix-size} * 1);
+		margin-bottom: calc(#{$_fix-size} * 1);
+	}
+	> *:not(button) {
+		> button:not(.titlebutton):not(.close):not(.maximize):not(.minimize)
+		{
+			margin-top: calc(#{$_fix-size} * 1);
+			margin-bottom: calc(#{$_fix-size} * 1);
+		}
+	}
+	*:not(.image-button) {
+		min-height: initial;
+	}
+	windowhandle  {
+		padding-top: calc(#{$_fix-size} * 1);
+		padding-bottom: calc(#{$_fix-size} * 1);
+	}
+}
+
+
+.titlebar, .titlebar:backdrop,
+.default-decoration, .default-decoration:backdrop,
+headerbar.titlebar, headerbar.titlebar.default-decoration,
+headerbar.titlebar:backdrop, headerbar.titlebar.default-decoration:backdrop
+{
+	.background &, .csd &, .background.csd & {
+		&, &:not(.empty):dir(ltr), &:not(.empty), &:dir(ltr) {
+			padding-left: $_headerbar-size-left;
+			padding-right: $_headerbar-size-right;
+			button.titlebutton {
+				font-size: 1rem;
+				&.close {
+					// margin-left: calc(#{$_button_fix_multiplier} * #{$_headerbar-size-left});
+					margin-left: calc(#{$_button_fix_multiplier} * 1em);
+					// margin-left: calc(var(--base) * var(--mult));
+				}
+			}
+		}
+	}
+	dialog.background.csd & {
+		&, &:not(.empty):dir(ltr), &:not(.empty), &:dir(ltr) {
+			padding-left: $_headerbar-size-left;
+		}
+	}
+}
+
+.background,
+.csd,
+.background.csd,
+.start {
+	.top-bar, .bottom-bar {
+		windowhandle, box, windowhandle > box {
+			&, &.vertical {
+				min-height: initial;
+			}
+		}
+	}
+}
+
+button {
+	border-radius: $_button-radius;
+	&.circular {
+		border-radius: 999px;
+	}
+}
+
+// Close button first (layout "close,minimize,maximize:"): the extra close margin above
+// (calc($button_fix_multiplier * 1em)) is meant to separate it from the other buttons, but on
+// margin-left it lands on the window edge side. Move it to the side facing the others.
+// $windowcontrols-hmargin = the theme's own horizontal margin of the window buttons (Lavanda: 4px).
+@if variable-exists("windowcontrols-hmargin") {
+	.background.csd headerbar.titlebar:not(.empty):dir(ltr) box.left > button.titlebutton.close:not(.suggested-action):not(.destructive-action) {
+		margin-left: $windowcontrols-hmargin;
+		margin-right: calc(#{$_button_fix_multiplier} * 1em);
+	}
+}
+
+// Electron client-side titlebar (GTK3, Electron's default here; ClientFrameViewLinux). Electron
+// reads `window.background.csd > headerbar.default-decoration.titlebar`: the titlebar is the
+// headerbar min-height + its vertical padding, with the window buttons centred in it. The first
+// button sits at the frame border inset + the headerbar padding-left + its own margin-left
+// (Chromium FrameViewLayoutLinux / NavButtonProviderGtk), i.e. at padding-left plus an offset
+// fixed by the theme (MacTahoe: the visible dot at padding + 10px; Lavanda: padding + 6px).
+// Most of that offset is the generic close margin (calc($button_fix_multiplier * 1em)), which
+// keeps a short titlebar from getting its close button as close to the side as to the top:
+// $default-decoration-close-margin replaces it (MacTahoe: 0 -> offset 2px). Chromium builds the
+// button under its own `windowcontrols` node, which native GTK3 windows (box.left / box.right)
+// don't have, so only Electron is affected. The node holds just that button, so :first-child
+// can't tell the layouts apart: with the close button last, the margin faces the other buttons,
+// still kept apart by Chromium's own spacing.
+// Vertical button margins only make it scale the buttons down when they don't fit; the generic
+// close margins outrank simple overrides, so the handles are the headerbar's horizontal padding
+// and min-height. Native GTK3 windows without their own headerbar (default decoration) get them
+// as well; GTK3 apps with a headerbar are not affected.
+// For a gap g (close button to the top), with the theme's padding-top and button height:
+// $default-decoration-min-height = 2 * (g - padding-top) + button height (titlebar = 2 * g +
+// button), and $default-decoration-padding = side gap - offset, measured once on a screenshot.
+// g = (native headerbar height - button height) / 2 keeps the titlebar as tall as the headerbars
+// (Lavanda: g 12 -> 6px, 2 * (12 - 6) + 22 = 34px; 46px).
+// :backdrop as well: Electron draws the titlebar inactive while the window is dragged, and the
+// `.titlebar.default-decoration:backdrop` padding rule above outranks these selectors, so the
+// buttons jumped sideways during a move (MacTahoe: 10px -> 4.8px / 7.2px).
+// Concentric corner (as in fixes-4.0): with $titlebar-corner-radius set, the titlebar is at least twice
+// the window radius tall, so the close button's centre falls on the centre of the corner arc
+// (MacTahoe: 18px -> 36px). With $default-decoration-button-offset (the button's distance from
+// the side at padding 0, measured once: MacTahoe 1px with the close margin at 0) the padding is
+// computed from that height, so the side gap is the top gap minus $titlebutton-gap-offset;
+// otherwise $default-decoration-padding is used as given. The computed path also drops the
+// theme's vertical padding (Jasper: `.titlebar.default-decoration { padding: 6px }`), so the
+// titlebar is exactly the min-height and the button sits (min-height - button) / 2 from the top.
+// GtkDialog windows without a headerbar of their own (e.g. LXAppearance) get the same titlebar:
+// their CSS node is `dialog`, not `window`, so with `window.` alone they kept the theme's padding
+// (Jasper: 4px) and height (36px), while the close margin below assumed the computed ones (close
+// button 4px from the side, 7px from the top).
+$_dd-windows: "window.background.csd, dialog.background.csd";
+$_titlebutton-gap-offset: if(variable-exists("titlebutton-gap-offset"), $titlebutton-gap-offset, 1px);
+// $gtk3-titlebutton-size = the visible GTK3 window button when it differs from the GTK4 one
+// (Colloid: the 24px button box vs the 22px GTK4 circle); unset: $titlebutton-size
+$_gtk3-titlebutton-size: if(variable-exists("gtk3-titlebutton-size"), $gtk3-titlebutton-size, if(variable-exists("titlebutton-size"), $titlebutton-size, null));
+// $gtk3-titlebutton-inset = the same horizontal inset of the visible button in GTK3 (see fixes-4.0
+// $titlebutton-inset); unset: 0
+$_gtk3-titlebutton-inset: if(variable-exists("gtk3-titlebutton-inset"), $gtk3-titlebutton-inset, 0);
+// $windowcontrols-inner-margin = the margin between the window buttons (see fixes-4.0); unset:
+// $windowcontrols-hmargin
+$_windowcontrols-inner-margin: if(variable-exists("windowcontrols-inner-margin"), $windowcontrols-inner-margin, if(variable-exists("windowcontrols-hmargin"), $windowcontrols-hmargin, null));
+$_dd-min-height: if(variable-exists("default-decoration-min-height"), $default-decoration-min-height, null);
+@if $_dd-min-height and variable-exists("titlebar-corner-radius") {
+	$_dd-min-height: max($_dd-min-height, 2 * $titlebar-corner-radius) !global;
+}
+$_dd-padding: if(variable-exists("default-decoration-padding"), $default-decoration-padding, null);
+$_dd-computed: $_dd-min-height and variable-exists("titlebutton-size") and variable-exists("default-decoration-button-offset");
+// $default-decoration-titlebutton-size = the circle Electron draws in that titlebar, when it is not
+// the GTK3 one (Colloid: 22px, the native GTK3 default decoration button is 24px); unset: the GTK3 size
+$_dd-titlebutton-size: if(variable-exists("default-decoration-titlebutton-size"), $default-decoration-titlebutton-size, $_gtk3-titlebutton-size);
+@if $_dd-computed {
+	$_dd-padding: max(0px, floor(($_dd-min-height - $_dd-titlebutton-size) / 2) - $_titlebutton-gap-offset - $default-decoration-button-offset) !global;
+}
+
+@if $_dd-padding {
+	#{$_dd-windows} {
+		> headerbar.titlebar.default-decoration {
+			&, &:not(.empty), &:not(.empty):dir(ltr), &:dir(ltr) {
+				&, &:backdrop {
+					padding-left: $_dd-padding;
+					padding-right: $_dd-padding;
+					@if $_dd-computed {
+						padding-top: 0;
+						padding-bottom: 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+@if variable-exists("default-decoration-close-margin") {
+	window.background.csd > headerbar.titlebar.default-decoration {
+		&, &:not(.empty), &:not(.empty):dir(ltr), &:dir(ltr) {
+			&, &:backdrop {
+				windowcontrols > button.titlebutton.close {
+					&, &:backdrop {
+						margin-left: $default-decoration-close-margin;
+					}
+				}
+			}
+		}
+	}
+}
+
+@if $_dd-min-height {
+	#{$_dd-windows} {
+		> headerbar.titlebar.default-decoration {
+			&, &:backdrop {
+				min-height: $_dd-min-height;
+			}
+		}
+	}
+}
+
+// Close button as far from the window side as from the top (minus $titlebutton-gap-offset, 1px
+// by default: an exact match reads as further from the side), as in fixes-4.0.
+// The window buttons are centred vertically, so the top gap follows the headerbar height, and a
+// GTK3 headerbar is as tall as its tallest child: 38px empty, 44px with the theme's 36px buttons
+// and their margin (MacTahoe). The headerbar of .csd windows is fixed at $headerbar-height, the
+// GTK4 one, so the close button sits at the same spot in every GTK3 and GTK4 app. The children
+// fill the headerbar height, so a taller min-height would stretch the buttons; the extra height
+// goes into the headerbar's vertical padding instead.
+// $headerbar-button-height = height of the theme's GTK3 headerbar image button (MacTahoe: 36px).
+// Default decoration: Electron reads that headerbar but ignores button margins, so moving the
+// close button there only affects native GTK3 windows without a headerbar of their own.
+// GTK places the headerbar content at whole pixels, dropping the fraction of the padding
+// (MacTahoe: 4.8px -> 4px), hence the floor(). :backdrop as well: the generic close margin
+// rules above have backdrop variants with a higher specificity.
+
+@mixin _titlebutton-gap($bar-height, $side-left, $side-right) {
+	$gap: floor(($bar-height - $_gtk3-titlebutton-size) / 2) - $_titlebutton-gap-offset;
+
+	&, &:backdrop {
+		// the side facing the other buttons gets the theme's own button margin (as in fixes-4.0)
+		box.left > button.titlebutton.close:first-child:not(.suggested-action):not(.destructive-action) {
+			&, &:backdrop {
+				margin-left: max(-$_gtk3-titlebutton-inset, $gap - floor($side-left) - $_gtk3-titlebutton-inset);
+				@if $_windowcontrols-inner-margin {
+					margin-right: $_windowcontrols-inner-margin;
+				}
+			}
+		}
+		box.right > button.titlebutton.close:last-child:not(.suggested-action):not(.destructive-action) {
+			&, &:backdrop {
+				margin-right: max(-$_gtk3-titlebutton-inset, $gap - floor($side-right) - $_gtk3-titlebutton-inset);
+				@if $_windowcontrols-inner-margin {
+					margin-left: $_windowcontrols-inner-margin;
+				}
+			}
+		}
+	}
+}
+
+@if variable-exists("titlebutton-size") and variable-exists("headerbar-height") and variable-exists("headerbar-button-height") {
+	$_row: $headerbar-button-height + 2 * $_fix-size;
+	$_vpad: max(0px, floor(($headerbar-height - $_row) / 2));
+
+	.background.csd headerbar:not(.default-decoration) {
+		&, &.titlebar:not(.empty):dir(ltr), &.titlebar:not(.empty):dir(rtl) {
+			&, &:backdrop {
+				min-height: $headerbar-height - 2 * $_vpad;
+				padding-top: $_vpad;
+				padding-bottom: $_vpad;
+			}
+		}
+		&.titlebar:not(.empty) {
+			@include _titlebutton-gap($headerbar-height, $_headerbar-size-left, $_headerbar-size-right);
+		}
+	}
+}
+
+@if variable-exists("titlebutton-size") and $_dd-padding and $_dd-min-height {
+	.background.csd > headerbar.titlebar.default-decoration:not(.empty) {
+		@include _titlebutton-gap($_dd-min-height, $_dd-padding, $_dd-padding);
+	}
+}
+
+// Chromium browsers in GTK mode: window buttons in the tab strip. Chromium reads
+// `window.background.csd > headerbar.header-bar.titlebar > windowcontrols > button.titlebutton`
+// (NavButtonProviderGtk), centres the buttons in its own tab strip height, so the top gap is not
+// the theme's, and places the first one at the frame border inset + the headerbar padding-left +
+// its margin-left. Native GTK3 headerbars have no .header-bar class and no windowcontrols node,
+// so only the browsers are affected.
+// Older Electron (ClientFrameViewLinux, Electron <= 42, e.g. FreeTube) reads this padding too:
+// it places its first button at the default-decoration padding + this padding, and ignores
+// button margins. So the browsers' side gap belongs in $chromium-close-margin, with
+// $chromium-titlebar-padding at 0: a padding here moves the close button of those Electron
+// apps by as much (MacTahoe: 10px -> FreeTube 20px from the side instead of 10px).
+// $chromium-close-margin replaces the generic close margin (calc($button_fix_multiplier * 1em)).
+// Measured once on a screenshot (MacTahoe, Chromium 14x: the dot 13px from the top, offset 2px
+// at padding and margin 0 -> margin 10px puts it 12px from the side). The windowcontrols node
+// holds only that button, so with the close button last (on the right) the margin would face
+// the other buttons: such a layout wants the padding instead.
+@if variable-exists("chromium-titlebar-padding") {
+	window.background.csd > headerbar.header-bar.titlebar {
+		&, &:not(.empty), &:not(.empty):dir(ltr), &:dir(ltr) {
+			&, &:backdrop {
+				padding-left: $chromium-titlebar-padding;
+				padding-right: $chromium-titlebar-padding;
+				// the GTK3 headerbar rule below gives .csd headerbars a vertical padding, which
+				// Electron <= 42 adds to its titlebar height (Jasper: 38px -> 42px); the browsers
+				// centre their buttons in the tab strip, so it makes no difference to them
+				padding-top: 0;
+				padding-bottom: 0;
+			}
+		}
+	}
+}
+
+@if variable-exists("chromium-close-margin") {
+	window.background.csd > headerbar.header-bar.titlebar {
+		&, &:not(.empty), &:not(.empty):dir(ltr), &:dir(ltr) {
+			&, &:backdrop {
+				windowcontrols > button.titlebutton.close {
+					&, &:backdrop {
+						margin-left: $chromium-close-margin;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Chromium browsers in GTK mode (Brave, Helium, Chrome; Chromium 154): the tab strip, the active
+// and the inactive tabs all take the `window.background` colour, so only the tab text tells the
+// active tab apart. Inactive tabs use the headerbar title colour
+// (`window.background > headerbar.header-bar.titlebar label.title`), which many themes keep as
+// strong as the body text (MacTahoe Dark: even stronger), so every tab looks active.
+// Chromium styles a window without .csd; real GTK3 and Electron windows always carry .csd, so
+// these rules reach only the browsers. Only the toolkit-wide colours are used, so any theme can opt in:
+// $chromium-inactive-tab-dim = how far the inactive tab text moves from the text colour towards
+// the background (0 = unchanged, MacTahoe: 0.55); the backdrop (unfocused window) one goes 0.1 further.
+@if variable-exists("chromium-inactive-tab-dim") {
+	window.background:not(.csd) > headerbar.titlebar label.title {
+		color: unquote("mix(@theme_fg_color, @theme_bg_color, #{$chromium-inactive-tab-dim})");
+	}
+
+	window.background:not(.csd) > headerbar.titlebar:backdrop label.title:backdrop {
+		color: unquote("mix(@theme_fg_color, @theme_bg_color, #{min(1, $chromium-inactive-tab-dim + 0.1)})");
+	}
+}

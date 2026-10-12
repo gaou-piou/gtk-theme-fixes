@@ -1,0 +1,110 @@
+.background.csd {
+	&.nautilus-window,
+	&.nautilus-file-chooser {
+		.nautilus-grid-view,
+		.nautilus-list-view {
+			listview.view {
+				> row.activatable {
+					> cell {
+						> widget.nautilus-view-cell {
+							padding: $space-size / 2 $space-size * 1.5;
+						}
+					}
+				}
+			}
+		}
+
+
+		.nautilus-query-editor {
+			// search entry
+			> menubutton > button.image-button {
+				min-width: 24px;
+				min-height: 24px;
+				padding: $space-size / 2;
+				margin-right: $space-size / 2 - 8px;
+
+				&:checked image {
+					color: on($indicator);
+				}
+			}
+
+			> text,
+			> box,
+			> menubutton {
+				margin: $space-size / 2 0;
+			}
+		}
+
+		.nautilus-query-editor-tag {
+			background-color: $divider;
+
+			> button.image-button {
+				margin: 0;
+				padding: 0;
+			}
+		}
+
+		.nautilus-pathbar {
+			/* background-color: if($variant == 'light', $grey-100, $titlebar-fill); */
+			background-color: $titlebar-fill;
+
+			border-radius: $corner-radius;
+			margin: $space-size 0;
+		}
+
+		.nautilus-path-button {
+			margin: 0 $space-size / 2;
+			border-radius: $corner-radius;
+			@extend %button-flat;
+
+			&.current-dir {
+				color: $primary;
+
+				&:hover,
+				&:active {
+					background: none;
+					box-shadow: none;
+				}
+			}
+
+			&:first-child {
+				margin-left: 0;
+			}
+		}
+
+		.nautilus-view-cell {
+			clamp box {
+				margin: 0;
+				border-spacing: 0;
+			}
+		}
+
+		.nautilus-file-chooser gridview.view {
+			background-color: transparent;
+			margin: 10px 5px;
+			padding: 10px 5px;
+		}
+
+		.nautilus-file-chooser columnview.view,
+		row.activatable > cell {
+			background-color: transparent;
+			padding: 1px 10px;
+		}
+
+		.nautilus-progress-indicator popover label {
+			color: $text-secondary;
+		}
+
+		.nautilus-progress-indicator popover image {
+			color: $text-secondary;
+		}
+	}
+}
+// Headerbar entry + button linked boxes (Nautilus' location entry with its Cancel button, Ctrl+L):
+// upstream rounds the entry fully there (`headerbar .linked > entry { border-radius: $corner-radius }`)
+// but leaves the button the linked corners, square on the entry side, so the hovered button showed
+// a square edge next to a round entry (2026-10-12). Detach it like the other headerbar buttons
+headerbar .linked:not(.vertical) > entry:not(:only-child) + button {
+	border-radius: $corner-radius;
+	margin-left: $space-size;
+}

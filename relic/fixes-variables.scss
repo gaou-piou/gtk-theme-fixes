@@ -1,0 +1,61 @@
+// Radiuses
+$window-radius: 18px;
+$modal-radius: 12px;
+$corner-radius: 14px;
+$menu-radius: $corner-radius;
+$menuitem-radius: $menu-radius;
+$circular-radius: 9999px;
+
+
+$fix-size: 4px;
+
+$headerbar-size-left: 1.6 * $fix-size;
+$headerbar-size-right: 2 * $fix-size;
+
+$button_fix_multiplier: 0.6 0.5;
+
+// Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
+$headerbar-tab-margin: 6px;
+// Vertical margin the theme puts on headerbar buttons (collapsed toolbars, e.g. Ptyxis with tabs)
+$headerbar-button-margin: 6px;
+
+// Close button first (layout "close,minimize,maximize:"): its margin on the window edge side,
+// measured so it sits as far from the side as from the top
+$windowcontrols-hmargin: 3px;
+// Electron titlebar and GTK3 windows without a headerbar (LXAppearance): GTK3 default decoration.
+// Measured 2026-10-12 (Electron 44, LXAppearance, Catppuccin): 56px, the min-height plus the
+// theme's 6px vertical padding, the 16px circle 20px from the top, 15px (Electron) and 13px from
+// the side. With $default-decoration-button-offset (the circle's distance from the side at
+// padding 0 in Electron: 15px at 8px -> 7px) the generic rules drop that padding: 44px like the
+// X11 frames, the circle 14px from the top and 13px from the side
+$default-decoration-padding: 8px;
+$default-decoration-min-height: 44px;
+$default-decoration-button-offset: 7px;
+
+// X11 titlebars mutter draws (mutter-x11-frames) and GTK4 windows without a headerbar, measured
+// 2026-10-12 on SourceGit: the default decoration was 34px (Catppuccin, Vague: 48px), the close
+// circle further from the side than from the top. 44px like the Electron titlebar, the circle
+// 1px closer to the side than to the top. The 16px circle is the button's icon; its vertical
+// padding (9px in Everforest & co., 0 in Catppuccin and Vague) goes, so the button is the circle
+// in every theme here
+$titlebutton-size: 16px;
+$titlebutton-default-decoration-vpadding: 0;
+$titlebutton-inset: 0;
+$headerbar-default-decoration-height: 44px;
+$titlebutton-box-height: 16px;
+$titlebar-corner-radius: $window-radius;
+
+// Window buttons in GTK4 headerbars (Ptyxis etc.), measured 2026-10-12: the close circle 16px from
+// the top and 9px from the side, close->minimize 14px vs minimize->maximize 6px, and in
+// Catppuccin/Vague the window controls 48px tall, stretching the headerbar buttons (34x36).
+// The 16px circle in a 46px row like the other headerbar buttons (34px + 2 * 6px margin):
+// margin (46 - 16) / 2, no padding; the close button 1px closer to the side than to the top
+// (generic close gap rules) and as far from its neighbour as the others are (no own margin)
+$headerbar-height: 46px;
+// GTK3 headerbars (gnome-terminal etc.) as well, measured 2026-10-12: 42px, the close circle 8px
+// from the side and 13px from the top, close->minimize 13px vs 6px. Their image buttons are
+// 34px like the GTK4 ones, so the generic GTK3 rules make the bar 46px and place the close button
+$headerbar-button-height: 34px;
+$windowcontrols-margin: 15px;
+$windowcontrols-vpadding: 0;
+$windowcontrols-inner-margin: 0;

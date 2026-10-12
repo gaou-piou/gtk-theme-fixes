@@ -1,0 +1,465 @@
+$_space-size: if(variable-exists("space-size"), $space-size, 6px);
+$_fix-size: if(variable-exists("fix-size"), $fix-size, 4px);
+$_button-radius: if(variable-exists("button-radius"), $button-radius, 12px);
+
+$_headerbar-size-left: if(variable-exists("headerbar-size-left"), $headerbar-size-left, 9px);
+$_headerbar-size-right: if(variable-exists("headerbar-size-right"), $headerbar-size-right, 9px);
+$_button_fix_multiplier: if(variable-exists("button_fix_multiplier"), if(length($button_fix_multiplier) == 1, nth($button_fix_multiplier, 1), nth($button_fix_multiplier, 1)), 0.25);
+
+
+headerbar, windowcontrols, windowhandle, windowhandle > box, headerbar windowhandle > box, .titlebar {
+	.background &, .csd &, .view &, .background.csd &
+	{
+		&, &.start, &.header-bar,
+		& windowcontrols
+		&:not(.empty):dir(ltr), &:not(.empty), &:dir(ltr),
+		&:not(.empty).start:dir(ltr), &:not(.empty).end:dir(rtl),
+		&:not(.empty).start:dir(rtl), &:not(.empty).end:dir(ltr) {
+			padding-left: 0;
+			padding-right: 0;
+			margin-left: 0;
+			margin-right: 0;
+			// min-height: calc(1.7rem + #{2*$_fix-size});
+			button.image-button {
+				font-size: 1rem;
+				// &:not(.close):not(.minimize):not(.maximize) {
+				// 	min-width: calc(#{$_fix-size} * 5.5);;
+				// 	min-height: calc(#{$_fix-size} * 5.5);;
+				// 	padding: $_space-size;
+				// }
+				&.close {
+					// margin-left: calc(#{$_button_fix_multiplier} * #{$_headerbar-size-left});
+					margin-left: calc(#{$_button_fix_multiplier} * 1em);
+				}
+			}
+
+			// splitbutton {
+			// 	&, &.flat, &.image-button {
+			// 		min-height: initial;
+			// 		border-radius: $_button-radius;
+			// 		> button {
+			// 			border-radius: $_button-radius;
+			// 		}
+			// 		> menubutton > button {
+			// 			&, &.toggle {
+			// 				border-radius: $_button-radius;
+			// 				min-width: calc(#{$_fix-size} * 5.5);;
+			// 				min-height: calc(#{$_fix-size} * 5.5);;
+			// 				padding: $_space-size;
+			// 			}
+			// 		}
+			// 	}
+			// }
+		}
+	}
+}
+
+headerbar {
+	.background &, .csd &, .view &, .background.csd &, & {
+		&, &.start, &.header-bar, &.titlebar, &.default-decoration,
+		&:not(.empty):dir(ltr), &:not(.empty), &:dir(ltr),
+		&:not(.empty).start:dir(ltr), &:not(.empty).end:dir(rtl),
+		&:not(.empty).start:dir(rtl), &:not(.empty).end:dir(ltr) {
+			padding-left: $_headerbar-size-left;
+			padding-right: $_headerbar-size-right;
+		}
+	}
+
+}
+
+// .background,
+// .csd,
+// .background.csd,
+// .start {
+// 	.top-bar, .bottom-bar {
+// 		windowhandle, box, windowhandle > box {
+// 			&, &.vertical {
+// 				min-height: 0;
+// 			}
+// 		}
+// 	}
+// }
+
+// Nautilus list spacing
+// $nautilus-sidebar-spacing: false for themes that draw their own sidebar selection, sized to their
+// own row geometry (Orchis: a border-image tab joining the content, 54px labels on rows overlapping
+// by 8px). These rules outrank theme selectors and stretched that image (2026-10-09). Unset: true.
+$_nautilus-sidebar-spacing: if(variable-exists("nautilus-sidebar-spacing"), $nautilus-sidebar-spacing, true);
+
+@if $_nautilus-sidebar-spacing {
+window.background.csd.nautilus-window {
+	// toolbarview {
+	// 	headerbar {
+	// 		padding-right: $_headerbar-size-right;
+	// 	}
+	// }
+	// .content-pane toolbarview {
+	// 	headerbar {
+	// 		windowhandle > box {
+	// 			padding-top: 0;
+	// 			padding-bottom: 0;
+	// 		}
+	// 		.nautilus-path-button {
+	// 			min-height: initial;
+	// 			margin-top: 0;
+	// 			margin-bottom: 0;
+	// 		}
+	// 		.nautilus-pathbar {
+	// 			> menubutton {
+	// 				margin-top: 0;
+	// 				margin-bottom: 0;
+	// 			}
+	// 		}
+	// 	}
+	// }
+	
+	.navigation-sidebar {
+		> row {
+			min-height: 32px;
+		}
+		row.activatable {
+			margin-top: calc(#{$_fix-size} / 2);
+			margin-bottom: calc(#{$_fix-size} / 2);
+			// fix width on mounts
+			revealer.sidebar-revealer {
+				// padding-left: $_fix-size;
+				padding-right: $_fix-size;
+			}
+			// fix height on mounts
+			button.image-button.sidebar-button {
+				margin: 0;
+				padding: 0;
+			}
+			label {
+				min-height: 20px;
+			}
+		}
+	}
+}
+}
+
+// button {
+// 	border-radius: $_button-radius;
+// 	&.circular {
+// 		border-radius: 999px;
+// 	}
+// }
+
+// The theme is loaded at USER priority (~/.config/gtk-4.0/gtk.css), above the
+// APPLICATION priority of app stylesheets, so it overrides any CSS an app ships.
+// The rules below restore app intent for common patterns in a theme-agnostic way.
+
+// Tab bar embedded in a header bar (AdwTabBar with .inline, e.g. Black Box).
+// libadwaita expects the tab bar to supply the row height while the app zeroes the
+// headerbar box padding; the app rule loses here, so both paddings stack
+// (Colloid: 6 + 6 + 34 + 6 + 6 = 58px instead of 46px). Keep the theme's headerbar
+// spacing, so the row matches every other headerbar, and drop the tab bar's own.
+// Tabs stretch to the row height, so their vertical margin is what sizes them:
+// $headerbar-tab-margin = (headerbar row height - headerbar button height) / 2,
+// i.e. 0 when the headerbar box padding provides the spacing (Colloid, Orchis),
+// the buttons' vertical margin when they carry it (Everforest-style themes: 6px).
+$_headerbar-tab-margin: if(variable-exists("headerbar-tab-margin"), $headerbar-tab-margin, 0);
+
+headerbar tabbar.inline {
+	tabbox,
+	tabbox > tabboxchild,
+	.start-action,
+	.end-action {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	// a tabbox border (Lavanda: border-bottom 1px) adds to the row height, and the
+	// window buttons next to the tab bar stretch with it (Lavanda: 24x25, not round)
+	// libadwaita's `tabbar tabbox { min-height: 34px }` assumes 34px headerbar buttons; with
+	// smaller ones (Lavanda: 32px) it makes the row taller than the buttons and stretches them.
+	// The headerbar buttons size the row; the tabs stretch to it.
+	tabbox {
+		min-height: 0;
+		border-top-width: 0;
+		border-bottom-width: 0;
+	}
+
+	tab {
+		margin-top: $_headerbar-tab-margin;
+		margin-bottom: $_headerbar-tab-margin;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+}
+
+// Window buttons taller than the other headerbar buttons: header bar children fill the
+// row height, so when the window controls (button + vertical margin) set it, every other
+// headerbar button is stretched and stops being square (Lavanda: 32x34, Catppuccin: 34x36).
+// $windowcontrols-margin = vertical margin that makes the window controls as tall as a
+// headerbar button with its margin: (button height + 2 * its margin - control height) / 2
+// (Lavanda: (32 - 24) / 2 = 4px, Catppuccin: (34 + 12 - 16) / 2 = 15px). Unset: theme value.
+// Check with: tools/gtk-theme-check.py ref -t <theme> --dump --box (image-button h == w).
+// $windowcontrols-vpadding = vertical padding of the window buttons, when the theme's own is to go and
+// $windowcontrols-margin alone sets their height (Fausto-Korpsvart: Everforest & co. pad the 16px
+// circle 9px, Catppuccin and Vague give it a 16px margin; both 0 + 15px -> 46px)
+@if variable-exists("windowcontrols-margin") {
+	headerbar windowcontrols > button:not(.suggested-action):not(.destructive-action) {
+		margin-top: $windowcontrols-margin;
+		margin-bottom: $windowcontrols-margin;
+		@if variable-exists("windowcontrols-vpadding") {
+			padding-top: $windowcontrols-vpadding;
+			padding-bottom: $windowcontrols-vpadding;
+		}
+	}
+}
+
+// The extra close margin above (calc($button_fix_multiplier * 1em)) separates the close button
+// from the others when it is last (layout ":minimize,maximize,close"). When it comes first
+// (layout "close,minimize,maximize:") that margin lands on the window edge side instead, so the
+// button sits further from the side than from the top. Move it to the side facing the others.
+// $windowcontrols-hmargin = the theme's own horizontal margin of the window buttons (Lavanda: 4px).
+@if variable-exists("windowcontrols-hmargin") {
+	.background.csd headerbar windowcontrols.start > button.image-button.close:not(.suggested-action):not(.destructive-action) {
+		margin-left: $windowcontrols-hmargin;
+		margin-right: calc(#{$_button_fix_multiplier} * 1em);
+	}
+}
+
+// Close button as far from the window side as from the top (minus $titlebutton-gap-offset, 1px
+// by default: an exact match reads as further from the side). The window buttons are centred
+// vertically, so the top gap is (titlebar height - button height) / 2 and depends on the bar,
+// which CSS cannot read: it is computed here per kind of titlebar from the theme's heights.
+// The collapsed headerbar (toolbarview .collapse-spacing) keeps the same top gap: the 3px box
+// padding above it makes up for its lower height.
+// GTK places the headerbar content at whole pixels, dropping the fraction of the padding
+// (MacTahoe: 4.8px -> 4px), hence the floor().
+// Ancestor classes outrank the generic `.background.csd headerbar:not(.empty):dir(ltr)` close
+// margin above. Only the outer button moves: the margin towards the others stays.
+// $titlebutton-size = height of the visible window button (MacTahoe: 16px),
+// $headerbar-height = the theme's headerbar height (MacTahoe: 48px),
+// $headerbar-default-decoration-height = same for windows without their own headerbar,
+// also the X11 frames mutter draws for GTK2/X11 apps (MacTahoe: 32px),
+// $titlebutton-box-height = height of the window button box when the visible circle is a child
+// of it (Colloid: the 22px image in a 34px button, padding 6px 0); unset: $titlebutton-size.
+// Concentric corner: a titlebar without app buttons is short enough for the close button to
+// crowd the rounded window corner. With $titlebar-corner-radius set, it is at least twice the radius
+// tall, so the button's centre falls on the centre of the corner arc: gap = radius - button / 2
+// (MacTahoe: 18px -> 36px, gap 10px). Taller headerbars already clear the corner.
+$_titlebutton-gap-offset: if(variable-exists("titlebutton-gap-offset"), $titlebutton-gap-offset, 1px);
+$_default-decoration-height: if(variable-exists("headerbar-default-decoration-height"), $headerbar-default-decoration-height, null);
+$_titlebutton-box-height: if(variable-exists("titlebutton-box-height"), $titlebutton-box-height, if(variable-exists("titlebutton-size"), $titlebutton-size, null));
+// $titlebutton-inset = how far the visible window button sits inside the button box, horizontally:
+// flat themes show only the glyph (Orchis: a 10px glyph 14px into a 36px button); unset: 0.
+// The margin may go negative by as much: the invisible part of the button may reach into the
+// headerbar padding, the visible part never does
+$_titlebutton-inset: if(variable-exists("titlebutton-inset"), $titlebutton-inset, 0);
+// $windowcontrols-inner-margin = the margin between the window buttons, given to the close button
+// on the side facing the others, when $windowcontrols-hmargin means something else: in
+// Fausto-Korpsvart it is the GTK3 close margin on the window edge side (3px), the buttons have
+// none of their own (close->minimize was 9px vs 6px). Unset: $windowcontrols-hmargin
+$_windowcontrols-inner-margin: if(variable-exists("windowcontrols-inner-margin"), $windowcontrols-inner-margin, if(variable-exists("windowcontrols-hmargin"), $windowcontrols-hmargin, null));
+// $titlebutton-default-decoration-inset = the same inset in the default decoration, when its
+// buttons are a different box (Orchis: 24x24 with no padding, the glyph 7px in, not 14px: the
+// close button sat 9px from the side and 17px from the top in the X11 frames mutter draws for
+// SourceGit, 2026-10-12); unset: $titlebutton-inset
+$_titlebutton-dd-inset: if(variable-exists("titlebutton-default-decoration-inset"), $titlebutton-default-decoration-inset, $_titlebutton-inset);
+// $titlebutton-default-decoration-size = the visible window button in the default decoration, when
+// it is not $titlebutton-size (Lavanda: the 22px circle, 24px in its headerbars); unset: $titlebutton-size
+$_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size"), $titlebutton-default-decoration-size, if(variable-exists("titlebutton-size"), $titlebutton-size, null));
+// $titlebutton-default-decoration-vpadding = vertical padding of the window buttons there, when the
+// theme's own (spacing it gives them as padding, not margin) is to go: the margin below then sets
+// the height alone (Fausto-Korpsvart themes: 9px of a 34px box around the 16px circle -> 0);
+// $titlebutton-box-height is the box without it. Unset: the theme's padding
+@if $_default-decoration-height and variable-exists("titlebar-corner-radius") {
+	$_default-decoration-height: max($_default-decoration-height, 2 * $titlebar-corner-radius) !global;
+}
+
+@mixin _titlebutton-gap($bar-height, $inset: $_titlebutton-inset, $size: $titlebutton-size) {
+	$gap: floor(($bar-height - $size) / 2) - $_titlebutton-gap-offset;
+
+	// the side facing the other buttons gets the theme's own button margin, so the close button
+	// is as far from its neighbour as the others are from each other (the $windowcontrols-hmargin
+	// rule above adds calc($button_fix_multiplier * 1em) there: Jasper 19px vs 14px)
+	windowcontrols.start:not(.empty) > button.image-button.close:first-child:not(.suggested-action):not(.destructive-action) {
+		margin-left: max(-$inset, $gap - floor($_headerbar-size-left) - $inset);
+		@if $_windowcontrols-inner-margin {
+			margin-right: $_windowcontrols-inner-margin;
+		}
+	}
+	windowcontrols.end:not(.empty) > button.image-button.close:last-child:not(.suggested-action):not(.destructive-action) {
+		margin-right: max(-$inset, $gap - floor($_headerbar-size-right) - $inset);
+		@if $_windowcontrols-inner-margin {
+			margin-left: $_windowcontrols-inner-margin;
+		}
+	}
+}
+
+@if variable-exists("titlebutton-size") {
+	@each $ctx in ".background", ".csd" {
+		@if variable-exists("headerbar-height") {
+			#{$ctx} headerbar {
+				@include _titlebutton-gap($headerbar-height);
+			}
+		}
+		// X11 titlebars mutter draws (mutter-x11-frames, GTK4 + libadwaita) and GTK4 windows without
+		// a headerbar: set_titlebar() makes the header a direct child of the window with the
+		// .titlebar class, so theme rules of the form `window > .titlebar headerbar.default-decoration`
+		// and `window > headerbar.titlebar.default-decoration` outrank `.background headerbar...`
+		// (Colloid: its box padding 3px stayed, the bar was 50px instead of 44px, 2026-10-12).
+		// Same selectors here, later in the file, so these rules win.
+		@if $_default-decoration-height {
+			#{$ctx} headerbar.default-decoration,
+			window > .titlebar > headerbar.default-decoration,
+			window > headerbar.titlebar.default-decoration {
+				@if variable-exists("titlebar-corner-radius") {
+					min-height: $_default-decoration-height;
+
+					// the window buttons fill the bar height minus their vertical margin, which
+					// the theme sizes for its own height (Jasper: 7px for 36px): keep them square.
+					// The margin alone sets the height, so the box loses its vertical padding
+					// (Colloid: 3px, the bar was 58px instead of 40px; 0 in Jasper and MacTahoe)
+					> windowhandle > box {
+						padding-top: 0;
+						padding-bottom: 0;
+					}
+					// nor any vertical spacing on the window controls themselves (Fluent: margin
+					// 3px, 50px; Graphite: padding 6px, 56px)
+					windowcontrols {
+						margin-top: 0;
+						margin-bottom: 0;
+						padding-top: 0;
+						padding-bottom: 0;
+					}
+					windowcontrols > button:not(.suggested-action):not(.destructive-action) {
+						margin-top: floor(($_default-decoration-height - $_titlebutton-box-height) / 2);
+						margin-bottom: floor(($_default-decoration-height - $_titlebutton-box-height) / 2);
+						@if variable-exists("titlebutton-default-decoration-vpadding") {
+							padding-top: $titlebutton-default-decoration-vpadding;
+							padding-bottom: $titlebutton-default-decoration-vpadding;
+						}
+					}
+				}
+				@include _titlebutton-gap($_default-decoration-height, $_titlebutton-dd-inset, $_titlebutton-dd-size);
+			}
+		}
+	}
+}
+
+// Collapsed toolbar spacing: AdwToolbarView with stacked bars (e.g. Ptyxis with tabs,
+// headerbar + search bar) marks them .collapse-spacing. libadwaita then shrinks a headerbar
+// to button height + 2 * 3px (40px) and the tab bar padding to 3px; the themes keep the full
+// height (Colloid even doubles it: headerbar padding + box padding). Rebuild that geometry.
+// When the theme carries the headerbar spacing on the buttons instead of the box padding,
+// the excess is taken back from the box with a negative margin:
+// $headerbar-button-margin = vertical margin the theme puts on every headerbar button and on
+// the window controls, not an app-specific one (0 for Colloid/Orchis/Graphite/MacTahoe,
+// 6px Everforest-style, Magnetic, Jasper).
+// The other half of libadwaita's geometry is the 3px padding of the bars box itself, so a
+// collapsed headerbar keeps its buttons 6px from the edge, like a normal one: without it the
+// buttons sit 3px from the window top (GNOME Extensions with its hidden search bar).
+$_collapse-spacing: 3px;
+$_headerbar-button-margin: if(variable-exists("headerbar-button-margin"), $headerbar-button-margin, 0);
+$_collapse-tab-padding-top: if(variable-exists("collapse-tab-padding-top"), $collapse-tab-padding-top, 0);
+
+toolbarview > .top-bar,
+toolbarview > .bottom-bar {
+	.collapse-spacing {
+		padding-top: $_collapse-spacing;
+		padding-bottom: $_collapse-spacing;
+
+		headerbar {
+			min-height: 0;
+			padding-top: 0;
+			padding-bottom: 0;
+
+			> windowhandle > box {
+				padding-top: max(0px, $_collapse-spacing - $_headerbar-button-margin);
+				padding-bottom: max(0px, $_collapse-spacing - $_headerbar-button-margin);
+				margin-top: min(0px, $_collapse-spacing - $_headerbar-button-margin);
+				margin-bottom: min(0px, $_collapse-spacing - $_headerbar-button-margin);
+			}
+		}
+
+		// only remove spacing: forcing libadwaita's 3px tabbox padding makes some themes taller.
+		// Themes whose tabs keep a gap of their own above them (Orchis: folder tabs, 4px above,
+		// flush with the content below) give it back with $collapse-tab-padding-top; zeroing it
+		// glued the tabs to the headerbar in Ptyxis (2026-10-09)
+		tabbar {
+			tabbox > tabboxchild {
+				padding-top: $_collapse-tab-padding-top;
+				padding-bottom: 0;
+			}
+
+			tab {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+// Ptyxis moves that padding inside its .visual-bell-area (app CSS, same selector minus the
+// class); the rule above outranks it at USER priority and would add the 3px twice
+fullscreenbox > toolbarview > revealer.top-bar > windowhandle > box.collapse-spacing {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+// Black Box packs its end buttons (new tab, exit fullscreen, menu) in its own GtkBox with
+// spacing 0, not in the AdwHeaderBar start/end boxes that every theme spaces (6px in all
+// families and Adwaita). With non-flat headerbar buttons (Lavanda) they touch each other.
+// Scoped to the app: other apps set the GtkBox spacing property themselves (Contacts,
+// Simple Scan: 6), which CSS cannot see, so a rule for every headerbar box would double it.
+// Hidden buttons are skipped by the sibling match. Unset: 6px.
+$_headerbar-button-spacing: if(variable-exists("headerbar-button-spacing"), $headerbar-button-spacing, 6px);
+
+#blackbox-main-window headerbar.custom-headerbar box:not(.linked) {
+	> button + button,
+	> button + menubutton,
+	> menubutton + button {
+		margin-left: $_headerbar-button-spacing;
+	}
+}
+
+// Black Box: context-aware header bar (root / ssh). The app's own rules lose to the
+// theme's `headerbar.flat { background: none }`; the colours are defined only by the app.
+#blackbox-main-window {
+	&.context-root headerbar.custom-headerbar {
+		background-color: unquote("@root_context_color");
+	}
+	&.context-ssh headerbar.custom-headerbar {
+		background-color: unquote("@ssh_context_color");
+	}
+}
+
+// Split buttons in flat toolbars (e.g. Ptyxis' new tab button): libadwaita gives each half
+// the full button radius there (%flat_split_button), since only the hovered half has a
+// background. Themes keeping the linked-button rule (Jasper, Colloid, Graphite, Fluent,
+// Lavanda, Catppuccin) leave the inner side square: the hover background stops flat at the
+// separator. Same contexts and exclusions as libadwaita. The radius is inherited from the
+// splitbutton, which every theme gives its button radius, so no per-theme value is needed;
+// the menubutton passes it on to its button.
+$_toolbar-contexts: "headerbar", ".toolbar", "actionbar > revealer > box", "searchbar > revealer > box";
+
+@each $ctx in $_toolbar-contexts {
+	#{$ctx} splitbutton:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+		> button,
+		> menubutton,
+		> menubutton > button {
+			border-radius: inherit;
+		}
+	}
+}
+
+// Column headers (Nautilus' list view: Name, Size, Modified): the themes keep GTK's square header
+// buttons, while the rows below are rounded (Nautilus: 9px), so a hovered header was the only
+// square highlight in the list (2026-10-12). Rounded while highlighted only: the headers' own
+// borders are the column separators (Orchis also a bottom line), which a permanent radius would
+// bend; the highlighted one drops them, as rows have none.
+// $columnview-header-radius = the radius of the rows below it (Colloid: 6px, Fluent: 10px);
+// unset: Nautilus' 9px
+$_columnview-header-radius: if(variable-exists("columnview-header-radius"), $columnview-header-radius, 9px);
+
+columnview.view > header > button {
+	&:hover,
+	&:active {
+		border-radius: $_columnview-header-radius;
+		border-color: transparent;
+	}
+}
