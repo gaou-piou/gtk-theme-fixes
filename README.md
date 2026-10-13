@@ -1,6 +1,6 @@
 # relic-gtk-fixes
 
-Geometry and consistency fixes for GTK 3/4 themes, used by the `relic-*-gtk-theme` packages in the
+Geometry and consistency fixes for GTK 3/4 and GNOME Shell themes, used by the `relic-*-gtk-theme` packages in the
 AUR: maintained builds of the Catppuccin, Everforest, Gruvbox, Kanagawa, Material, Nightfox, Osaka,
 Rosé Pine, Tokyonight and Vague GTK themes by Fausto-Korpsvart, whose repositories are archived.
 
@@ -14,6 +14,7 @@ The packages compile these files into the upstream SCSS sources; nothing here is
 | `generic/fixes-4.0.scss` | Generic GTK 4 fixes (headerbars, window buttons, X11 frames, column headers, …) |
 | `relic/fixes-variables.scss` | The relic themes' values for the generic fixes (measured geometry) |
 | `relic/local-fixes-4.0.scss` | Fixes specific to these themes (Nautilus pathbar, linked entries, …) |
+| `relic/local-fixes-gnome-shell.scss` | GNOME Shell fixes for these themes (notification banners, …) |
 
 The generic fixes read optional variables; a theme sets them in its variables file to switch a fix
 on and give it its measurements. Each variable is documented where `fixes-*.scss` reads it.
@@ -25,6 +26,7 @@ on and give it its measurements. Each variable is documented where `fixes-*.scss
   (`mutter-x11-frames`) and Electron/Chromium titlebars.
 - Titlebars without a headerbar (Electron, LXAppearance, X11 frames): 44px.
 - Nautilus: pathbar, location entry, list column headers.
+- GNOME Shell: notification banners no longer jump down on hover.
 
 ## Releases
 

@@ -1,0 +1,14 @@
+// GNOME Shell fixes shared by the Fausto-Korpsvart themes, appended to each gnome-shell entry file
+// (themes/src/main/gnome-shell/*.scss), after the theme's own partials.
+
+// Notification banners jumped down on hover (2026-10-13, GNOME 51): widgets-48-0 imports
+// widgets-46-0/notifications, whose banner and :hover/:active get `margin: 20px`, then its own
+// notifications, which set the banner margin to 12px 8px 8px but no margin on :hover. So the hover
+// kept 20px: the banner moved 8px down and 12px sideways. Same margin in every state.
+.notification-banner {
+	&:hover,
+	&:active,
+	&:focus {
+		margin: 12px 8px 8px;
+	}
+}
