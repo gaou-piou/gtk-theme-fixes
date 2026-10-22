@@ -112,3 +112,11 @@ headerbar .linked:not(.vertical) > entry:not(:only-child) + button {
 	border-radius: $corner-radius;
 	margin-left: $space-size;
 }
+
+// Nautilus' file chooser (the portal's Open/Save dialog, Nautilus 47+) is the Nautilus window with
+// another class. The theme styles only `.nautilus-window` (sidebar and content panes, places
+// sidebar, views) and so do the generic sidebar fixes: the chooser got a flat window with tighter
+// sidebar rows (2026-10-22). Every `.nautilus-window` rule reaches it too.
+.nautilus-file-chooser {
+	@extend .nautilus-window !optional;
+}
