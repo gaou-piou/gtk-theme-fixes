@@ -85,6 +85,10 @@ headerbar {
 // own row geometry (Orchis: a border-image tab joining the content, 54px labels on rows overlapping
 // by 8px). These rules outrank theme selectors and stretched that image (2026-10-09). Unset: true.
 $_nautilus-sidebar-spacing: if(variable-exists("nautilus-sidebar-spacing"), $nautilus-sidebar-spacing, true);
+// $nautilus-sidebar-row-height: rows tall enough for the theme's row radius (Graphite: 14px radius
+// on 32px rows read as pills, 2026-10-20); one height for all rows, with or without the eject
+// button. Unset: 32px.
+$_nautilus-sidebar-row-height: if(variable-exists("nautilus-sidebar-row-height"), $nautilus-sidebar-row-height, 32px);
 
 @if $_nautilus-sidebar-spacing {
 window.background.csd.nautilus-window {
@@ -115,7 +119,7 @@ window.background.csd.nautilus-window {
 	
 	.navigation-sidebar {
 		> row {
-			min-height: 32px;
+			min-height: $_nautilus-sidebar-row-height;
 		}
 		row.activatable {
 			margin-top: calc(#{$_fix-size} / 2);
@@ -445,6 +449,52 @@ $_toolbar-contexts: "headerbar", ".toolbar", "actionbar > revealer > box", "sear
 			border-radius: inherit;
 		}
 	}
+}
+
+// Nautilus list view side inset: Nautilus pads its columnview 24px on both sides (and keeps the
+// rubber band area wide with -24px on the list, +24px on the rows), while the sidebar rows sit
+// $space-size from theirs: the file list read as floating in the middle (Graphite: rows 30px
+// in, header 24px, sidebar 6px; Jasper: 0px, 2026-10-20). Same trick with the theme's inset, so
+// the header, the rows and the sidebar line up. Overrides the theme's own row/list margins.
+// $nautilus-list-inset = how far the selected sidebar row sits from the sidebar sides, measured in
+// the REAL Nautilus (its sidebar is `placessidebar`, which an offscreen GtkListBox misses: Fluent
+// 12px there, 6px offscreen); unset: Nautilus' 24px, untouched.
+// Scoped to the Nautilus windows (and its file chooser, same list): themes style these nodes with
+// long selectors (Magnetic: `.background.csd.nautilus-window .nautilus-list-view ... >
+// widget.nautilus-view-cell`, 7 classes) that outranked the bare rules and kept their own padding.
+@if variable-exists("nautilus-list-inset") {
+window.nautilus-window, window.nautilus-file-chooser {
+	.nautilus-list-view columnview.view {
+		padding-left: $nautilus-list-inset;
+		padding-right: $nautilus-list-inset;
+
+		> listview.view {
+			margin-left: -$nautilus-list-inset;
+			margin-right: -$nautilus-list-inset;
+			padding-left: 0;
+			padding-right: 0;
+
+			> row.activatable {
+				margin-left: $nautilus-list-inset;
+				margin-right: $nautilus-list-inset;
+			}
+		}
+	}
+
+	// $nautilus-sidebar-row-padding = where the file list's first column starts its content, chosen
+	// so the file icons sit as far into the row as the sidebar icons do, by eye in the real Nautilus:
+	// the 32px file icons carry ~4px more empty margin than the 16px symbolic sidebar ones (Fluent:
+	// sidebar icons 14px into the row, list icons 11px before, 9px here, 2026-10-22). Unset: untouched.
+	@if variable-exists("nautilus-sidebar-row-padding") {
+		.nautilus-list-view columnview.view > listview.view > row.activatable > cell:first-child {
+			padding-left: 0;
+
+			> widget#NautilusViewCell, .nautilus-view-cell {
+				padding-left: $nautilus-sidebar-row-padding;
+			}
+		}
+	}
+}
 }
 
 // Column headers (Nautilus' list view: Name, Size, Modified): the themes keep GTK's square header

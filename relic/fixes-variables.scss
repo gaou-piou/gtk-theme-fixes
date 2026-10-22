@@ -59,3 +59,19 @@ $headerbar-button-height: 34px;
 $windowcontrols-margin: 15px;
 $windowcontrols-vpadding: 0;
 $windowcontrols-inner-margin: 0;
+
+// Nautilus file list: the list is a card (%nautilus_content_style: margin 0 $space-size $space-size).
+// The selected list row keeps the same distance from the card edge as the selected sidebar row
+// keeps from that card: the sidebar padding (.navigation-sidebar: $space-size - 2) plus the card
+// margin ($space-size), 10px (2026-10-22; 4px and 6px looked cramped, Nautilus' own 24px floated).
+// No $nautilus-sidebar-row-padding: local-fixes-4.0 already gives every list cell the themes' own
+// side padding ($space-size * 1.5, upstream's `widget#NautilusViewCell` rule rewritten for Nautilus'
+// `widget.nautilus-view-cell`); setting it to 0 outranked that and squeezed the first column.
+$nautilus-list-inset: ($space-size - 2) + $space-size;
+
+// The themes' own button radius: unset, fixes-3.0 made every GTK3 button 12px. The two layouts
+// differ: the other eight import this file before their rules, so the $corner-radius above is
+// their button radius (GTK4 14px vs GTK3 12px, 2026-10-22); Catppuccin and Vague (new layout, with
+// $roundness) import it after their rules, so their buttons keep upstream's
+// $modal-radius = ($roundness - 3) * 1px (9px), not the 12px set above.
+$button-radius: if(variable-exists("roundness"), ($roundness - 3) * 1px, $corner-radius);
