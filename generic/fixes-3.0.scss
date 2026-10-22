@@ -180,9 +180,17 @@ $_gtk3-titlebutton-size: if(variable-exists("gtk3-titlebutton-size"), $gtk3-titl
 // $gtk3-titlebutton-inset = the same horizontal inset of the visible button in GTK3 (see fixes-4.0
 // $titlebutton-inset); unset: 0
 $_gtk3-titlebutton-inset: if(variable-exists("gtk3-titlebutton-inset"), $gtk3-titlebutton-inset, 0);
+// $gtk3-titlebutton-default-decoration-inset = the same inset in the GTK3 default decoration, when its
+// buttons are a different box (Orchis: 24x24 with no padding, the glyph 7px in, not 10px: the close
+// button sat 14px from the side and 18px from the top in LXAppearance, 2026-10-19); unset: $gtk3-titlebutton-inset
+$_gtk3-titlebutton-dd-inset: if(variable-exists("gtk3-titlebutton-default-decoration-inset"), $gtk3-titlebutton-default-decoration-inset, $_gtk3-titlebutton-inset);
 // $windowcontrols-inner-margin = the margin between the window buttons (see fixes-4.0); unset:
 // $windowcontrols-hmargin
 $_windowcontrols-inner-margin: if(variable-exists("windowcontrols-inner-margin"), $windowcontrols-inner-margin, if(variable-exists("windowcontrols-hmargin"), $windowcontrols-hmargin, null));
+// $gtk3-default-decoration-inner-margin = the same margin in the GTK3 default decoration, when its
+// buttons are spaced differently from the headerbar ones (Orchis: 1px left close->minimize 26px vs
+// minimize->maximize 28px in LXAppearance, 2026-10-19); unset: $windowcontrols-inner-margin
+$_gtk3-dd-inner-margin: if(variable-exists("gtk3-default-decoration-inner-margin"), $gtk3-default-decoration-inner-margin, $_windowcontrols-inner-margin);
 $_dd-min-height: if(variable-exists("default-decoration-min-height"), $default-decoration-min-height, null);
 @if $_dd-min-height and variable-exists("titlebar-corner-radius") {
 	$_dd-min-height: max($_dd-min-height, 2 * $titlebar-corner-radius) !global;
@@ -252,24 +260,24 @@ $_dd-titlebutton-size: if(variable-exists("default-decoration-titlebutton-size")
 // (MacTahoe: 4.8px -> 4px), hence the floor(). :backdrop as well: the generic close margin
 // rules above have backdrop variants with a higher specificity.
 
-@mixin _titlebutton-gap($bar-height, $side-left, $side-right) {
+@mixin _titlebutton-gap($bar-height, $side-left, $side-right, $inset: $_gtk3-titlebutton-inset, $inner: $_windowcontrols-inner-margin) {
 	$gap: floor(($bar-height - $_gtk3-titlebutton-size) / 2) - $_titlebutton-gap-offset;
 
 	&, &:backdrop {
 		// the side facing the other buttons gets the theme's own button margin (as in fixes-4.0)
 		box.left > button.titlebutton.close:first-child:not(.suggested-action):not(.destructive-action) {
 			&, &:backdrop {
-				margin-left: max(-$_gtk3-titlebutton-inset, $gap - floor($side-left) - $_gtk3-titlebutton-inset);
-				@if $_windowcontrols-inner-margin {
-					margin-right: $_windowcontrols-inner-margin;
+				margin-left: max(-$inset, $gap - floor($side-left) - $inset);
+				@if $inner {
+					margin-right: $inner;
 				}
 			}
 		}
 		box.right > button.titlebutton.close:last-child:not(.suggested-action):not(.destructive-action) {
 			&, &:backdrop {
-				margin-right: max(-$_gtk3-titlebutton-inset, $gap - floor($side-right) - $_gtk3-titlebutton-inset);
-				@if $_windowcontrols-inner-margin {
-					margin-left: $_windowcontrols-inner-margin;
+				margin-right: max(-$inset, $gap - floor($side-right) - $inset);
+				@if $inner {
+					margin-left: $inner;
 				}
 			}
 		}
@@ -292,11 +300,18 @@ $_dd-titlebutton-size: if(variable-exists("default-decoration-titlebutton-size")
 			@include _titlebutton-gap($headerbar-height, $_headerbar-size-left, $_headerbar-size-right);
 		}
 	}
+	// Split titlebars: gedit sets a paned as the titlebar (`paned.titlebar > headerbar`), so the
+	// .titlebar padding above lands on the paned and the headerbar has neither the class nor a
+	// horizontal padding; the side gap is the same. Without this the close button kept the
+	// generic close margin (Jasper: 9px from the side, 12px from the top, 2026-10-15)
+	.background.csd .titlebar:not(headerbar) > headerbar:not(.default-decoration):not(.empty) {
+		@include _titlebutton-gap($headerbar-height, $_headerbar-size-left, $_headerbar-size-right);
+	}
 }
 
 @if variable-exists("titlebutton-size") and $_dd-padding and $_dd-min-height {
 	.background.csd > headerbar.titlebar.default-decoration:not(.empty) {
-		@include _titlebutton-gap($_dd-min-height, $_dd-padding, $_dd-padding);
+		@include _titlebutton-gap($_dd-min-height, $_dd-padding, $_dd-padding, $_gtk3-titlebutton-dd-inset, $_gtk3-dd-inner-margin);
 	}
 }
 
