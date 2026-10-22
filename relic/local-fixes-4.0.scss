@@ -17,10 +17,14 @@
 
 		.nautilus-query-editor {
 			// search entry
+			// a 24px circle: with the $space-size / 2 padding it grew to 30px, plus the 3px menubutton
+			// margin 36px, taller than the 30px an entry fits; the hidden search page of Nautilus'
+			// title stack then made the collapsed content headerbar 6px taller than the sidebar one,
+			// its buttons and path bar 3px lower (2026-10-22)
 			> menubutton > button.image-button {
 				min-width: 24px;
 				min-height: 24px;
-				padding: $space-size / 2;
+				padding: 0;
 				margin-right: $space-size / 2 - 8px;
 
 				&:checked image {
