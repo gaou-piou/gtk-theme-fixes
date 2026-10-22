@@ -361,6 +361,75 @@ $_dd-titlebutton-size: if(variable-exists("default-decoration-titlebutton-size")
 	}
 }
 
+// themetest:chromium-gtk4 begin
+// The same nodes under GTK3 (Chromium --gtk-version=3, and Electron always: it draws its buttons from
+// these even with --gtk-version=4, measured 2026-10-22 with tests/themetest). The browsers read
+// `headerbar.header-bar.titlebar`, Electron `headerbar.default-decoration.titlebar`, every node with
+// .chromium (see fixes-4.0 for how Chromium lays the buttons out). The generic close margin above
+// (calc($button_fix_multiplier * 1em), 7.3px in the relic themes) reached these nodes too: with the
+// buttons on the right the close button is last, so it went between the buttons (Bitwarden: 6px from
+// the side, the last gap 7px wider). Electron's side gap is its header padding. The browsers' is
+// the close button's margin, not their header padding: Electron 42 (FreeTube, ClientFrameViewLinux)
+// adds the browser header padding to its own (13px + 10px = 23px from the side), so that padding
+// stays 0. With the buttons on the right the close margin faces the others: not fixed there
+// (decision 2026-10-22: FreeTube first; tests/tt/rules.py EXEMPT_VIEWS). Opt-in, values as in fixes-4.0:
+// $chromium-gtk3-side = the browsers' close button to the window side (relic: 10px, between
+// Chromium's top 12 and Helium's top 9);
+// $electron-gtk3-side = Electron's (its buttons are centred in its 44px titlebar: top gap - 1).
+// $chromium-gtk4-button-margin / -padding: as in fixes-4.0, for both; $chromium-gtk3-button-margin /
+// -padding when the GTK3 button box differs from the GTK4 one (Orchis: 28px vs 24px).
+@mixin _chromium-gtk3($header, $side, $close-margin: false, $margin: false, $padding: false) {
+	$margin: if($margin != false, $margin, if(variable-exists("chromium-gtk3-button-margin"), $chromium-gtk3-button-margin,
+		if(variable-exists("chromium-gtk4-button-margin"), $chromium-gtk4-button-margin, null)));
+	$padding: if($padding != false, $padding, if(variable-exists("chromium-gtk3-button-padding"), $chromium-gtk3-button-padding,
+		if(variable-exists("chromium-gtk4-button-padding"), $chromium-gtk4-button-padding, null)));
+	window.background.csd.chromium > headerbar.#{$header}.titlebar.chromium {
+		&, &:not(.empty), &:not(.empty):dir(ltr), &:not(.empty):dir(rtl), &:dir(ltr), &:dir(rtl) {
+			&, &:backdrop {
+				padding: 0 if($close-margin, 0, $side - if($margin, $margin, 0));
+				windowcontrols.chromium > button.titlebutton.chromium {
+					&, &.close, &.minimize, &.maximize {
+						&, &:backdrop, &:hover, &:active {
+							margin-top: 0;
+							margin-bottom: 0;
+							@if $margin {
+								margin-left: $margin;
+								margin-right: $margin;
+							}
+							@if $padding {
+								padding: $padding;
+							}
+						}
+					}
+					@if $close-margin {
+						&.close {
+							&, &:backdrop, &:hover, &:active {
+								margin-left: $side;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@if variable-exists("chromium-gtk3-side") {
+	@include _chromium-gtk3('header-bar', $chromium-gtk3-side, $close-margin: true);
+}
+
+// Electron's buttons get no horizontal margin: Electron 42 (FreeTube, ClientFrameViewLinux) ignores
+// it, so a margin made its close button that much closer to the side than Electron 43's (Jasper:
+// 6px vs 10px). The side gap is all padding; the buttons stay 6px apart, narrower than the native
+// ones in themes that space theirs (decision 2026-10-22). Electron 42 also centres its glyphs in the
+// browsers' button box, Electron 43 in its own: $electron-gtk3-button-padding makes the two boxes the
+// same where they differ (Orchis: 28px vs 24px, +2px from the side in FreeTube).
+@if variable-exists("electron-gtk3-side") {
+	@include _chromium-gtk3('default-decoration', $electron-gtk3-side, $margin: 0,
+		$padding: if(variable-exists("electron-gtk3-button-padding"), $electron-gtk3-button-padding, false));
+}
+// themetest:chromium-gtk4 end
+
 // Chromium browsers in GTK mode (Brave, Helium, Chrome; Chromium 154): the tab strip, the active
 // and the inactive tabs all take the `window.background` colour, so only the tab text tells the
 // active tab apart. Inactive tabs use the headerbar title colour

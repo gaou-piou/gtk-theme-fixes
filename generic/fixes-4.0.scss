@@ -345,6 +345,54 @@ $_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size")
 	}
 }
 
+// themetest:chromium-gtk4 begin
+// Chromium browsers and Electron in GTK mode under GTK4 (--gtk-version=4). Chromium builds its own
+// CSS nodes (ui/gtk/gtk_util.cc) with the .chromium class on every node, so only these rules reach
+// it: the browsers read `window.background.csd > headerbar.header-bar.titlebar > windowcontrols >
+// button.titlebutton.<type> > image`, Electron the same under `headerbar.default-decoration.titlebar`
+// (nav_button_provider_gtk.cc). It centres the buttons in its own top area (the browsers' tab strip),
+// scales them all down when a button with its vertical margins does not fit, spaces them 6px
+// (kHeaderSpacing) plus their margins apart, and puts the first one at the frame inset + the header's
+// padding. Hence: no vertical margins (Catppuccin's 16px scaled the 16px circles to 0.74 and the
+// spacing to 4px), the theme's own GTK3-era .chromium button rules neutralised (Catppuccin: padding
+// 2.5px, margin 16px -20px 16px 22px), and the side gap as the header padding, which holds with the
+// close button on the left and on the right (a margin on it faces the other buttons in one of the two).
+// Measured 2026-10-22 with tests/themetest. Opt-in per theme family:
+// $chromium-gtk4-side = close button to the window side in the browsers. Chromium's tab strip puts
+// the buttons at top 12, Helium's at top 9, from the same nodes: 10px, between the two (±2px).
+// $chromium-gtk4-button-margin = each button's horizontal margin: button + 6px + 2 * margin is the
+// native centre-to-centre distance (relic: 0, the 16px circles 22px apart). Unset: the theme's own
+// (Colloid: 4px), and then the side gap comes out that much bigger.
+// $chromium-gtk4-button-padding = the button's padding, so the box Chromium draws is the native
+// visible button (relic: 0, Catppuccin's .chromium rule had 2.5px). Unset: the theme's own.
+// Electron draws its window buttons from the GTK3 nodes even with --gtk-version=4 (Bitwarden and
+// FreeTube measured the same under both, and did not move with a GTK4 change): see fixes-3.0.
+@if variable-exists("chromium-gtk4-side") {
+	$_cg-margin: if(variable-exists("chromium-gtk4-button-margin"), $chromium-gtk4-button-margin, null);
+	$_cg-padding: if(variable-exists("chromium-gtk4-button-padding"), $chromium-gtk4-button-padding, null);
+
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium {
+		&, &:backdrop {
+			padding: 0 ($chromium-gtk4-side - if($_cg-margin, $_cg-margin, 0));
+		}
+	}
+
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium {
+		&, &:backdrop, &:hover, &:active {
+			margin-top: 0;
+			margin-bottom: 0;
+			@if $_cg-margin {
+				margin-left: $_cg-margin;
+				margin-right: $_cg-margin;
+			}
+			@if $_cg-padding {
+				padding: $_cg-padding;
+			}
+		}
+	}
+}
+// themetest:chromium-gtk4 end
+
 // Collapsed toolbar spacing: AdwToolbarView with stacked bars (e.g. Ptyxis with tabs,
 // headerbar + search bar) marks them .collapse-spacing. libadwaita then shrinks a headerbar
 // to button height + 2 * 3px (40px) and the tab bar padding to 3px; the themes keep the full
