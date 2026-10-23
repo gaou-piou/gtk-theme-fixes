@@ -76,12 +76,13 @@ $nautilus-list-inset: ($space-size - 2) + $space-size;
 // $modal-radius = ($roundness - 3) * 1px (9px), not the 12px set above.
 $button-radius: if(variable-exists("roundness"), ($roundness - 3) * 1px, $corner-radius);
 
-// Chromium browsers (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), measured 2026-10-22 with
+// Chromium browsers (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), measured with
 // tests/themetest: the 16px circles 6px apart like the native ones (button margin 0), the close
-// button 10px from the side (between Chromium's top 12 and Helium's top 9).
-$chromium-gtk4-side: 10px;
-$chromium-gtk3-side: 10px;
+// button as far from the side as Chromium's tab strip puts it from the top, 12px (2026-10-23;
+// Helium's lower strip puts it 3px higher with the same CSS).
+$chromium-gtk4-side: 12px;
+$chromium-gtk3-side: 12px;
 $chromium-gtk4-button-margin: 0;
 $chromium-gtk4-button-padding: 0;
-// Electron (GTK3 nodes, also with --gtk-version=4): 16px circles at top 14, so 13px from the side
-$electron-gtk3-side: 13px;
+// Electron (GTK3 nodes, also with --gtk-version=4): 16px circles at top 14, so 14px from the side
+$electron-gtk3-side: 14px;

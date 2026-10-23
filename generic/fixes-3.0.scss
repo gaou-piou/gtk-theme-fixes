@@ -173,7 +173,7 @@ button {
 // (Jasper: 4px) and height (36px), while the close margin below assumed the computed ones (close
 // button 4px from the side, 7px from the top).
 $_dd-windows: "window.background.csd, dialog.background.csd";
-$_titlebutton-gap-offset: if(variable-exists("titlebutton-gap-offset"), $titlebutton-gap-offset, 1px);
+$_titlebutton-gap-offset: if(variable-exists("titlebutton-gap-offset"), $titlebutton-gap-offset, 0);
 // $gtk3-titlebutton-size = the visible GTK3 window button when it differs from the GTK4 one
 // (Colloid: the 24px button box vs the 22px GTK4 circle); unset: $titlebutton-size
 $_gtk3-titlebutton-size: if(variable-exists("gtk3-titlebutton-size"), $gtk3-titlebutton-size, if(variable-exists("titlebutton-size"), $titlebutton-size, null));
@@ -245,8 +245,8 @@ $_dd-titlebutton-size: if(variable-exists("default-decoration-titlebutton-size")
 	}
 }
 
-// Close button as far from the window side as from the top (minus $titlebutton-gap-offset, 1px
-// by default: an exact match reads as further from the side), as in fixes-4.0.
+// Close button as far from the window side as from the top (minus $titlebutton-gap-offset: 0 by
+// default since 2026-10-23, the user's decision; it was 1px), as in fixes-4.0.
 // The window buttons are centred vertically, so the top gap follows the headerbar height, and a
 // GTK3 headerbar is as tall as its tallest child: 38px empty, 44px with the theme's 36px buttons
 // and their margin (MacTahoe). The headerbar of .csd windows is fixed at $headerbar-height, the

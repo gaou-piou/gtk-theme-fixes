@@ -225,8 +225,8 @@ headerbar tabbar.inline {
 	}
 }
 
-// Close button as far from the window side as from the top (minus $titlebutton-gap-offset, 1px
-// by default: an exact match reads as further from the side). The window buttons are centred
+// Close button as far from the window side as from the top (minus $titlebutton-gap-offset: 0 by
+// default since 2026-10-23, the user's decision; it was 1px, which read as crowding the side). The window buttons are centred
 // vertically, so the top gap is (titlebar height - button height) / 2 and depends on the bar,
 // which CSS cannot read: it is computed here per kind of titlebar from the theme's heights.
 // The collapsed headerbar (toolbarview .collapse-spacing) keeps the same top gap: the 3px box
@@ -245,7 +245,7 @@ headerbar tabbar.inline {
 // crowd the rounded window corner. With $titlebar-corner-radius set, it is at least twice the radius
 // tall, so the button's centre falls on the centre of the corner arc: gap = radius - button / 2
 // (MacTahoe: 18px -> 36px, gap 10px). Taller headerbars already clear the corner.
-$_titlebutton-gap-offset: if(variable-exists("titlebutton-gap-offset"), $titlebutton-gap-offset, 1px);
+$_titlebutton-gap-offset: if(variable-exists("titlebutton-gap-offset"), $titlebutton-gap-offset, 0);
 $_default-decoration-height: if(variable-exists("headerbar-default-decoration-height"), $headerbar-default-decoration-height, null);
 $_titlebutton-box-height: if(variable-exists("titlebutton-box-height"), $titlebutton-box-height, if(variable-exists("titlebutton-size"), $titlebutton-size, null));
 // $titlebutton-inset = how far the visible window button sits inside the button box, horizontally:
@@ -389,6 +389,19 @@ $_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size")
 				padding: $_cg-padding;
 			}
 		}
+	}
+}
+
+// Chromium under GTK4 draws the glyph of a window button (the icon theme's window-close-symbolic
+// etc.) at its colour's alpha squared: the themes' 0.7 white read as 0.49 (Graphite: 138 vs
+// Nautilus' 189 luminance, 2026-10-23); GTK3 Chromium and Electron are right. The image node gets
+// its button's colour times $chromium-gtk4-glyph-alpha = 1 / sqrt(the theme's glyph alpha)
+// (0.7: 1.195, 0.75: 1.155), so the square comes out as the theme's alpha; < 1 where the browser
+// glyph is opaque and the native one is not (Jasper: 0.87, measured; sqrt(0.7) = 0.837 came out
+// darker). GTK's alpha(), not Sass'.
+@if variable-exists("chromium-gtk4-glyph-alpha") {
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium > image.chromium {
+		color: unquote("alpha(currentColor, #{$chromium-gtk4-glyph-alpha})");
 	}
 }
 // themetest:chromium-gtk4 end
@@ -561,3 +574,14 @@ columnview.view > header > button {
 		border-color: transparent;
 	}
 }
+
+// themetest:file-chooser begin
+// Nautilus' file chooser (the portal's Open/Save dialog, Nautilus 47+) is the Nautilus window with
+// the class nautilus-file-chooser instead of nautilus-window. The themes style only (or mostly)
+// .nautilus-window: sidebar and content panes, places sidebar, views; and so do the sidebar fixes
+// above. The chooser got a flat window with tighter sidebar rows (relic, Jasper, Orchis…;
+// 2026-10-23). Every .nautilus-window rule reaches it too; tests/themetest checks it (rule parity).
+.nautilus-file-chooser {
+	@extend .nautilus-window !optional;
+}
+// themetest:file-chooser end
