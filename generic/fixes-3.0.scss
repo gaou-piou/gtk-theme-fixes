@@ -73,6 +73,14 @@ headerbar.titlebar, headerbar.default-decoration, headerbar {
 			margin-top: calc(#{$_fix-size} * 1);
 			margin-bottom: calc(#{$_fix-size} * 1);
 		}
+		// and further down: a button group in a box of its own (Tilix: box > box.linked > button)
+		// kept the theme's margin (relic: 6px), made the row taller and stretched every other
+		// button, 34x38 instead of 34x34, 2026-10-29
+		box > button:not(.titlebutton):not(.close):not(.maximize):not(.minimize)
+		{
+			margin-top: calc(#{$_fix-size} * 1);
+			margin-bottom: calc(#{$_fix-size} * 1);
+		}
 	}
 	// Entries, spin buttons and combo boxes with the buttons' margin: the themes give them their own
 	// (6px), so a header bar with one was taller than without and stretched its buttons (MacTahoe:
