@@ -7,7 +7,10 @@ sources by theme packages in the AUR:
   Material, Nightfox, Osaka, Rosé Pine, Tokyonight and Vague GTK themes by Fausto-Korpsvart, whose
   repositories are archived
 - `<theme>-fixed-git`: vinceliuice's Colloid (and its Catppuccin, Dracula, Everforest, Gruvbox and
-  Nord variants), Fluent, Graphite, Jasper, Lavanda, Layan, MacTahoe, Magnetic, Orchis and Orianin
+  Nord variants), Fluent, Graphite, Jasper, Lavanda, MacTahoe, Magnetic, Orchis and Orianin
+
+`layan/` is unfinished: Layan's package installed the CSS shipped upstream, so these fixes never
+reached it and its variables were never measured; it has no package yet.
 
 Nothing here is a theme on its own.
 
