@@ -24,7 +24,8 @@ Nothing here is a theme on its own.
 
 The generic fixes read optional variables; a theme sets them in its variables file to switch a fix
 on and give it its measurements. Each variable is documented where `fixes-*.scss` reads it.
-Fixes for one theme only stay with that theme's package.
+The fixes of a theme published in the AUR live here too (`relic/`, `mactahoe/`), so they reach it
+without a package update; those of a theme built only locally stay with its package.
 
 ## What the fixes do
 
