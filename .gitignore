@@ -1,0 +1,5 @@
+# dev-only: the test harness, dev tools and backups stay on this machine (Syncthing), not in the repo
+/tests/
+/tools/
+/backup/
+__pycache__/
