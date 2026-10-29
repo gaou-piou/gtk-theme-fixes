@@ -1,11 +1,13 @@
 # gtk-theme-fixes
 
 Geometry and consistency fixes for GTK 3/4 and GNOME Shell themes, compiled into the upstream SCSS
-sources by theme packages: the `relic-*-gtk-theme` packages in the AUR (maintained builds of the
-Catppuccin, Everforest, Gruvbox, Kanagawa, Material, Nightfox, Osaka, Rosé Pine, Tokyonight and Vague
-GTK themes by Fausto-Korpsvart, whose repositories are archived), `mactahoe-gtk-theme-fixed-git` in
-the AUR, and local builds of other themes (Colloid, Fluent, Graphite, Jasper, Lavanda, Layan,
-Magnetic, Orchis, Orianin).
+sources by theme packages in the AUR:
+
+- `relic-*-gtk-theme`: maintained builds of the Catppuccin, Everforest, Gruvbox, Kanagawa,
+  Material, Nightfox, Osaka, Rosé Pine, Tokyonight and Vague GTK themes by Fausto-Korpsvart, whose
+  repositories are archived
+- `<theme>-fixed-git`: vinceliuice's Colloid (and its Catppuccin, Dracula, Everforest, Gruvbox and
+  Nord variants), Fluent, Graphite, Jasper, Lavanda, Layan, MacTahoe, Magnetic, Orchis and Orianin
 
 Nothing here is a theme on its own.
 
@@ -21,11 +23,12 @@ Nothing here is a theme on its own.
 | `mactahoe/fixes-variables.scss` | MacTahoe's values for the generic fixes |
 | `mactahoe/local-fixes-4.0.scss` | Fixes specific to MacTahoe (GTK 4) |
 | `mactahoe/local-fixes-firefox.css` | Appended to MacTahoe's Firefox theme (`customChrome.css`) |
+| `<theme>/` | The same for each `<theme>-fixed-git` package: `fixes-variables.scss`, and `local-fixes-3.0.scss`, `local-fixes-4.0.scss`, … where the theme needs its own |
 
 The generic fixes read optional variables; a theme sets them in its variables file to switch a fix
 on and give it its measurements. Each variable is documented where `fixes-*.scss` reads it.
-The fixes of a theme published in the AUR live here too (`relic/`, `mactahoe/`), so they reach it
-without a package update; those of a theme built only locally stay with its package.
+A theme's own fixes live here too, so they reach its package without a package update. A
+package's pkgver counts only the commits that change `generic/` or its own directory.
 
 ## What the fixes do
 

@@ -1,0 +1,39 @@
+// Nautilus list view: Orchis zeroes the cell padding in the main window
+// (`.nautilus-window .nautilus-list-view .nautilus-view-cell { padding: 0 }`), so its rows were 41px
+// apart, while the file chooser (no .nautilus-window class) kept Nautilus' own 6px: 53px, about
+// Adwaita's 52px (measured 2026-10-09). Give the main window the same values as the file chooser,
+// those of Nautilus' style.css, compact list included.
+.nautilus-window .nautilus-list-view {
+	#NautilusViewCell,
+	.nautilus-view-cell {
+		padding: 6px;
+	}
+
+	&.compact {
+		#NautilusViewCell,
+		.nautilus-view-cell {
+			padding-top: 3px;
+			padding-bottom: 3px;
+		}
+	}
+}
+
+// Headerbar entry + button linked boxes (Nautilus' location entry with its Cancel button, Ctrl+L):
+// Orchis rounds the entry there (12px) and makes the button a circle, but the linked box leaves no
+// gap, so the hovered circle touched the entry (2026-10-12). Space it like the other headerbar buttons
+headerbar .linked:not(.vertical) > entry:not(:only-child) + button {
+	margin-left: $space-size;
+}
+
+// Nautilus' file chooser like the Nautilus window (generic fixes-4.0 extends .nautilus-window to
+// it): the theme paints the chooser's content pane, the window's is transparent over the window
+// background; one look in every theme (user decision 2026-10-23, tests/themetest rule parity)
+window.background.csd.nautilus-file-chooser .content-pane {
+	&, &:backdrop {
+		background-color: transparent;
+	}
+}
+
+// Headerbar hairline: the stray 1px line above the pathbar (2026-10-26) is fixed in the generic
+// fixes-4.0 now (a collapsed top bar's 3px gap moved into the headerbar, so its `inset 0 1px`
+// highlight sits on the window's edge), so Orchis keeps its own highlight in Nautilus.

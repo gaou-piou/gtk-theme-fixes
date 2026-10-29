@@ -1,0 +1,93 @@
+//
+// Sizes
+//
+
+$space-size: if($compact == 'false', 6px, 4px);
+
+
+//
+// Radii
+//
+
+$modal-radius: $default_corner;
+$corner-radius: $default_corner;
+$menu-radius: if($compact == 'false', $corner-radius + $space-size, $corner-radius);
+$window-radius: if($compact == 'false', $corner-radius + $space-size, $corner-radius);
+$circular-radius: 9999px;
+
+$fix-size: 4px;
+
+$headerbar-size-left: 1 * $fix-size;
+$headerbar-size-right: 1.8 * $fix-size;
+
+$button_fix_multiplier: 0.55 0.4;
+
+// Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
+$headerbar-tab-margin: 3px;
+
+// Nautilus sidebar rows: the row radius ($corner-radius, 14px with --round 14px) on both ends plus
+// a 2 * $space-size straight side (Jasper: 12px radius, 36px rows): 40px (32px read as pills)
+$nautilus-sidebar-row-height: 2 * $corner-radius + 2 * $space-size;
+
+// The theme's own button radius: unset, fixes-3.0 made every GTK3 button 12px while GTK4 kept
+// 14px (2026-10-20)
+$button-radius: $corner-radius;
+// Nautilus' list rows are $corner-radius (14px), not Nautilus' 9px: the hovered column header too
+$columnview-header-radius: $corner-radius;
+// Nautilus file list as far from the pane sides as the sidebar rows (.navigation-sidebar padding)
+$nautilus-list-inset: $space-size;
+
+// Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
+// screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
+// to the side than to the top, close->minimize as far apart as minimize->maximize.
+// Flat window buttons: only the 10px glyph is visible, 7px into the button box (8px: the close
+// button 1px too far from the side everywhere, e.g. Nautilus 18px from the side, 20px from the
+// top, 2026-10-19)
+$titlebutton-size: 10px;
+$titlebutton-inset: 7px;
+// The default decoration (X11 frames mutter draws): 24px wide buttons, the glyph (24 - 10) / 2 in
+$titlebutton-default-decoration-inset: 7px;
+$headerbar-height: 48px;
+$headerbar-default-decoration-height: 44px;
+$titlebutton-box-height: 24px;
+$titlebar-corner-radius: $window-radius;
+$gtk3-titlebutton-size: 10px;
+// 7px also in the GTK3 default decoration (LXAppearance: 15px from the side, 17px from the top with 8px)
+$gtk3-titlebutton-inset: 7px;
+$headerbar-button-height: 38px;
+// Close button margin towards the others (was 8px: close->minimize 32px vs 28px)
+$windowcontrols-hmargin: 4px;
+// 3px towards the others (4px: close->minimize 29px vs 28px in gedit, Nautilus, LXAppearance, 2026-10-19)
+$windowcontrols-inner-margin: 3px;
+// Electron titlebar (GTK3 default decoration): 44px, padding computed from it
+$default-decoration-min-height: 44px;
+$default-decoration-titlebutton-size: 10px;
+// 7px: with 8px Electron 44 (Vesktop) and 42 (FreeTube) had the close button 16px from the side,
+// 18px from the top (Electron 37 is 1px further out, but no installed app uses it), 2026-10-19
+$default-decoration-button-offset: 7px;
+$default-decoration-close-margin: 0;
+
+// Chromium browsers (GTK mode) and Electron <= 42 (FreeTube, ClientFrameViewLinux) read
+// `headerbar.header-bar.titlebar`: Electron <= 42 adds its padding to the titlebar padding above and
+// ignores margins (close button 10px further from the side than from the top, 2026-10-09), so the
+// padding stays 0 and the browsers' side gap goes in the close margin, measured on Chromium 154:
+// the close glyph 1px closer to the side than to the top
+$chromium-titlebar-padding: 0;
+// 7px (6px: Chromium and Brave 14px vs 16px, 2026-10-19)
+$chromium-close-margin: 7px;
+// Where the Nautilus sidebar row content starts (.navigation-sidebar > row: 0 1.5 * $space-size):
+// the file list's first column starts there too
+$nautilus-sidebar-row-padding: 1.5 * $space-size;
+
+// Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22. The
+// visible part is the glyph Chromium takes from the icon theme (Tela: 8px under GTK4, 10px under
+// GTK3 and in Electron), centred in the button box: the side gap is set for the glyph, between
+// Chromium's and Helium's tab strips ((35 - glyph) / 2), Electron's at its top gap - 1 ((44 - 10) / 2 - 1
+// = 16px); margins give Nautilus' centre-to-centre distance. Electron's buttons stay 6px apart.
+// These replace $chromium-titlebar-padding / $chromium-close-margin. // box 24px, 36px apart
+$chromium-gtk4-side: 8px;
+$chromium-gtk3-side: 8px;
+$electron-gtk3-side: 10px;
+$chromium-gtk4-button-margin: 3px;
+// Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
+$chromium-gtk4-glyph-alpha: 1.195;

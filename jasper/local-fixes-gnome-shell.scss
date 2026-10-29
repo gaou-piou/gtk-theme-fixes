@@ -1,0 +1,10 @@
+// GNOME Shell fixes for Jasper, appended to each gnome-shell entry file
+// (src/main/gnome-shell/*.scss), after the theme's own partials.
+
+// Dash to Panel taskbar icons jumped up on hover (2026-10-15, GNOME 51): `.overview-tile` gets
+// `border: 1px solid transparent`, so a taskbar tile is 2px taller than the panel's scroll view
+// (36px in 34px). On hover Dash to Panel calls ensureActorVisibleInScrollView, which, when the
+// taskbar fits (no fade), scrolls the view 2px down to show the whole tile: the icons moved up 2px.
+#dashtopanelScrollview .overview-tile {
+	border: none;
+}

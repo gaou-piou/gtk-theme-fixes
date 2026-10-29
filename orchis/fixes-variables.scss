@@ -1,0 +1,85 @@
+$fix-size: $space-size;
+
+$headerbar-size-left: 1.4 * $fix-size;
+$headerbar-size-right: 1 * $fix-size;
+
+$button_fix_multiplier: 0.2 0.01;
+
+// Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
+// screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
+// to the side than to the top, close->minimize as far apart as minimize->maximize.
+// Flat window buttons: only the 10px glyph is visible, 13px into the 36px button box (14px put the
+// close button in Nautilus 18px from the side and 20px from the top, 2026-10-19)
+$titlebutton-size: 10px;
+$titlebutton-inset: 13px;
+// The default decoration (X11 frames mutter draws, GTK4 windows without a headerbar): 24x24 buttons
+// with no padding, the glyph (24 - 10) / 2 in
+$titlebutton-default-decoration-inset: 7px;
+$headerbar-height: 48px;
+$headerbar-default-decoration-height: 44px;
+$titlebutton-box-height: 24px;
+// --round 12px in the PKGBUILD (the theme default)
+$titlebar-corner-radius: 12px;
+$gtk3-titlebutton-size: 10px;
+// 30px wide since local-fixes-3.0 squares them (was 14px in the 38px wide button); 9px measured
+// (10px: gedit 18px from the side, 20px from the top, 2026-10-19)
+$gtk3-titlebutton-inset: 9px;
+// GTK3 default decoration (LXAppearance and other dialogs without a headerbar): 24x24 buttons with
+// no padding, as in GTK4 (with 10px the close button was 14px from the side, 18px from the top)
+$gtk3-titlebutton-default-decoration-inset: 7px;
+$headerbar-button-height: 38px;
+// Close button margin towards the others (was -2px: close->minimize 31px vs 34px)
+$windowcontrols-hmargin: 1px;
+// 1px left close->minimize 1px wider than minimize->maximize (gedit 27px vs 26px, Nautilus 35px vs
+// 34px, the X11 frame 7px vs 6px between the boxes), but 2px narrower in the GTK3 default
+// decoration (LXAppearance 26px vs 28px), 2026-10-19
+$windowcontrols-inner-margin: 0;
+$gtk3-default-decoration-inner-margin: 3px;
+// Electron titlebar (GTK3 default decoration): 44px, padding computed from it (was 52px)
+$default-decoration-min-height: 44px;
+$default-decoration-titlebutton-size: 10px;
+$default-decoration-button-offset: 8px;
+$default-decoration-close-margin: 0;
+
+// Chromium browsers (GTK mode) and Electron <= 42 (FreeTube, ClientFrameViewLinux) read
+// `headerbar.header-bar.titlebar`: Electron <= 42 adds its padding to the titlebar padding above and
+// ignores margins (close button 10px further from the side than from the top, 2026-10-09), so the
+// padding stays 0 and the browsers' side gap goes in the close margin, measured on Chromium 154:
+// the close glyph 1px closer to the side than to the top (4px: 14px vs 16px, 2026-10-19)
+$chromium-titlebar-padding: 0;
+$chromium-close-margin: 5px;
+
+// Nautilus: Orchis draws its own sidebar selection (border-image tab sized to its row geometry),
+// so the generic sidebar spacing rules stay out
+$nautilus-sidebar-spacing: false;
+
+// Tabs (AdwTabBar) are folder tabs: 4px above them, flush with the content below. Collapsed
+// toolbars (Ptyxis, Console with tabs) keep that gap instead of zeroing it
+$collapse-tab-padding-top: 4px;
+
+// Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22. The
+// visible part is the glyph Chromium takes from the icon theme (Tela: 8px under GTK4, 10px under
+// GTK3 and in Electron), centred in the button box: the side gap is set for the glyph, between
+// Chromium's and Helium's tab strips ((35 - glyph) / 2), Electron's at its top gap - 1 ((44 - 10) / 2 - 1
+// = 16px); margins give Nautilus' centre-to-centre distance. Electron's buttons stay 6px apart.
+// These replace $chromium-titlebar-padding / $chromium-close-margin. // boxes 24px (GTK4) / 28px (GTK3), 42px apart
+$chromium-gtk4-side: 8px;
+$chromium-gtk3-side: 6px;
+$electron-gtk3-side: 8px;
+// Round, not an oval: Electron's box is min-width/min-height 24px + this padding, and Chromium
+// paints the theme's button for its window controls itself (tests/themetest rule `round`). `0 2px`
+// made it 28x24 - a radius of 9999px is clamped to half of the box, so the background was a squashed
+// circle 28 wide and 24 tall (screenshot 2026-10-26). `2px` keeps the 28px width the browsers' box
+// has (Electron 42 centres its glyph in that one) and makes it 28px tall: a circle, glyph and side
+// gap unchanged.
+$electron-gtk3-button-padding: 2px;
+$chromium-gtk4-button-margin: 6px;
+$chromium-gtk3-button-margin: 4px;
+// Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
+$chromium-gtk4-glyph-alpha: 1.195;
+// Header bar split buttons (fixes-4.0): the label half had the 6px padding of an icon button (text
+// 6px from the sides, 12px from the top), 2026-10-27
+$splitbutton-text-padding: 12px;
+// GTK3 header bar entries (fixes-3.0): the image buttons are 36px ($headerbar-button-height 38px
+// is the row this file's headerbar padding is computed from); 38px entries stretched them
+$gtk3-headerbar-entry-height: 36px;

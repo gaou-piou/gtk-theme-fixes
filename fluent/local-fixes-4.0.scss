@@ -1,0 +1,91 @@
+.background.csd {
+	&.nautilus-window,
+	&.nautilus-file-chooser {
+		.nautilus-view-cell {
+      padding: $space-size;
+
+      .icon-ui-labels-box {
+        margin: 0 0 $space-size * 2;
+        border-spacing: 0;
+      }
+
+      .dim-label {
+        border-spacing: 0;
+      }
+    }
+
+		.nautilus-view-cell {
+			clamp box {
+				margin: 0;
+				border-spacing: 0;
+			}
+		}
+
+		.nautilus-query-editor {
+			// search entry
+			padding: 0 $space-size;
+
+			> menubutton {
+				margin: 0;
+
+				> button {
+					min-width: 16px;
+					min-height: 16px;
+					margin: 4px 0;
+				}
+			}
+
+			> text {
+				margin: 0;
+			}
+		}
+
+		.nautilus-pathbar {
+			background-color: $titlebar-fill;
+			border-radius: $corner-radius;
+
+			.nautilus-path-button {
+				margin: 0 $space-size / 2;
+				border-radius: $corner-radius;
+
+				&.current-dir {
+					color: $titlebar-text;
+
+					&:hover, &:active {
+						background: none;
+						box-shadow: none;
+					}
+				}
+
+				&:first-child {
+					margin-left: 0;
+				}
+			}
+		}
+
+
+
+		// .nautilus-list-view {
+
+		//   listview.view {
+
+		//     > row.activatable {
+		//       > cell {
+
+		//         > widget.nautilus-view-cell {
+		//           padding: $space-size / 2 $space-size * 1.5;
+		//         }
+		//       }
+		//     }
+		//   }
+		// }
+	}
+}
+// Headerbar entry + button linked boxes (Nautilus' location entry with its Cancel button, Ctrl+L):
+// Fluent rounds the entry there ($corner-radius) but leaves the button the linked corners, square
+// on the entry side, so the hovered button showed a square edge next to a round entry
+// (2026-10-12). Detach it like the other headerbar buttons
+headerbar .linked:not(.vertical):not(.path-bar):not(.nautilus-path-bar):not(.stack-switcher) > entry:not(:only-child) + button:not(.combo) {
+	border-radius: $corner-radius;
+	margin-left: $space-size;
+}

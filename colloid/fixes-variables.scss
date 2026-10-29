@@ -1,0 +1,95 @@
+//
+// Sizes
+//
+
+$space-size: if($compact == 'false', 6px, 4px);
+
+
+//
+// Radiuses
+//
+
+$modal-radius: 8px;
+$corner-radius: 14px;
+$menu-radius: $corner-radius + $space-size;
+$window-radius: $corner-radius + $space-size;
+$circular-radius: 9999px;
+
+
+//
+// FIXES
+//
+
+$fix-size: 4px;
+
+$headerbar-size-left: 1 * $fix-size;
+$headerbar-size-right: 2 * $fix-size;
+
+$button_fix_multiplier: 0.5 0.45;
+
+// Vertical margin the theme puts on headerbar buttons (collapsed toolbars, e.g. Ptyxis with tabs):
+// none, the headerbar box padding carries the spacing
+$headerbar-button-margin: 0;
+
+// The theme's own horizontal margin of the window buttons (4px each side): the close button gets
+// it towards the others; its window edge side is set by the gap below
+// (was 8px, the edge margin before the generic gap rules)
+$windowcontrols-hmargin: 4px;
+
+// Close button gap (generic): 1px closer to the side than to the top, measured 2026-10-09.
+// The visible window button is the 22px circle: GTK4 the image (16px icon + 3px padding,
+// local-fixes-4.0), GTK3 the button box (22px headerbar, 24px default decoration)
+$titlebutton-size: 22px;
+// GTK4 headerbar, GTK4 default decoration, GTK3 headerbar image button
+$headerbar-height: 46px;
+// Nautilus' content pane headerbar, where the end window controls are (fixes-4.0, 2026-10-23)
+$nautilus-content-headerbar-height: 48px;
+$headerbar-default-decoration-height: 44px;
+$headerbar-button-height: 36px;
+// Titlebars without app buttons (Electron, default decoration, X11 frames): at least twice the
+// corner radius, the close button concentric to the corner (20px -> 40px)
+$titlebar-corner-radius: $window-radius;
+
+// Electron titlebar (GTK3 default decoration): the padding is computed from the height; the
+// circle sits at the padding from the side with the close margin at 0 (offset 0).
+// 44px, a little below the native headerbars (46px): 11px from the top, 10px from the side.
+// Compared on headless gnome-shell screenshots next to a GTK4 window, 2026-10-09: the concentric
+// 40px titlebar (7px from the side) crowded the corner. Electron draws the circle 22px, not the
+// 24px of the GTK3 default decoration. GTK4 default decoration: same height.
+// (was: 46px; 34px -> 40px concentric; before that padding 8px, titlebar 46px)
+$default-decoration-min-height: 44px;
+$default-decoration-titlebutton-size: 22px;
+$default-decoration-button-offset: 0;
+$default-decoration-close-margin: 0;
+
+// Chromium browsers (GTK mode): the close margin sets the side gap, the padding stays 0: Electron
+// <= 42 (FreeTube) adds it to its own titlebar padding. Same button geometry as Jasper (8px),
+// not measured on a screenshot yet
+$chromium-titlebar-padding: 0;
+$chromium-close-margin: 8px;
+
+// GTK4 window button box (the circle is its image, padding 6px 0) and the GTK3 visible button:
+// the 22px circle, as measured (gedit; 24px put it 11px from the side at top 12, 2026-10-23)
+$titlebutton-box-height: 34px;
+$gtk3-titlebutton-size: 22px;
+
+// Nautilus list rows are 6px here: the hovered column header matches them
+$columnview-header-radius: 6px;
+
+// Nautilus file list, measured in the real Nautilus against the selected sidebar row (2026-10-22):
+// rows 6px from the column sides (as Colloid already had them), the list icons 16px into the row
+// like the sidebar icons (11px: the 32px file icons carry 4-5px more empty margin than the 16px
+// symbolic ones; the list had 4px).
+$nautilus-list-inset: $space-size;
+$nautilus-sidebar-row-padding: 11px;
+
+// Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22:
+// the 22px circles 36px apart like Nautilus' (22 + 6 + 2 * 4), the browsers' close button
+// (35 - 22) / 2 = 6px from the side, Electron's (42 - 22) / 2 = 10px. The button's own padding (the
+// circle is its image) stays. These replace $chromium-titlebar-padding / $chromium-close-margin.
+$chromium-gtk4-side: 9px;
+$chromium-gtk3-side: 9px;
+$electron-gtk3-side: 11px;
+$chromium-gtk4-button-margin: 4px;
+// Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.75 white, 2026-10-23
+$chromium-gtk4-glyph-alpha: 1.155;

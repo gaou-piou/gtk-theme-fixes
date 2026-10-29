@@ -1,0 +1,84 @@
+$medium-size: if($compact == 'false', 32px, 30px);
+$large-size: if($compact == 'false', 44px, 38px);
+
+//
+// Radiuses
+//
+
+$window-radius: 18px;
+$modal-radius: 10px;
+$corner-radius: 10px;
+$menu-radius: $corner-radius + $space-size;
+
+
+
+$fix-size: 4px;
+
+// Horizontal headerbar inset = the vertical one, so the end buttons don't hug the edge:
+// left: buttons sit $space-size below the top (headerbar box padding);
+// right: window buttons sit $space-size + $windowcontrols-margin (4px) below the top,
+// and carry a 4px side margin of their own.
+$headerbar-size-left: $space-size;
+$headerbar-size-right: $space-size;
+$button_fix_multiplier: 0.4 0.4;
+
+// Window buttons (24px) as tall as the headerbar buttons ($medium-size: 32px), so these stay square
+$windowcontrols-margin: 4px;
+// Nautilus' content pane: its 34px path bar row stretched the 24px circles to 26 (fixes-4.0, 2026-10-23)
+$nautilus-content-windowcontrols-margin: 5px;
+
+// Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
+$headerbar-tab-margin: 0;
+
+// Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
+// screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
+// to the side than to the top, close->minimize as far apart as minimize->maximize.
+// The visible buttons are circles: GTK4 24px (22px without a headerbar), GTK3 and Electron 22px
+$titlebutton-size: 24px;
+// the circles start at their box's edge (1px put them 1px short of the side: Nautilus 9 at top 10,
+// gedit 10 at top 11, 2026-10-23)
+$titlebutton-inset: 0;
+// The default decoration (X11 frames mutter draws): the 22px circle is the whole button
+$titlebutton-default-decoration-size: 22px;
+$titlebutton-default-decoration-inset: 0;
+$headerbar-height: 44px;
+$headerbar-default-decoration-height: 44px;
+$titlebutton-box-height: 22px;
+$titlebar-corner-radius: $window-radius;
+$gtk3-titlebutton-size: 22px;
+$gtk3-titlebutton-inset: 0;
+$headerbar-button-height: 34px;
+// The theme's own horizontal margin of the window buttons (towards the others)
+$windowcontrols-hmargin: 4px;
+// Electron titlebar (GTK3 default decoration): 44px, padding computed from it
+$default-decoration-min-height: 44px;
+$default-decoration-titlebutton-size: 22px;
+$default-decoration-button-offset: 1px;
+$default-decoration-close-margin: 0;
+
+// Chromium browsers (GTK mode) and Electron <= 42 (FreeTube, ClientFrameViewLinux) read
+// `headerbar.header-bar.titlebar`: Electron <= 42 adds its padding to the titlebar padding above and
+// ignores margins (close button 10px further from the side than from the top, 2026-10-09), so the
+// padding stays 0 and the browsers' side gap goes in the close margin, measured on Chromium 154:
+// the close glyph 1px closer to the side than to the top
+$chromium-titlebar-padding: 0;
+$chromium-close-margin: 7px;
+
+// Nautilus file list, measured in the real Nautilus against the selected sidebar row (2026-10-22):
+// rows 6px from the column sides (as Lavanda already had them), the list icons 5px into the row
+// like the sidebar icons (1px: the 32px file icons carry 4px more empty margin than the 16px
+// symbolic ones; the list had 6px, 10px in).
+$nautilus-list-inset: $space-size;
+$nautilus-sidebar-row-padding: 1px;
+
+// Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22:
+// Nautilus' circles are 24px, Chromium's box 22px: 1px padding makes it 24, 38px apart like
+// Nautilus' (24 + 6 + 2 * 4); the browsers' close button (35 - 24) / 2 = 5px from the side,
+// Electron's (42 - 24) / 2 = 9px. These replace $chromium-titlebar-padding / $chromium-close-margin.
+$chromium-gtk4-side: 8px;
+$chromium-gtk3-side: 8px;
+$electron-gtk3-side: 10px;
+$chromium-gtk4-button-margin: 4px;
+$chromium-gtk4-button-padding: 1px;
+// Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
+$chromium-gtk4-glyph-alpha: 1.195;

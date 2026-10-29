@@ -1,0 +1,13 @@
+$fix-size: $fix-size;
+
+$headerbar-size-left: #{1.4*$fix-size};
+$headerbar-size-right: #{1.2*$fix-size};
+$button_fix_multiplier: 0.25;
+
+// Close button first (layout "close,minimize,maximize:"): its margin on the window edge side,
+// measured so it sits as far from the side as from the top (unverified: the package ships the prebuilt upstream CSS)
+$windowcontrols-hmargin: 2px;
+// Electron titlebar (GTK3 default decoration), measured on screenshots: the visible close
+// button (unverified: the package ships the prebuilt upstream CSS, so no fixes apply) 16px from the top and the side, titlebar 48px
+$default-decoration-padding: 12px;
+$default-decoration-min-height: 44px;

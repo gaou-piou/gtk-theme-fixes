@@ -1,0 +1,88 @@
+//
+// Radius
+//
+
+$window-radius: if($window == 'round', 16px, 3px);
+$corner-radius: if($window == 'round', 10px, 2px);
+$menu-radius: $corner-radius + 3px;
+$popover-radius: if($window == 'round', $corner-radius + $space-size, 6px);
+$circular-radius: 9999px;
+
+$fix-size: 4px;
+
+$headerbar-size-left: 1 * $space-size;
+$headerbar-size-right: 1 * $space-size;
+
+$button_fix_multiplier: 0.2 0.2;
+
+// Black Box: (44px headerbar - 26px titlebutton) / 2
+$blackbox-windowcontrols-margin: 9px;
+
+// Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
+$headerbar-tab-margin: 6px;
+
+// Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
+// screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
+// to the side than to the top, close->minimize as far apart as minimize->maximize.
+// Flat window buttons: only the 10px glyph is visible, 8px into the button box
+$titlebutton-size: 10px;
+$titlebutton-inset: 8px;
+// The default decoration (X11 frames mutter draws): 22px wide buttons, the glyph (22 - 10) / 2 in
+$titlebutton-default-decoration-inset: 6px;
+$headerbar-height: 44px;
+$headerbar-default-decoration-height: 44px;
+$titlebutton-box-height: 22px;
+$titlebar-corner-radius: $window-radius;
+$gtk3-titlebutton-size: 10px;
+$gtk3-titlebutton-inset: 8px;
+// in the GTK3 default decoration the 10px glyph is 6px into a 22px box, not 8px (LXAppearance: 15px
+// from the side at top 17, 2026-10-23)
+$gtk3-titlebutton-default-decoration-inset: 6px;
+$headerbar-button-height: 32px;
+// Close button margin towards the others (was 3px: close->minimize 29px vs 30px)
+$windowcontrols-hmargin: 4px;
+// Electron titlebar (GTK3 default decoration): 44px, padding computed from it
+$default-decoration-min-height: 44px;
+$default-decoration-titlebutton-size: 10px;
+$default-decoration-button-offset: 6px;
+$default-decoration-close-margin: 0;
+
+// Chromium browsers (GTK mode) and Electron <= 42 (FreeTube, ClientFrameViewLinux) read
+// `headerbar.header-bar.titlebar`: Electron <= 42 adds its padding to the titlebar padding above and
+// ignores margins (close button 10px further from the side than from the top, 2026-10-09), so the
+// padding stays 0 and the browsers' side gap goes in the close margin, measured on Chromium 154:
+// the close glyph 1px closer to the side than to the top
+$chromium-titlebar-padding: 0;
+$chromium-close-margin: 6px;
+
+// Nautilus list rows are $corner-radius (10px) here: the hovered column header matches them
+$columnview-header-radius: $corner-radius;
+
+// The theme's own button radius (GTK4: 10px round): unset, fixes-3.0 made every GTK3 button 12px
+// (2026-10-22)
+$button-radius: $corner-radius;
+
+// Nautilus file list as far from the pane sides as the sidebar rows: 12px in the real Nautilus
+// (the selected sidebar row; 6px was taken from an offscreen sidebar and left the list rows 6px
+// wider than the sidebar ones, 2026-10-22). Nautilus' own 24px left the list floating.
+$nautilus-list-inset: 2 * $space-size;
+
+// Where the Nautilus sidebar row content starts (.navigation-sidebar > row: 0 1.5 * $space-size):
+// the file list's first column starts there too (was 6px vs 9px, 2026-10-22)
+$nautilus-sidebar-row-padding: 1.5 * $space-size;
+
+// Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22. The
+// visible part is the glyph Chromium takes from the icon theme (Tela: 8px under GTK4, 10px under
+// GTK3 and in Electron), centred in the button box: the side gap is set for the glyph, between
+// Chromium's and Helium's tab strips ((35 - glyph) / 2), Electron's at its top gap - 1 ((44 - 10) / 2 - 1
+// = 16px); margins give Nautilus' centre-to-centre distance. Electron's buttons stay 6px apart.
+// These replace $chromium-titlebar-padding / $chromium-close-margin. // boxes 26px / Electron 22px, 38px apart
+$chromium-gtk4-side: 7px;
+$chromium-gtk3-side: 7px;
+$electron-gtk3-side: 9px;
+$electron-gtk3-button-padding: 0 2px;
+$chromium-gtk4-button-margin: 3px;
+// Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
+$chromium-gtk4-glyph-alpha: 1.195;
+// GTK3 header bar entries (fixes-3.0): the theme pads them 2px top and bottom
+$gtk3-headerbar-entry-vpadding: 4px;

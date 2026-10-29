@@ -1,0 +1,11 @@
+// Window buttons in GTK3 headerbars, also the ones Chromium browsers and Electron draw from these
+// rules in GTK mode: Orchis rounds them (border-radius: 9999px) but pads them 6px 10px, so the hover
+// background was a 38x30 oval (Chromium: 36x27, scaled to its tab strip). Equal padding: 30x30
+// circles, the height (and the headerbar) unchanged. The narrower box moves the glyph 4px towards
+// its left edge: $gtk3-titlebutton-inset in variables.scss accounts for it (14px -> 10px).
+// Not the default decoration (Electron's titlebar): its buttons are already 24x24 with no padding,
+// and this selector outranks that rule (Electron's buttons spread apart, 2026-10-09).
+headerbar:not(.default-decoration) button.titlebutton:not(.suggested-action):not(.destructive-action) {
+	padding-left: 6px;
+	padding-right: 6px;
+}

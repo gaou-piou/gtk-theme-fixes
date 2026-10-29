@@ -1,0 +1,146 @@
+.background.csd {
+	&.nautilus-window,
+	&.nautilus-file-chooser {
+		&.view {
+			background-color: $background;
+		}
+
+		flap > separator {
+			background-color: transparent;
+		}
+
+		.nautilus-grid-view {
+			child.activatable {
+				@extend %row_activatable;
+			}
+		}
+
+		.nautilus-grid-view,
+		.nautilus-list-view {
+			@extend %content_style;
+
+			.view {
+				background-color: transparent;
+			}
+
+			scrolledwindow {
+				@extend %round_undershoot;
+
+				scrollbar {
+					@extend %round_scrollbar;
+				}
+			}
+		}
+
+		.nautilus-grid-view {
+			child.activatable {
+				padding: 0;
+
+				.nautilus-view-cell {
+					padding: $space-size;
+
+					.icon-ui-labels-box {
+						margin: 0 0 $space-size;
+						border-spacing: 0;
+					}
+
+					.dim-label {
+						border-spacing: 0;
+					}
+				}
+			}
+		}
+
+		.nautilus-list-view {
+			padding: 0;
+			margin: 0;
+			border-spacing: 0;
+
+			listview.view {
+				padding: 0;
+				margin: 0;
+				border-spacing: $space-size / 2;
+
+				> row.activatable {
+					padding: 0;
+					margin: 0;
+					border-radius: $menuitem-radius;
+
+					> cell {
+						padding: 0;
+
+						> widget.nautilus-view-cell {
+							padding: $space-size / 2 $space-size * 1.5;
+						}
+					}
+
+					&:nth-child(odd):not(:hover):not(:active):not(:selected):not(:disabled) {
+						background-color: $background;
+					}
+				}
+			}
+		}
+
+
+
+		.nautilus-query-editor {
+
+			// search entry
+			> menubutton > button.image-button {
+				min-width: 24px;
+				min-height: 24px;
+				padding: $space-size / 2;
+				margin-right: $space-size / 2 - 8px;
+
+				&:checked image {
+					color: on($indicator);
+				}
+			}
+
+			> text, > box, > menubutton {
+				margin: $space-size / 2 0;
+			}
+		}
+
+		.nautilus-query-editor-tag {
+			background-color: $divider;
+
+			> button.image-button {
+				margin: 0;
+				padding: 0;
+			}
+		}
+
+		.nautilus-pathbar {
+			background-color: if($topbar =='light', rgba(white, 0.6), $titlebar-fill);
+			border-radius: $circular-radius;
+			margin: $space-size 0;
+		}
+
+		.nautilus-path-button {
+			margin: 0 $space-size / 2;
+			border-radius: $circular-radius;
+			@extend %button-flat;
+
+			&.current-dir {
+				color: $titlebar-text;
+
+				&:hover, &:active {
+					background: none;
+					box-shadow: none;
+				}
+			}
+
+			&:first-child {
+				margin-left: 0;
+			}
+		}
+
+		.nautilus-view-cell {
+			clamp box {
+				margin: 0;
+				border-spacing: 0;
+			}
+		}
+	}
+}

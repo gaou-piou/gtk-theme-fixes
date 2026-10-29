@@ -1,0 +1,133 @@
+.background.csd {
+	&.nautilus-window,
+	&.nautilus-file-chooser {
+		.nautilus-pathbar {
+			background-color: $titlebar-fill;
+			border-radius: $corner-radius;
+			margin: $space-size 0;
+			padding: 0;
+
+			.nautilus-path-button {
+				margin-top: $space-size / 2;
+				margin-bottom: $space-size / 2;
+				padding: 0 ($medium-size - 16px) / 2;
+				border-radius: $corner-radius - $space-size / 2;
+
+				&:hover {
+					background-color: if($variant =='light' and $topbar =='light', white, rgba(white, 0.15));
+					box-shadow: 0 1px 3px rgba(black, 0.06), inset 0 1px highlight($titlebar);
+				}
+
+				&:active {
+					box-shadow: none;
+					background-color: $titlebar-divider;
+				}
+
+				&.current-dir {
+					color: $titlebar-text;
+
+					&:hover, &:active {
+						background: none;
+						box-shadow: none;
+					}
+				}
+			}
+
+			> menubutton {
+				margin: 0;
+			}
+		}
+		splitbutton {
+			menubutton {
+				button {
+					padding: 6px;
+				}
+			}
+		}
+
+
+
+		
+		.nautilus-list-view {
+			listview.view {
+				> row.activatable {
+					padding-top: calc(#{$space-size} / 1);
+					padding-bottom: calc(#{$space-size} / 1);
+					> cell {
+						> widget.nautilus-view-cell {
+							padding: $space-size / 2 $space-size * 1.5;
+						}
+					}
+				}
+			}
+		}
+		.nautilus-list-view {
+			listview.view {
+				.nautilus-view-cell {
+					padding: 0;
+
+					button.star.circular {
+						margin: 0;
+						min-height: 24px;
+						min-width: 24px;
+						padding: $space-size / 2;
+						border-radius: $circular-radius;
+					}
+				}
+			}
+		}
+		.nautilus-path-button {
+			margin: $space-size / 2;
+			border-radius: $corner-radius - $space-size / 2;
+		}
+
+		.nautilus-grid-view {
+			child.activatable {
+				.nautilus-view-cell {
+					padding: $space-size;
+
+					clamp box {
+						margin: 0;
+						border-spacing: 0;
+					}
+
+					.icon-ui-labels-box {
+						margin: 0 0 $space-size * 2;
+						border-spacing: 0;
+					}
+
+					.dim-label {
+						border-spacing: 0;
+					}
+				}
+
+				&:selected {
+					.nautilus-view-cell {
+						.dim-label {
+							color: $primary;
+						}
+					}
+				}
+			}
+		}
+
+		.nautilus-query-editor-tag {
+			border-radius: $circular-radius;
+
+			> button {
+				margin: 0;
+				padding: 0;
+				min-height: 24px;
+				min-width: 24px;
+			}
+		}
+	}
+	&.ptyxis-window {
+		headerbar.main-header-bar {
+			splitbutton {
+				margin-top: 6px;
+				margin-bottom: 6px;
+			}
+		}
+	}
+}

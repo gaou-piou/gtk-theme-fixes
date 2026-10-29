@@ -1,0 +1,64 @@
+$window-radius: 18px;
+$corner-radius: $window-radius - $space-size;
+$menu-radius: $corner-radius;
+$menuitem-radius: $menu-radius - $space-size;
+
+$fix-size: 4px;
+
+$headerbar-size-left: 0.6 * $space-size;
+$headerbar-size-right: 1 * $space-size;
+$button_fix_multiplier: 0.5 0.5;
+
+// Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
+$headerbar-tab-margin: 3px;
+// Vertical margin the theme puts on headerbar buttons (collapsed toolbars, e.g. Ptyxis with tabs)
+$headerbar-button-margin: 6px;
+
+// Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
+// screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
+// to the side than to the top, close->minimize as far apart as minimize->maximize.
+// The visible buttons are 22px circles
+$titlebutton-size: 22px;
+$titlebutton-inset: 0;
+$headerbar-height: 48px;
+$headerbar-default-decoration-height: 44px;
+$titlebutton-box-height: 22px;
+$titlebar-corner-radius: $window-radius;
+$gtk3-titlebutton-size: 22px;
+$gtk3-titlebutton-inset: 0;
+$headerbar-button-height: 38px;
+// Close button margin towards the others (was 10px: close->minimize 19px vs 12px)
+$windowcontrols-hmargin: 3px;
+// Electron titlebar (GTK3 default decoration): 44px, padding computed from it
+$default-decoration-min-height: 44px;
+$default-decoration-titlebutton-size: 22px;
+$default-decoration-button-offset: 0;
+$default-decoration-close-margin: 0;
+
+// Chromium browsers (GTK mode) and Electron <= 42 (FreeTube, ClientFrameViewLinux) read
+// `headerbar.header-bar.titlebar`: Electron <= 42 adds its padding to the titlebar padding above and
+// ignores margins (close button 10px further from the side than from the top, 2026-10-09), so the
+// padding stays 0 and the browsers' side gap goes in the close margin, measured on Chromium 154:
+// the close glyph 1px closer to the side than to the top
+$chromium-titlebar-padding: 0;
+// 8px (10px: the circle 10px from the side, 9px from the top in Chromium and Brave, 2026-10-19)
+$chromium-close-margin: 8px;
+
+// Nautilus file list, measured in the real Nautilus against the selected sidebar row (2026-10-22):
+// the sidebar is a card 6px in from the window, its rows 6px into the card, the file list 6px past
+// the divider gap; the list icons 8px into the row like the sidebar icons (4px: the 32px file
+// icons carry 4px more empty margin than the 16px symbolic ones; Magnetic's own 9px, which used to
+// outrank the generic rule, left them 13px in). The offscreen estimate (12px and 17px) was off.
+$nautilus-list-inset: $space-size;
+$nautilus-sidebar-row-padding: 4px;
+
+// Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22:
+// the 22px circles 34px apart like Nautilus' (22 + 6 + 2 * 3), the browsers' close button
+// (35 - 22) / 2 = 6px from the side, Electron's (42 - 22) / 2 = 10px. These replace
+// $chromium-titlebar-padding / $chromium-close-margin.
+$chromium-gtk4-side: 9px;
+$chromium-gtk3-side: 9px;
+$electron-gtk3-side: 11px;
+$chromium-gtk4-button-margin: 3px;
+// Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
+$chromium-gtk4-glyph-alpha: 1.195;

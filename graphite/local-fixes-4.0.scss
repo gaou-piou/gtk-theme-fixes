@@ -1,0 +1,57 @@
+window {
+	&.nautilus-window {
+		.content-pane {
+			// sides only: the top bar is collapsed (toolbar + tab bar), fixes-4.0 already pads
+			// the box 3px vertically. $space-size here added 3px over the bars box's own 3px:
+			// the buttons 3px below the sidebar's (2026-10-21)
+			.top-bar {
+				headerbar > windowhandle > box {
+					padding-left: 0;
+					padding-right: 0;
+				}
+			}
+		}
+	}
+	&#blackbox-main-window {
+		headerbar.custom-headerbar {
+			> windowhandle > box {
+				padding: 0;
+				windowcontrols.start {
+					padding-top: #{2*$space-size};
+					padding-bottom: #{2*$space-size};
+				}
+			}
+		}
+	}
+}
+
+// rimless: the headerbar's top highlight belongs on the window edge. In a collapsed top bar
+// (Nautilus: toolbar + tab bar) fixes-4.0 pads the bars box 3px, so the line floated 3px below
+// the edge over the content pane only (2026-10-20). Draw it on the box instead.
+@if $rimless == 'true' {
+	toolbarview > .top-bar .collapse-spacing {
+		box-shadow: inset 0 1px highlight($titlebar);
+
+		headerbar {
+			box-shadow: none;
+		}
+	}
+}
+
+// Nautilus list view spacing as in Jasper: 8px above and below the cells, 6px above and below the
+// list (the sides: $nautilus-list-inset in fixes-4.0). Graphite packs it to 3px cells: 41px rows
+// with 32px icons; Colloid's 43px still read as cramped (2026-10-20). Graphite's 3px row gap and
+// 9px cell sides stay.
+.nautilus-list-view {
+	listview.view {
+		padding-top: $space-size;
+		padding-bottom: $space-size;
+
+		> row.activatable > cell {
+			> widget#NautilusViewCell, .nautilus-view-cell {
+				padding-top: 8px;
+				padding-bottom: 8px;
+			}
+		}
+	}
+}

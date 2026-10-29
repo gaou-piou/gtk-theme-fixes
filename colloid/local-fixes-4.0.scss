@@ -1,0 +1,148 @@
+windowcontrols, navigation-split-view headerbar windowcontrols {
+	.background &, .csd &, .background.csd &, &, &.start {
+		> button {
+			&,
+			&:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+			&.image-button {
+				> image {
+					padding: 3px;
+				}
+			}
+		}
+	}
+
+}
+
+// .background.csd {
+// 	&.nautilus-window,
+// 	&.nautilus-file-chooser {
+// 		.nautilus-query-editor {
+
+// 			// search entry
+// 			> menubutton > button.image-button {
+// 				min-width: 24px;
+// 				min-height: 24px;
+// 			}
+
+// 			> text, > box, > menubutton > button.image-button {
+// 				margin: $space-size 0;
+// 			}
+
+// 			// search entry
+// 		  > menubutton {
+// 		    margin: 2px 0;
+
+// 		    > button.image-button {
+// 		      min-width: 16px;
+// 		      min-height: 16px;
+// 		      padding: $base_padding / 2;
+// 		    }
+// 		  }
+// 		}
+
+
+// 		.nautilus-query-editor-tag {
+// 			background-color: $divider;
+
+// 			> button.image-button {
+// 				margin: 0;
+// 				padding: 0;
+// 			}
+// 		}
+
+// 		.nautilus-pathbar {
+// 			background-color: $titlebar-fill;
+// 			border-radius: $corner-radius;
+// 			margin: $space-size 0;
+// 			padding: 0;
+
+// 			@if $colorscheme !='default' or $blackness =='true' or $colortype =='fixed' {
+// 		    color: $window_fg_color;
+// 		  }
+
+// 			.content-pane & {
+// 				background-color: $fill;
+// 			}
+// 		}
+
+// 		.nautilus-path-button {
+// 			margin: 0 $space-size / 2;
+// 			border-radius: $corner-radius;
+
+// 			&.current-dir {
+// 				color: $titlebar-text;
+
+// 				&:hover, &:active {
+// 					background: none;
+// 					box-shadow: none;
+// 				}
+// 			}
+
+// 			.content-pane &.current-dir {
+// 				color: $text;
+// 			}
+
+// 			&:first-child {
+// 				margin-left: 0;
+// 			}
+
+// 			margin: 0;
+// 		  border-radius: $button_radius;
+// 		  @extend %button_basic_flat;
+
+// 		  @if $colorscheme !='default' or $blackness =='true' or $colortype =='fixed' {
+// 		    @extend %header_button_reset;
+// 		  }
+// 		}
+
+// 		.nautilus-grid-view {
+// 			child.activatable {
+
+// 				.nautilus-view-cell {
+// 					padding: $base_padding;
+
+// 					clamp box {
+// 						margin: 0;
+// 						border-spacing: 0;
+// 					}
+
+// 					.icon-ui-labels-box {
+// 						margin: 0 0 $space-size * 2;
+// 						border-spacing: 0;
+// 					}
+
+// 					.dim-label {
+// 						border-spacing: 0;
+// 					}
+// 				}
+// 			}
+// 		}
+
+// 		.nautilus-list-view {
+
+// 			listview.view {
+
+// 				> row.activatable {
+
+// 					> cell {
+
+// 						> widget.nautilus-view-cell {
+// 							padding: $space-size / 2 $space-size * 1.5;
+// 						}
+// 					}
+// 				}
+// 				.nautilus-view-cell {
+// 					padding: 0;
+
+// 					button.star.circular {
+// 						margin: 0;
+// 						min-height: 24px;
+// 						min-width: 24px;
+// 						padding: $base_padding / 2;
+// 						border-radius: $circular_radius;
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// }

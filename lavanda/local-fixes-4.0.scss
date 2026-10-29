@@ -1,0 +1,270 @@
+// Current Nautilus (50) dropped the widget names the theme targets (#NautilusPathBar,
+// #NautilusPathButton, #NautilusViewCell) in favour of CSS classes, so the
+// theme's nautilus rules no longer match. Re-apply them on the classes.
+
+// Path bar: one white field with flat buttons, like the theme's #NautilusPathBar.
+// Without this the path buttons get the white headerbar button style.
+headerbar .nautilus-pathbar {
+	padding: 0;
+	background-color: if($topbar == 'light', white, $overlay-normal);
+	border-radius: $corner-radius;
+	color: $titlebar-text-secondary;
+	box-shadow: 0 2px 3px -1px rgba(black, 0.04);
+
+	// button.toggle / button.nautilus-path-button: specificity to beat
+	// `headerbar button:not(.suggested-action):not(.destructive-action)`
+	> menubutton {
+		margin: 2px;
+
+		> button.toggle {
+			min-height: 20px;
+			min-width: 20px;
+			margin: 0;
+			padding: $space-size / 2;
+			border-radius: $corner-radius - 2px;
+			@extend %titlebar-flat-button;
+		}
+	}
+
+	button.nautilus-path-button {
+		margin: 2px;
+		min-height: 24px;
+		min-width: 24px;
+		padding-top: 0;
+		padding-bottom: 0;
+		border-radius: $corner-radius - 2px;
+		@extend %titlebar-flat-button;
+
+		&.current-dir {
+			color: $titlebar-text;
+
+			&:hover, &:active {
+				background: none;
+				box-shadow: none;
+			}
+		}
+	}
+}
+
+// Collapsed content headerbar: upstream's `.nautilus-window .content-pane .top-bar headerbar >
+// windowhandle > box { padding-top: 5px }` outranks fixes-4.0's rule and adds to its 3px
+// .collapse-spacing padding, which put the content buttons and path bar lower than the sidebar
+// ones. Centre the $headerbar-button-height title area in $headerbar-height like the sidebar (2026-10-22)
+.nautilus-window .content-pane .top-bar .collapse-spacing headerbar > windowhandle > box,
+#NautilusFileChooser .content-pane .top-bar .collapse-spacing headerbar > windowhandle > box {
+	padding-top: ($headerbar-height - $headerbar-button-height) / 2 - $_collapse-spacing;
+}
+
+// List view: nautilus keeps the horizontal inset in sync on three nodes
+// (columnview padding = -listview margin = row margin) and puts the cell
+// padding on .nautilus-view-cell. The theme changed only the columnview padding
+// and padded the cell as well, which pushed the rows away from the column headers.
+.nautilus-list-view columnview {
+	padding-left: $space-size;
+	padding-right: $space-size;
+
+	> listview {
+		margin-left: -$space-size;
+		margin-right: -$space-size;
+
+		> row {
+			margin-left: $space-size;
+			margin-right: $space-size;
+		}
+
+		// rows content lines up with the header labels (header button padding: 6px)
+		&.view > row.activatable > cell {
+			padding: $space-size / 2 0;
+		}
+	}
+}
+
+// Tab bar inside a header bar (Black Box): the tab close button also matches
+// `headerbar button:not(.suggested-action):not(.destructive-action)`, which wins
+// over the tab rules and paints it white, under the white icon of the selected tab.
+// Keep it flat like in a tab bar outside a header bar (button.flat for specificity).
+headerbar tabbar tabbox > tabboxchild > tab button.flat.tab-close-button {
+	background-color: transparent;
+	box-shadow: none;
+
+	&:hover {
+		background-color: $overlay-hover;
+		box-shadow: none;
+	}
+
+	&:active {
+		background-color: $overlay-active;
+		box-shadow: none;
+	}
+}
+
+// .background.csd {
+// 	&.nautilus-window,
+// 	&.nautilus-file-chooser {
+// 		.nautilus-grid-view {
+// 		  child.activatable {
+// 		    @extend %row_activatable;
+// 		    padding: 0;
+
+// 		    .nautilus-view-cell {
+// 		      padding: 0;
+
+// 		      .icon-ui-labels-box {
+// 		        margin: 0 0 $space-size * 2;
+// 		        border-spacing: 0;
+// 		      }
+
+// 		      .dim-label {
+// 		        border-spacing: 0;
+// 		      }
+// 		    }
+// 		    listview.view {
+// 			    border-spacing: $space-size / 2;
+// 			    padding: $space-size * 1.5 0 $space-size * 2.5;
+
+// 			    row.activatable {
+// 			      border-radius: $corner-radius;
+
+// 			      > cell {
+// 			        padding: $space-size / 2 $space-size;
+
+// 			        > .nautilus-view-cell {
+// 			          padding: 0;
+// 			        }
+// 			      }
+// 			    }
+// 			  }
+// 		  }
+// 		}
+// 		.nautilus-query-editor {
+
+// 		  // search entry
+// 		  > menubutton > button.image-button {
+// 		    min-width: 24px;
+// 		    min-height: 24px;
+
+// 		    @extend %titlebar-flat-button;
+// 		  }
+
+// 		  > * {
+// 		    margin: 2px 0;
+// 		  }
+// 		}
+
+// 		.nautilus-query-editor-tag {
+// 		  background-color: $titlebar-divider;
+
+// 		  > button.image-button {
+// 		    margin: 0;
+// 		    padding: 0;
+// 		    @extend %titlebar-flat-button;
+// 		  }
+// 		}
+
+// 		.nautilus-pathbar {
+// 		  padding: 0;
+// 		  background-color: if($topbar =='light', white, $overlay-normal);
+// 		  border-radius: $corner-radius;
+// 		  color: $titlebar-text-secondary;
+// 		  box-shadow: 0 2px 3px -1px rgba(black, 0.04);
+
+// 		  > menubutton {
+// 		    margin: 2px;
+
+// 		    > button {
+// 		      min-height: 20px;
+// 		      min-width: 20px;
+// 		      margin: 0;
+// 		      padding: $space-size;
+// 		      border-radius: $corner-radius - 2px;
+// 		      @extend %titlebar-flat-button;
+// 		    }
+// 		  }
+// 		}
+
+// 		.nautilus-path-button {
+// 		  margin: 2px;
+// 		  min-height: 24px;
+// 		  min-width: 24px;
+// 		  padding-top: 0;
+// 		  padding-bottom: 0;
+// 		  border-radius: $corner-radius - 2px;
+// 		  background-color: transparent;
+// 		  @extend %titlebar-flat-button;
+
+// 		  &.current-dir {
+// 		    color: $titlebar-text;
+
+// 		    &:hover, &:active {
+// 		      background: none;
+// 		      box-shadow: none;
+// 		    }
+// 		  }
+// 		}
+
+// 		.nautilus-view-cell {
+// 		  clamp box {
+// 		    margin: 0;
+// 		    border-spacing: 0;
+// 		  }
+// 		}
+
+// 		splitbutton {
+// 			&:hover {
+// 				background: initial;
+// 			}
+// 		}
+
+// 		.top-bar {
+// 			headerbar {
+// 				box.horizontal.linked:not(.nautilus-pathbar) {
+// 					padding-top: $space-size;
+// 					padding-bottom: $space-size;
+// 					> entry {
+// 						min-height: initial;
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// 	&.nautilus-file-chooser {
+// 		.content-pane {
+// 	    .top-bar headerbar {
+// 	      box-shadow: inset 0 1px highlight($titlebar), inset 0 -1px $border;
+// 	      background-color: $titlebar;
+
+// 	      > windowhandle > box {
+// 	        padding-top: $space-size - 1px;
+// 	      }
+
+// 	      &:backdrop {
+// 	        background-color: $titlebar-backdrop;
+// 	      }
+// 	    }
+
+// 	    toolbarview.undershoot-top scrolledwindow {
+// 	      @include undershoot(top);
+// 	    }
+
+// 	    toolbarview.undershoot-bottom scrolledwindow {
+// 	      @include undershoot(bottom);
+// 	    }
+// 	  }
+// 	}
+// 	&.ptyxis-window {
+// 		headerbar.main-header-bar {
+// 			splitbutton {
+// 				margin-top: 0;
+// 				margin-bottom: 0;
+
+// 				> button,
+// 				> menubutton > button {
+// 					@extend %titlebar-flat-button;
+// 					min-width: 24px;
+// 					min-height: 0;
+// 					padding: 4px 8px;
+// 				}
+// 			}
+// 		}
+// 	}
+// }

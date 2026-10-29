@@ -1,0 +1,67 @@
+//
+// Radius
+//
+
+$window-radius: 19px;
+$modal-radius: 12px;
+$corner-radius: 12px;
+$menuitem-radius: 8px;
+$menu-radius: $menuitem-radius + $space-size;
+$circular-radius: 9999px;
+
+
+//
+// FIXES
+//
+
+$fix-size: 4px;
+
+$headerbar-size-left: 1 * $fix-size;
+$headerbar-size-right: 2 * $fix-size;
+$button_fix_multiplier: 0.65 0.45;
+
+// Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
+$headerbar-tab-margin: 5px;
+// Vertical margin the theme puts on headerbar buttons (collapsed toolbars, e.g. Ptyxis with tabs)
+$headerbar-button-margin: 6px;
+
+// The theme's own horizontal margin of the window buttons (4px each side, 14px between them):
+// the close button gets it towards the others; its window edge side is set by the gap below
+// (was 9px, the edge margin before the generic gap rules)
+$windowcontrols-hmargin: 4px;
+
+// Close button gap (generic): 1px closer to the side than to the top, measured 2026-10-08.
+// The visible window button is the 22px circle (button box), not its icon
+$titlebutton-size: 22px;
+// GTK4/GTK3 headerbar ($large-size), GTK4 default decoration, GTK3 headerbar image button
+// ($medium-size): GTK3 headerbars are fixed at 48px like the GTK4 ones
+$headerbar-height: 48px;
+$headerbar-default-decoration-height: 44px;
+$headerbar-button-height: 36px;
+// Titlebars without app buttons (Electron, default decoration, X11 frames): at least twice the
+// corner radius, the close button concentric to the corner (19px -> 38px)
+$titlebar-corner-radius: $window-radius;
+
+// Electron titlebar (GTK3 default decoration): the padding is computed from the height; the
+// circle sits at the padding from the side with the close margin at 0 (offset 0, Electron 42/44)
+$default-decoration-min-height: 44px;
+$default-decoration-button-offset: 0;
+$default-decoration-close-margin: 0;
+
+// Chromium browsers (GTK mode): the circle sits 9px from the top of the tab strip (set by the
+// browser) and at the close margin from the side -> 8px. The padding stays 0: Electron <= 42
+// (FreeTube) adds it to its own titlebar padding
+$chromium-titlebar-padding: 0;
+$chromium-close-margin: 8px;
+
+// Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22:
+// the 22px circles 36px apart like Nautilus' (22 + 6 + 2 * 4), the browsers' close button
+// (35 - 22) / 2 = 6px from the side (between Chromium's top 9 and Helium's top 6), Electron's
+// (42 - 22) / 2 = 10px (top 11). These replace $chromium-titlebar-padding / $chromium-close-margin.
+$chromium-gtk4-side: 9px;
+$chromium-gtk3-side: 9px;
+$electron-gtk3-side: 11px;
+$chromium-gtk4-button-margin: 4px;
+// Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, opaque in the browser; sqrt(0.7) = 0.837
+// came out 177 vs Nautilus 193, 0.87 measured 191 (2026-10-23)
+$chromium-gtk4-glyph-alpha: 0.87;
