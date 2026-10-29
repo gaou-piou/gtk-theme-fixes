@@ -1,0 +1,27 @@
+
+/* ---- local fixes (appended by PKGBUILD prepare) ---- */
+
+/* Firefox 15x replaced [breakout-extend] with [popover-open]. When the results
+ * popover opens on focus, the (Proton) urlbar grows its input container by
+ * --urlbar-margin-inline / --urlbar-container-padding-block via negative
+ * margins, and shrinks back on blur, so the address bar visibly jumps.
+ * MacTahoe still only targets [breakout-extend], so neutralise the growth. */
+#urlbar,
+.urlbar {
+	--urlbar-input-growth-open-inline: 0px !important;
+	--urlbar-input-growth-open-block: 0px !important;
+	--urlbar-background-overhang-open: 0px !important;
+}
+
+/* Firefox 15x paints the results popup as a "joint background" with the input:
+ * .urlbarView-background extends above the popup with square top corners and
+ * .urlbar-background is stretched/clipped towards it. MacTahoe styles the
+ * popup itself as a detached rounded panel, so drop the joint background. */
+.urlbarView-background {
+	display: none !important;
+}
+
+.urlbar[popover-open] > .urlbar-background {
+	inset: 0 !important;
+	clip-path: none !important;
+}

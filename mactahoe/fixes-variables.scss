@@ -1,0 +1,75 @@
+// radiuses
+$wm_radius: if($laptop == 'false', 20px, 18px);
+
+
+$space-size: 6px;
+$fix-size: 4px;
+
+$headerbar-size-left: 1.2 * $fix-size;
+$headerbar-size-right: 1.8 * $fix-size;
+
+$button_fix_multiplier: 0.6 0.55;
+
+// Vertical margin the theme puts on headerbar buttons (collapsed toolbars): none, the box padding
+// carries the spacing
+$headerbar-button-margin: 0;
+
+// $windowcontrols-hmargin: not set: the window buttons did not render in the headless test,
+// so the close button keeps the generic margin
+// Window corner radius: titlebars without app buttons (Electron, GTK3/GTK4 default decoration,
+// X11 frames) become twice as tall (36px) with the close button concentric to the corner
+$titlebar-corner-radius: $wm_radius;
+
+// Electron titlebar (GTK3 default decoration), measured on screenshots (Electron 44, 2026-10-08).
+// It has no app buttons, so it is as tall as the GTK4 default decoration (and the X11 frames),
+// not as a 48px headerbar. Without the generic close margin the close icon sits at padding +
+// 1px (the visible dot at + 2px); the padding is computed from the height (36px -> 8px).
+// (was: padding 10px, min-height 48px -> dot 20 / 17)
+$default-decoration-min-height: 44px;
+$default-decoration-button-offset: 1px;
+$default-decoration-close-margin: 0;
+
+// Close button gap (GTK4): visible window button and the titlebar heights it is centred in
+$titlebutton-size: 16px;
+$headerbar-height: 48px;
+// Nautilus: both headerbars put the buttons 3px lower (top 20), and the floating sidebar card
+// sits 6px in from the window side (fixes-4.0, 2026-10-23)
+$nautilus-content-headerbar-height: 54px;
+$nautilus-sidebar-headerbar-height: 54px;
+$nautilus-sidebar-offset: 6px;
+// the close button's margin towards the others, as the others' (was 9px: max->close 31px vs 24px)
+$windowcontrols-inner-margin: 1px;
+$headerbar-default-decoration-height: 44px;
+// GTK3 headerbar image button (the headerbar is sized from it plus its margin)
+$headerbar-button-height: 36px;
+
+// Chromium browsers (GTK mode): the close dot sits 13px from the top of the tab strip, set by
+// Chromium; at margin + 2px from the side -> 12px. The padding stays 0: Electron <= 42
+// (FreeTube) adds it to its own titlebar padding (2026-10-08)
+$chromium-titlebar-padding: 0;
+$chromium-close-margin: 10px;
+
+// Chromium browsers (GTK mode): dim the inactive tab text, the tab backgrounds are all the same
+$chromium-inactive-tab-dim: 0.55;
+
+// Nautilus file list, measured in the real Nautilus against the selected sidebar row (2026-10-22):
+// rows 10px from the column sides, the list icons as far into the row as the sidebar icons (6px:
+// the 32px file icons carry 4px more empty margin than the 16px symbolic ones; 5px was 1px short).
+$nautilus-list-inset: 10px;
+$nautilus-sidebar-row-padding: 6px;
+
+// Chromium browsers (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-23: the 16px image
+// buttons (a 14px circle, 1px in) 24px apart like the native ones (16 + 2 * 1 + Chromium's 6), the
+// circle as far from the side as Chromium's tab strip puts it from the top, 13px
+$chromium-gtk4-side: 12px;
+$chromium-gtk4-button-margin: 1px;
+// GTK3: the button box is 18px (the circle 2px in): no margin, 11px to the side
+$chromium-gtk3-side: 11px;
+$chromium-gtk3-button-margin: 0;
+// Header bar split buttons (fixes-4.0): the label half had the 3px padding of an icon button (text
+// 3px from the sides, 9px from the top) and the arrow half 12px (48px wide next to 36px icon
+// buttons), 2026-10-27
+$splitbutton-text-padding: 12px;
+$splitbutton-arrow-padding: 6px;
+// GTK3 header bar entries (fixes-3.0): the theme pads them 3px top and bottom
+$gtk3-headerbar-entry-vpadding: 6px;

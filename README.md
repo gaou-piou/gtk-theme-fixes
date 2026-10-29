@@ -3,8 +3,9 @@
 Geometry and consistency fixes for GTK 3/4 and GNOME Shell themes, compiled into the upstream SCSS
 sources by theme packages: the `relic-*-gtk-theme` packages in the AUR (maintained builds of the
 Catppuccin, Everforest, Gruvbox, Kanagawa, Material, Nightfox, Osaka, Rosé Pine, Tokyonight and Vague
-GTK themes by Fausto-Korpsvart, whose repositories are archived) and local builds of other themes
-(Colloid, Fluent, Graphite, Jasper, Lavanda, Layan, MacTahoe, Magnetic, Orchis, Orianin).
+GTK themes by Fausto-Korpsvart, whose repositories are archived), `mactahoe-gtk-theme-fixed-git` in
+the AUR, and local builds of other themes (Colloid, Fluent, Graphite, Jasper, Lavanda, Layan,
+Magnetic, Orchis, Orianin).
 
 Nothing here is a theme on its own.
 
@@ -17,6 +18,9 @@ Nothing here is a theme on its own.
 | `relic/fixes-variables.scss` | The relic themes' values for the generic fixes (measured geometry) |
 | `relic/local-fixes-4.0.scss` | Fixes specific to the relic themes (Nautilus pathbar, linked entries, …) |
 | `relic/local-fixes-gnome-shell.scss` | GNOME Shell fixes for the relic themes (notification banners, …) |
+| `mactahoe/fixes-variables.scss` | MacTahoe's values for the generic fixes |
+| `mactahoe/local-fixes-4.0.scss` | Fixes specific to MacTahoe (GTK 4) |
+| `mactahoe/local-fixes-firefox.css` | Appended to MacTahoe's Firefox theme (`customChrome.css`) |
 
 The generic fixes read optional variables; a theme sets them in its variables file to switch a fix
 on and give it its measurements. Each variable is documented where `fixes-*.scss` reads it.
