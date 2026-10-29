@@ -54,6 +54,9 @@ headerbar, stack, leaflet,
 	// }
 }
 
+$_gtk3-headerbar-entry-height: if(variable-exists("gtk3-headerbar-entry-height"), $gtk3-headerbar-entry-height, if(variable-exists("headerbar-button-height"), $headerbar-button-height, null));
+$_gtk3-headerbar-entry-vpadding: if(variable-exists("gtk3-headerbar-entry-vpadding"), $gtk3-headerbar-entry-vpadding, 0);
+
 headerbar.titlebar, headerbar.default-decoration, headerbar {
 	// min-height: 6 * $_fix-size;
 	min-height: calc(1.7rem + #{2*$_fix-size});
@@ -61,14 +64,52 @@ headerbar.titlebar, headerbar.default-decoration, headerbar {
 		margin-top: calc(#{$_fix-size} * 1);
 		margin-bottom: calc(#{$_fix-size} * 1);
 	}
-	> *:not(button) {
+	// (not the +/- buttons of a spin button, inside its frame, nor the buttons of a stack switcher,
+	// which takes the margin itself as the themes do: MacTahoe's 6px stackswitcher margin plus this
+	// 4px one on its buttons made a header bar with one 61px tall)
+	> *:not(button):not(spinbutton):not(stackswitcher) {
 		> button:not(.titlebutton):not(.close):not(.maximize):not(.minimize)
 		{
 			margin-top: calc(#{$_fix-size} * 1);
 			margin-bottom: calc(#{$_fix-size} * 1);
 		}
 	}
-	*:not(.image-button) {
+	// Entries, spin buttons and combo boxes with the buttons' margin: the themes give them their own
+	// (6px), so a header bar with one was taller than without and stretched its buttons (MacTahoe:
+	// 36px buttons -> 40px next to an entry, 44px next to a spin button), 2026-10-28
+	// (stackswitcher.linked: Fluent's and Lavanda's `.titlebar stackswitcher.linked` margin)
+	entry, spinbutton, stackswitcher, stackswitcher.linked, combobox > box > button.combo {
+		margin-top: calc(#{$_fix-size} * 1);
+		margin-bottom: calc(#{$_fix-size} * 1);
+	}
+	spinbutton > entry, spinbutton > button, stackswitcher > button {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	// Entries as tall as the image buttons: header bar children fill the row, but an entry inside a
+	// box does not (Evince's zoom entry, a vertical GtkBox: 25px next to 36px buttons in MacTahoe,
+	// 19px in the relic themes, while the themes size their headerbar entries to the buttons), 2026-10-28.
+	// $gtk3-headerbar-entry-height = that height, unset: $headerbar-button-height;
+	// $gtk3-headerbar-entry-vpadding = the theme's top + bottom entry padding (MacTahoe: 3px + 3px), unset: 0.
+	// GTK3 min-height is the content height: the padding comes off.
+	@if $_gtk3-headerbar-entry-height {
+		entry {
+			min-height: $_gtk3-headerbar-entry-height - $_gtk3-headerbar-entry-vpadding;
+		}
+	}
+	// A spin button's entry and +/- buttons: the spin button's own min-height sizes it and the row
+	// stretches it; their padding and min-height made it 2px taller than the buttons (relic: 36px
+	// next to 34px, which stretched them), 2026-10-28
+	spinbutton > entry, spinbutton > button {
+		min-height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+	// Window buttons without a min-height of their own (Chromium/Electron read it: Orchis, Orianin).
+	// This was `*:not(.image-button)`, which also took the themes' min-height off the entries and
+	// stack switchers (Evince's zoom entry 25px next to 36px buttons, MacTahoe), 2026-10-28.
+	// Same specificity as before.
+	.titlebutton {
 		min-height: initial;
 	}
 	windowhandle  {

@@ -212,6 +212,15 @@ headerbar tabbar.inline {
 		}
 	}
 }
+// Nautilus' content pane headerbar: its row is as tall as the path bar, not as a headerbar button,
+// so the window buttons there need their own margin to stay round
+// ($nautilus-content-windowcontrols-margin; Lavanda: (34 - 24) / 2 = 5px, the circle was 24x26)
+@if variable-exists("nautilus-content-windowcontrols-margin") {
+	.nautilus-window .content-pane headerbar windowcontrols > button:not(.suggested-action):not(.destructive-action) {
+		margin-top: $nautilus-content-windowcontrols-margin;
+		margin-bottom: $nautilus-content-windowcontrols-margin;
+	}
+}
 
 // The extra close margin above (calc($button_fix_multiplier * 1em)) separates the close button
 // from the others when it is last (layout ":minimize,maximize,close"). When it comes first
@@ -274,8 +283,9 @@ $_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size")
 	$_default-decoration-height: max($_default-decoration-height, 2 * $titlebar-corner-radius) !global;
 }
 
-@mixin _titlebutton-gap($bar-height, $inset: $_titlebutton-inset, $size: $titlebutton-size) {
-	$gap: floor(($bar-height - $size) / 2) - $_titlebutton-gap-offset;
+@mixin _titlebutton-gap($bar-height, $inset: $_titlebutton-inset, $size: $titlebutton-size, $offset: 0) {
+	// $offset: how far the headerbar itself sits from the window side (Nautilus' floating sidebar)
+	$gap: floor(($bar-height - $size) / 2) - $_titlebutton-gap-offset - $offset;
 
 	// the side facing the other buttons gets the theme's own button margin, so the close button
 	// is as far from its neighbour as the others are from each other (the $windowcontrols-hmargin
@@ -299,6 +309,23 @@ $_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size")
 		@if variable-exists("headerbar-height") {
 			#{$ctx} headerbar {
 				@include _titlebutton-gap($headerbar-height);
+			}
+			// Nautilus' content pane headerbar holds the end window controls, and its path bar
+			// can make it taller than the sidebar's (Colloid: 48px vs 46px, top 13, the side was
+			// 12, 2026-10-23): $nautilus-content-headerbar-height sets the gap from its height
+			@if variable-exists("nautilus-content-headerbar-height") {
+				#{$ctx}.nautilus-window .content-pane headerbar {
+					@include _titlebutton-gap($nautilus-content-headerbar-height);
+				}
+			}
+			// the same for its sidebar headerbar, which holds the start controls; a floating sidebar
+			// sits $nautilus-sidebar-offset in from the window side (MacTahoe: 54px, 6px; the close
+			// button was 23px from the side at top 20, 2026-10-23)
+			@if variable-exists("nautilus-sidebar-headerbar-height") {
+				#{$ctx}.nautilus-window .sidebar-pane headerbar {
+					@include _titlebutton-gap($nautilus-sidebar-headerbar-height,
+						$offset: if(variable-exists("nautilus-sidebar-offset"), $nautilus-sidebar-offset, 0));
+				}
 			}
 		}
 		// X11 titlebars mutter draws (mutter-x11-frames, GTK4 + libadwaita) and GTK4 windows without
@@ -459,11 +486,52 @@ toolbarview > .bottom-bar {
 	}
 }
 
+// The bars box's 3px padding on the window-edge side is where a theme's headerbar edge should be:
+// themes draw a 1px highlight on the headerbar's top (`box-shadow: inset 0 1px`, a lit window edge
+// inherited from GTK3 Adwaita; libadwaita 1.10 has none and keeps a top bar's headerbar flat).
+// With the headerbar 3px down, that highlight landed 3px into the window: a stray line above the
+// content (GNOME Extensions' top bar, Nautilus' path bar, user report 2026-10-26; Orchis, Colloid,
+// Lavanda, Orianin). Give the headerbar that gap instead of the box above it: the painted box
+// grows 3px, the layout box does not (negative margin), so nothing moves and the highlight sits on
+// the window edge, as it already does in the themes that port libadwaita's sass (Graphite, Jasper,
+// MacTahoe, Fluent: their highlight is at y=0).
+toolbarview > .top-bar .collapse-spacing headerbar {
+	margin-top: -$_collapse-spacing;
+	padding-top: $_collapse-spacing;
+}
+
+toolbarview > .bottom-bar .collapse-spacing headerbar {
+	margin-bottom: -$_collapse-spacing;
+	padding-bottom: $_collapse-spacing;
+}
+
 // Ptyxis moves that padding inside its .visual-bell-area (app CSS, same selector minus the
-// class); the rule above outranks it at USER priority and would add the 3px twice
+// class); the rule above outranks it at USER priority and would add the 3px twice. Its bar has
+// no gap to move into a headerbar either: nothing for the two rules above to do there.
 fullscreenbox > toolbarview > revealer.top-bar > windowhandle > box.collapse-spacing {
 	padding-top: 0;
 	padding-bottom: 0;
+
+	headerbar {
+		margin-top: 0;
+		padding-top: 0;
+	}
+}
+
+// With the tab bar shown (window.has-tab-bar, Ptyxis 50) that 3px sits above and below the
+// headerbar inside .visual-bell-area, and bares the top bar Ptyxis paints in its palette's
+// headerbar colour (#2e2e32 dark) around the theme's headerbar: two bands, a gap between title bar
+// and tabs (Orchis, user report 2026-10-29). Give the 3px to the headerbar, as above: same height,
+// the theme's colour throughout, in :backdrop too. The visual bell still flashes the whole area:
+// Ptyxis clears the headerbar's background while it animates.
+window.ptyxis-window.has-tab-bar .visual-bell-area {
+	padding-top: 0;
+	padding-bottom: 0;
+
+	headerbar {
+		padding-top: $_collapse-spacing;
+		padding-bottom: $_collapse-spacing;
+	}
 }
 
 // Black Box packs its end buttons (new tab, exit fullscreen, menu) in its own GtkBox with
@@ -509,6 +577,57 @@ $_toolbar-contexts: "headerbar", ".toolbar", "actionbar > revealer > box", "sear
 		> menubutton > button {
 			border-radius: inherit;
 		}
+	}
+}
+
+// Split buttons and drop-downs in a header bar (Apostrophe's Save, Text Editor's Open). Themes that
+// carry the headerbar spacing on the buttons ($headerbar-button-margin) zero it on the split
+// button's halves and give none to the split button, so it filled the 48px row, as tall as the bar
+// while the other buttons are 36px (Jasper, Magnetic, 2026-10-27); a drop-down's button got none
+// either (Catppuccin, Vague: 48px, 2026-10-28). The margin moves to the split button / drop-down.
+@if $_headerbar-button-margin != 0 {
+	headerbar dropdown {
+		margin-top: $_headerbar-button-margin;
+		margin-bottom: $_headerbar-button-margin;
+
+		> button {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	headerbar splitbutton {
+		margin-top: $_headerbar-button-margin;
+		margin-bottom: $_headerbar-button-margin;
+
+		> button,
+		> menubutton,
+		> menubutton > button {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+	}
+}
+
+// The halves of a header bar split button get the padding of an icon button, the label one too:
+// its text sat 3px from the sides of its hover pill and 9px from the top (MacTahoe), or 6px and
+// 12px (Orchis, Orianin), 2026-10-27.
+// $splitbutton-text-padding = side padding of the label half, about the text's vertical gap so
+// the hover shape has even sides (MacTahoe: 12px, as its Open button);
+// $splitbutton-arrow-padding = side padding of the arrow half, wide as the theme's icon buttons
+// (MacTahoe: 6px, the arrow half was 48px next to 36px icon buttons). Unset: untouched.
+@if variable-exists("splitbutton-text-padding") {
+	headerbar splitbutton.text-button > button {
+		padding-left: $splitbutton-text-padding;
+		padding-right: $splitbutton-text-padding;
+	}
+}
+// (the arrow is a button.toggle in a menubutton.popup: the classes outrank the themes' own
+// `menubutton.popup > button.toggle:not(.image-button)`)
+@if variable-exists("splitbutton-arrow-padding") {
+	headerbar splitbutton > menubutton.popup > button.toggle:not(.image-button) {
+		padding-left: $splitbutton-arrow-padding;
+		padding-right: $splitbutton-arrow-padding;
 	}
 }
 
