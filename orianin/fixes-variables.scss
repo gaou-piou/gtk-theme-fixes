@@ -15,9 +15,9 @@ $titlebutton-inset: 13px;
 // The default decoration (X11 frames mutter draws): 24x24 buttons with no padding, the glyph (24 - 10) / 2 in
 $titlebutton-default-decoration-inset: 7px;
 $headerbar-height: 48px;
-// Nautilus' content pane headerbar, where the end window controls are: 58px, its content 5px lower
-// than the sidebar's (top 24, fixes-4.0, 2026-10-23)
-$nautilus-content-headerbar-height: 58px;
+// Nautilus' content pane headerbar, where the end window controls are: as tall as the sidebar's once
+// the path bar and the location page are 36px ($nautilus-pathbar-height; was 58px, its content 5px lower)
+$nautilus-content-headerbar-height: 48px;
 $headerbar-default-decoration-height: 44px;
 $titlebutton-box-height: 24px;
 // Orianin window corners (installed CSS: 18px)

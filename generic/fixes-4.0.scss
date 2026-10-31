@@ -229,6 +229,32 @@ headerbar tabbar.inline {
 // height: 36px = a header icon button) and $nautilus-pathbar-radius (its corners; the buttons get
 // that minus their margin, in every state, so hover keeps the shape).
 @if variable-exists("nautilus-pathbar-height") {
+	// The buttons inside the entries and the path bar (the search options, the path bar menu) kept the theme's
+	// 24px + 2 * 6px padding plus its margin: 46px in all, which sized the whole stack, so the header
+	.nautilus-window .content-pane headerbar stack menubutton > button:not(.suggested-action):not(.destructive-action) {
+		&, &:hover, &:active, &:checked, &:backdrop, &:focus, &:focus-visible {
+			min-height: 24px;
+			margin-top: 0; margin-bottom: 0;
+			padding-top: 0; padding-bottom: 0;
+		}
+	}
+	// The location (address edit) page: its entry and close button are as tall as the path bar, the
+	// close button a square (it was 36x46, an oval, the entry 43px: the stack, so the header, grew)
+	.nautilus-window .content-pane headerbar .linked {
+		> entry, > button {
+			&, &:hover, &:active, &:checked, &:backdrop, &:focus, &:focus-visible {
+				min-height: $nautilus-pathbar-height;
+				margin-top: 0; margin-bottom: 0;
+				padding-top: 0; padding-bottom: 0;
+			}
+		}
+		> button:not(.suggested-action):not(.destructive-action) {
+			&, &:hover, &:active, &:checked, &:backdrop, &:focus, &:focus-visible {
+				min-width: $nautilus-pathbar-height;
+				padding-left: 0; padding-right: 0;
+			}
+		}
+	}
 	$_pathbar-margin: 3px;
 	$_pathbar-radius: if(variable-exists("nautilus-pathbar-radius"), $nautilus-pathbar-radius, 12px);
 	.nautilus-window .content-pane headerbar .nautilus-pathbar {
