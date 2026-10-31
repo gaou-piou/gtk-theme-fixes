@@ -268,3 +268,16 @@ headerbar tabbar tabbox > tabboxchild > tab button.flat.tab-close-button {
 // 		}
 // 	}
 // }
+
+// Content pane headerbar: upstream gives `.nautilus-window .content-pane .top-bar headerbar` its own
+// dark background (#1b1e24 / #22262c in :backdrop) and a bottom line, so it matched neither the
+// sidebar's headerbar (transparent over the sidebar pane) nor the file area below it
+// (2026-10-31). Transparent with the same top highlight as the other headerbars, on the pane colour.
+.nautilus-window .content-pane .top-bar headerbar,
+.nautilus-file-chooser .content-pane .top-bar headerbar,
+#NautilusFileChooser .content-pane .top-bar headerbar {
+	&, &:backdrop {
+		background-color: transparent;
+		box-shadow: inset 0 1px rgba(white, 0.08);
+	}
+}
