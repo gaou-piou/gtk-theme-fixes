@@ -85,3 +85,6 @@ $chromium-gtk4-button-margin: 4px;
 $chromium-gtk4-button-padding: 1px;
 // Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
 $chromium-gtk4-glyph-alpha: 1.195;
+
+// Nautilus' location page close button, rounded like the other header buttons (fixes-4.0)
+$nautilus-location-button-radius: $corner-radius;

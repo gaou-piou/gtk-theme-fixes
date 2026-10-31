@@ -277,6 +277,19 @@ headerbar tabbar.inline {
 	}
 }
 
+// The location page's close button (address edit) is no longer joined to the entry, but themes that
+// round only the outer corners of a `.linked` group left it flat on the left (Lavanda, Colloid,
+// 2026-10-31). Opt in with $nautilus-location-button-radius (the radius of the other header buttons).
+@if variable-exists("nautilus-location-button-radius") {
+	.nautilus-window .content-pane headerbar .linked > button:not(.suggested-action):not(.destructive-action),
+	.nautilus-file-chooser .content-pane headerbar .linked > button:not(.suggested-action):not(.destructive-action) {
+		&, &:hover, &:active, &:checked, &:backdrop, &:focus, &:focus-visible {
+			border-radius: $nautilus-location-button-radius;
+			margin-left: 0;
+		}
+	}
+}
+
 // The extra close margin above (calc($button_fix_multiplier * 1em)) separates the close button
 // from the others when it is last (layout ":minimize,maximize,close"). When it comes first
 // (layout "close,minimize,maximize:") that margin lands on the window edge side instead, so the
