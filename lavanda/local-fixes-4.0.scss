@@ -281,3 +281,12 @@ headerbar tabbar tabbox > tabboxchild > tab button.flat.tab-close-button {
 		box-shadow: inset 0 1px rgba(white, 0.08);
 	}
 }
+
+// Split buttons made of an image only (Ptyxis' new tab, while there is no profile menu to show): the
+// theme's 6px side padding made the button 36px wide next to the 32px square header buttons, 2026-10-31
+headerbar splitbutton.image-button > button:not(.suggested-action):not(.destructive-action) {
+	&, &:hover, &:active, &:checked, &:backdrop, &:focus, &:focus-visible {
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+}
