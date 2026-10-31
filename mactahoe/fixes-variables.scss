@@ -66,6 +66,10 @@ $chromium-gtk4-button-margin: 1px;
 // GTK3: the button box is 18px (the circle 2px in): no margin, 11px to the side
 $chromium-gtk3-side: 11px;
 $chromium-gtk3-button-margin: 0;
+// Electron (default-decoration): the same side gap; its box was 18x16, an oval at radius 9999px
+// (themetest `round`, 2026-10-31): 1px above and below makes it 18x18
+$electron-gtk3-side: 13px;
+$electron-gtk3-button-padding: 1px 0;
 // Header bar split buttons (fixes-4.0): the label half had the 3px padding of an icon button (text
 // 3px from the sides, 9px from the top) and the arrow half 12px (48px wide next to 36px icon
 // buttons), 2026-10-27

@@ -59,7 +59,8 @@ $collapse-tab-padding-top: 4px;
 $chromium-gtk4-side: 2px;
 $chromium-gtk3-side: 6px;
 $electron-gtk3-side: 8px;
-$electron-gtk3-button-padding: 0 2px;
+// 2px, not `0 2px`: that made the box 28x24, an oval at radius 9999px (themetest `round`, 2026-10-31)
+$electron-gtk3-button-padding: 2px;
 $chromium-gtk4-button-margin: 0;
 $chromium-gtk4-button-padding: 0 10px; // box 36x24: Helium's 34px top area would scale a 36px tall one
 $chromium-gtk3-button-margin: 4px;
