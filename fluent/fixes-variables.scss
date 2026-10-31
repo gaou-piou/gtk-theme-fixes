@@ -86,3 +86,6 @@ $chromium-gtk4-button-margin: 3px;
 $chromium-gtk4-glyph-alpha: 1.195;
 // GTK3 header bar entries (fixes-3.0): the theme pads them 2px top and bottom
 $gtk3-headerbar-entry-vpadding: 4px;
+// GTK3 header bar image buttons square like the GTK4 ones (fixes-3.0): the titlebar button rule pads
+// them ($medium-size - 16px) / 2 at the sides, 40x32; the vertical padding at the sides as well, 32x32
+$gtk3-headerbar-image-button-hpadding: ($medium-size - 24px) / 2;

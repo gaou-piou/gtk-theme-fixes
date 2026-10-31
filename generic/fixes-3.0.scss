@@ -60,6 +60,17 @@ $_gtk3-headerbar-entry-vpadding: if(variable-exists("gtk3-headerbar-entry-vpaddi
 headerbar.titlebar, headerbar.default-decoration, headerbar {
 	// min-height: 6 * $_fix-size;
 	min-height: calc(1.7rem + #{2*$_fix-size});
+	// Square image buttons: Fluent's `.titlebar button:not(.titlebutton)` padding is
+	// ($medium-size - 24px) / 2 by ($medium-size - 16px) / 2, sized for a 16px wide content, but an
+	// image button is 24px wide (`button.image-button { min-width: 24px }`): 40x32 in GTK3 header
+	// bars (Tilix, gedit) while its GTK4 ones are 32x32, 2026-10-31.
+	// $gtk3-headerbar-image-button-hpadding = their left and right padding; unset: the theme's.
+	@if variable-exists("gtk3-headerbar-image-button-hpadding") {
+		button.image-button:not(.suggested-action):not(.destructive-action):not(.titlebutton) {
+			padding-left: $gtk3-headerbar-image-button-hpadding;
+			padding-right: $gtk3-headerbar-image-button-hpadding;
+		}
+	}
 	> button {
 		margin-top: calc(#{$_fix-size} * 1);
 		margin-bottom: calc(#{$_fix-size} * 1);
