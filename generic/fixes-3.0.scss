@@ -70,6 +70,12 @@ headerbar.titlebar, headerbar.default-decoration, headerbar {
 			padding-left: $gtk3-headerbar-image-button-hpadding;
 			padding-right: $gtk3-headerbar-image-button-hpadding;
 		}
+		// Tilix' "+" (.session-new-button): its own application CSS sets 2px side padding, which
+		// the theme's cannot override, so the button was 32px wide next to its 34px siblings; its
+		// min-width, which Tilix leaves alone, makes up the difference, 2026-10-31
+		button.session-new-button {
+			min-width: calc(24px + 2 * #{$gtk3-headerbar-image-button-hpadding} - 2 * 2px);
+		}
 	}
 	> button {
 		margin-top: calc(#{$_fix-size} * 1);

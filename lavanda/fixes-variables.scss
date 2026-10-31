@@ -48,6 +48,9 @@ $titlebar-corner-radius: $window-radius;
 $gtk3-titlebutton-size: 22px;
 $gtk3-titlebutton-inset: 0;
 $headerbar-button-height: 34px;
+// GTK3 header bar image buttons (Tilix, gedit): 24px min-width + 2 * 4px = 32px wide, 34px tall
+// (24px + 2 * 4px + the 2px of the generic margin rules); the side padding that makes them square
+$gtk3-headerbar-image-button-hpadding: ($headerbar-button-height - 24px) / 2;
 // The theme's own horizontal margin of the window buttons (towards the others)
 $windowcontrols-hmargin: 4px;
 // Electron titlebar (GTK3 default decoration): 44px, padding computed from it
