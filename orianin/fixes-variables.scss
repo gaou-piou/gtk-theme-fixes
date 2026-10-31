@@ -60,13 +60,17 @@ $collapse-tab-padding-top: 4px;
 // Chromium's and Helium's tab strips ((35 - glyph) / 2), Electron's at its top gap - 1 ((44 - 10) / 2 - 1
 // = 16px); margins give Nautilus' centre-to-centre distance. Electron's buttons stay 6px apart.
 // These replace $chromium-titlebar-padding / $chromium-close-margin. // boxes 36px (GTK4) / 28px (GTK3), 42px apart
-$chromium-gtk4-side: 2px;
+// 6px with the 4px margin and 2px header padding: the 28x28 box below keeps the glyph 16px in
+$chromium-gtk4-side: 6px;
 $chromium-gtk3-side: 6px;
 $electron-gtk3-side: 8px;
 // 2px, not `0 2px`: that made the box 28x24, an oval at radius 9999px (themetest `round`, 2026-10-31)
 $electron-gtk3-button-padding: 2px;
-$chromium-gtk4-button-margin: 0;
-$chromium-gtk4-button-padding: 0 10px; // box 36x24: Helium's 34px top area would scale a 36px tall one
+// box 28x28 (min 16x24 + padding): a circle at radius 9999px and a round focus ring; it was 36x24, a stadium
+// (Chromium draws the focus ring around the box, 2026-10-31). 28px is under Helium's 34px top area; the
+// margin keeps the 42px centre distance
+$chromium-gtk4-button-margin: 4px;
+$chromium-gtk4-button-padding: 2px 6px;
 $chromium-gtk3-button-margin: 4px;
 $chromium-gtk3-button-padding: 6px; // the theme's own, not the GTK4 one above
 // Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
