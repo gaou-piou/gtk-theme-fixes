@@ -222,6 +222,35 @@ headerbar tabbar.inline {
 	}
 }
 
+// Nautilus' path bar: the app's own CSS gives its buttons no vertical padding (.nautilus-path-button:
+// 3px margin, 7px radius), but a theme's `button` rule (min-height 24px, padding 6px) wins, so the bar
+// came out 42px tall next to 36px header buttons, and its buttons took another shape on hover than
+// the bar's corners ask for (Orianin, 2026-10-31). Opt in with $nautilus-pathbar-height (the bar's
+// height: 36px = a header icon button) and $nautilus-pathbar-radius (its corners; the buttons get
+// that minus their margin, in every state, so hover keeps the shape).
+@if variable-exists("nautilus-pathbar-height") {
+	$_pathbar-margin: 3px;
+	$_pathbar-radius: if(variable-exists("nautilus-pathbar-radius"), $nautilus-pathbar-radius, 12px);
+	.nautilus-window .content-pane headerbar .nautilus-pathbar {
+		&, &:backdrop {
+			min-height: $nautilus-pathbar-height;
+			padding-top: 0;
+			padding-bottom: 0;
+			border-radius: $_pathbar-radius;
+		}
+		.nautilus-path-button:not(.suggested-action):not(.destructive-action) {
+			&, &:hover, &:active, &:checked, &:backdrop, &:focus, &:focus-visible {
+				margin-top: $_pathbar-margin;
+				margin-bottom: $_pathbar-margin;
+				min-height: $nautilus-pathbar-height - 2 * $_pathbar-margin;
+				padding-top: 0;
+				padding-bottom: 0;
+				border-radius: max(0px, $_pathbar-radius - $_pathbar-margin);
+			}
+		}
+	}
+}
+
 // The extra close margin above (calc($button_fix_multiplier * 1em)) separates the close button
 // from the others when it is last (layout ":minimize,maximize,close"). When it comes first
 // (layout "close,minimize,maximize:") that margin lands on the window edge side instead, so the

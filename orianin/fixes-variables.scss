@@ -30,6 +30,10 @@ $gtk3-titlebutton-inset: 9px;
 $gtk3-titlebutton-default-decoration-inset: 7px;
 $gtk3-default-decoration-inner-margin: 3px;
 $headerbar-button-height: 38px;
+// Nautilus' path bar: as tall as a header icon button (24px + 2 * 6px padding), corners as the theme's
+// buttons (12px); it was 42px with the app's 7px button radius on hover
+$nautilus-pathbar-height: 36px;
+$nautilus-pathbar-radius: 12px;
 // Close button margin towards the others
 $windowcontrols-hmargin: 1px;
 // Electron titlebar (GTK3 default decoration): 44px, padding computed from it (was 52px)
