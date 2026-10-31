@@ -80,7 +80,11 @@ $nautilus-sidebar-row-padding: 1.5 * $space-size;
 $chromium-gtk4-side: 7px;
 $chromium-gtk3-side: 7px;
 $electron-gtk3-side: 9px;
-$electron-gtk3-button-padding: 0 2px;
+// Round, not an oval (themetest rule `round`, as in Orchis): Electron's box is the 22px min size + this
+// padding, and Chromium paints the theme's button for its window controls itself. `0 2px` made it
+// 26x22, a squashed circle (Muster Agent, Bitwarden, 2026-10-31); `2px` keeps the 26px width and
+// makes it 26px tall: a circle, glyph and side gap unchanged.
+$electron-gtk3-button-padding: 2px;
 $chromium-gtk4-button-margin: 3px;
 // Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
 $chromium-gtk4-glyph-alpha: 1.195;
