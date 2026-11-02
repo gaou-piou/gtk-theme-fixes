@@ -65,3 +65,7 @@ $chromium-gtk4-button-margin: 4px;
 // Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, opaque in the browser; sqrt(0.7) = 0.837
 // came out 177 vs Nautilus 193, 0.87 measured 191 (2026-10-23)
 $chromium-gtk4-glyph-alpha: 0.87;
+
+// Jasper has no @window_bg_color: its window.background.chromium is already opaque (fixes-4.0
+// chromium bubble rule would make it transparent)
+$chromium-no-window-bg-color: true;

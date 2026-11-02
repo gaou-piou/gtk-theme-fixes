@@ -506,8 +506,12 @@ $_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size")
 // Magnetic give that node a translucent colour (relic rgba(fg, 0.04), Magnetic 0.08 / 0.75) for a
 // frosted window that Chromium never draws, so every popup turned see-through. Opaque again, in the
 // theme's own window colour (2026-11-02).
-window.background.chromium {
-	background-color: unquote("@window_bg_color");
+// A theme without @define-color window_bg_color (Jasper) must set $chromium-no-window-bg-color:
+// an undefined named colour makes the node fully transparent, and the tab hover card with it.
+@if not variable-exists("chromium-no-window-bg-color") {
+	window.background.chromium {
+		background-color: unquote("@window_bg_color");
+	}
 }
 
 // Collapsed toolbar spacing: AdwToolbarView with stacked bars (e.g. Ptyxis with tabs,
