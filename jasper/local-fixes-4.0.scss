@@ -131,3 +131,10 @@
 		}
 	}
 }
+// The theme paints every .toolbar box (GTK3-style #1c1e26), but libadwaita apps use .toolbar as
+// a plain layout box inside a bar (Nautilus' file chooser bottom bar: filter, file name, Select),
+// so the bar got patches of a second colour. Let the bar's own colour show through.
+toolbarview > .top-bar .toolbar,
+toolbarview > .bottom-bar .toolbar {
+	background-color: transparent;
+}
