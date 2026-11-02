@@ -501,6 +501,15 @@ $_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size")
 }
 // themetest:chromium-gtk4 end
 
+// Chromium's bubbles and dialogs (the Extensions popup, ...) take their background from the
+// window.background.chromium node (ui/gtk/gtk_util.cc), not from the window itself. Relic and
+// Magnetic give that node a translucent colour (relic rgba(fg, 0.04), Magnetic 0.08 / 0.75) for a
+// frosted window that Chromium never draws, so every popup turned see-through. Opaque again, in the
+// theme's own window colour (2026-11-02).
+window.background.chromium {
+	background-color: unquote("@window_bg_color");
+}
+
 // Collapsed toolbar spacing: AdwToolbarView with stacked bars (e.g. Ptyxis with tabs,
 // headerbar + search bar) marks them .collapse-spacing. libadwaita then shrinks a headerbar
 // to button height + 2 * 3px (40px) and the tab bar padding to 3px; the themes keep the full
