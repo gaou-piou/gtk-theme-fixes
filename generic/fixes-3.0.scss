@@ -514,3 +514,20 @@ $_dd-titlebutton-size: if(variable-exists("default-decoration-titlebutton-size")
 		color: unquote("mix(@theme_fg_color, @theme_bg_color, #{min(1, $chromium-inactive-tab-dim + 0.1)})");
 	}
 }
+
+// The active tab, the toolbar under it and the page-info bars are painted with that same
+// `window.background` colour, and the tab strip behind the tabs with the headerbar's. Where the two
+// are equal (every theme that gives the headerbar the window colour: MacTahoe Dark, Magnetic,
+// Graphite, ...) a focused window shows no active tab at all. GTK CSS cannot compare colours, so the
+// window colour (which only the browsers' own node `window.background.chromium` reaches) is moved
+// by a fixed step towards the text colour in every theme: lighter in dark themes, darker in light
+// ones, always different from the headerbar whatever it is. Chromium's popups and dialogs take the
+// same colour, so they move with it. $chromium-active-tab-lift = the step (0.08 default, 0 = off).
+$_chromium-tab-lift: if(variable-exists("chromium-active-tab-lift"), $chromium-active-tab-lift, 0.08);
+@if $_chromium-tab-lift > 0 {
+	window.background.chromium:not(.csd) {
+		&, &:backdrop {
+			background-color: unquote("mix(@theme_bg_color, @theme_fg_color, #{$_chromium-tab-lift})");
+		}
+	}
+}

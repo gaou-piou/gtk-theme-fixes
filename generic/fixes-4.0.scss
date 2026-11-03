@@ -508,9 +508,34 @@ $_titlebutton-dd-size: if(variable-exists("titlebutton-default-decoration-size")
 // theme's own window colour (2026-11-02).
 // A theme without @define-color window_bg_color (Jasper) must set $chromium-no-window-bg-color:
 // an undefined named colour makes the node fully transparent, and the tab hover card with it.
-@if not variable-exists("chromium-no-window-bg-color") {
+// The same node is what the active tab and the toolbar are painted with, while the tab strip takes
+// the headerbar's colour: themes that give both the same colour (MacTahoe Dark, Magnetic, Graphite
+// Dark, ...) showed no active tab in a focused window. So the colour moves by $chromium-active-tab-lift
+// (0.08 default, 0 = off) from the window colour towards the text colour: always different from the
+// headerbar, lighter in dark themes and darker in light ones (generic: see fixes-3.0).
+$_chromium-tab-lift: if(variable-exists("chromium-active-tab-lift"), $chromium-active-tab-lift, 0.08);
+$_chromium-win-bg: if(variable-exists("chromium-no-window-bg-color"), "@theme_bg_color", "@window_bg_color");
+@if $_chromium-tab-lift > 0 {
+	window.background.chromium {
+		&, &:backdrop {
+			background-color: unquote("mix(#{$_chromium-win-bg}, @theme_fg_color, #{$_chromium-tab-lift})");
+		}
+	}
+} @else if not variable-exists("chromium-no-window-bg-color") {
 	window.background.chromium {
 		background-color: unquote("@window_bg_color");
+	}
+}
+
+// Inactive tab text under GTK4 (the GTK3 rule is in fixes-3.0, opt-in with the same variable): the
+// tabs' labels take the headerbar title colour, at the node chain the browsers build with .chromium.
+@if variable-exists("chromium-inactive-tab-dim") {
+	window.background.chromium headerbar.titlebar label.title {
+		color: unquote("mix(@theme_fg_color, #{$_chromium-win-bg}, #{$chromium-inactive-tab-dim})");
+
+		&:backdrop {
+			color: unquote("mix(@theme_fg_color, #{$_chromium-win-bg}, #{min(1, $chromium-inactive-tab-dim + 0.1)})");
+		}
 	}
 }
 
