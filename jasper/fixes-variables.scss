@@ -69,3 +69,6 @@ $chromium-gtk4-glyph-alpha: 0.87;
 // Jasper has no @window_bg_color: its window.background.chromium is already opaque (fixes-4.0
 // chromium bubble rule would make it transparent)
 $chromium-no-window-bg-color: true;
+
+// Chromium menus: the hovered item is inset (generic), keep the radius of popover modelbutton
+$chromium-menu-item-radius: 8px;

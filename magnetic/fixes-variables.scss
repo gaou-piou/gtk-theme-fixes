@@ -62,3 +62,6 @@ $electron-gtk3-side: 11px;
 $chromium-gtk4-button-margin: 3px;
 // Chromium GTK4 glyph alpha (fixes-4.0): the glyph 0.7 white, 2026-10-23
 $chromium-gtk4-glyph-alpha: 1.195;
+
+// Chromium menus: the hovered item is inset (generic), keep the radius of popover modelbutton
+$chromium-menu-item-radius: 6px;

@@ -81,3 +81,6 @@ $splitbutton-text-padding: 12px;
 // GTK3 header bar entries (fixes-3.0): the image buttons are 36px ($headerbar-button-height 38px
 // is the row this file's headerbar padding is computed from); 38px entries stretched them
 $gtk3-headerbar-entry-height: 36px;
+
+// Chromium menus: the hovered item is inset (generic), keep the radius of popover modelbutton
+$chromium-menu-item-radius: 5px;

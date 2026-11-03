@@ -545,10 +545,14 @@ $_chromium-win-bg: if(variable-exists("chromium-no-window-bg-color"), "@theme_bg
 // the items. The GTK menu padding cannot be reproduced (Chromium lays the menu out itself and takes
 // only the colours and this node's paint), so the inset goes into the node: a transparent border with
 // the background clipped to the padding box, the highlight shrinks by it (2026-11-03).
-// $chromium-menu-item-inset: vertical horizontal (2px 4px default, 0 = as before).
+// $chromium-menu-item-inset: vertical horizontal. Default = the gaps the fixes leave around the
+// selected row of the Nautilus sidebar (same look in both): the row margin ($fix-size / 2 above and
+// below) and $nautilus-list-inset at the sides (the real distance from the sidebar sides; 6px for
+// themes that do not set it, Adwaita's own sidebar padding). 0 = as before.
 // The border rounds the highlight by its width, so the theme's radius (on popover.menu modelbutton)
 // loses that much: $chromium-menu-item-radius is the radius the highlight should have (inset added).
-$_chromium-menu-inset: if(variable-exists("chromium-menu-item-inset"), $chromium-menu-item-inset, 2px 4px);
+$_chromium-menu-inset: if(variable-exists("chromium-menu-item-inset"), $chromium-menu-item-inset,
+	($_fix-size * 0.5) if(variable-exists("nautilus-list-inset"), $nautilus-list-inset, 6px));
 @if $_chromium-menu-inset != 0 and $_chromium-menu-inset != 0 0 {
 	popover.menu modelbutton.chromium {
 		border: 0 solid transparent;
@@ -558,7 +562,12 @@ $_chromium-menu-inset: if(variable-exists("chromium-menu-item-inset"), $chromium
 		@if variable-exists("chromium-menu-item-radius") {
 			$_h: if(length($_chromium-menu-inset) > 1, nth($_chromium-menu-inset, 2), $_chromium-menu-inset);
 			$_v: nth($_chromium-menu-inset, 1);
-			border-radius: ($chromium-menu-item-radius + $_h) / ($chromium-menu-item-radius + $_v);
+			// interpolated: a bare `a / b` is a division in Sass, not the elliptical radius. Measured
+			// (GTK 4, Brave, 2026-11-03): the inner radius is the outer one minus the border of the OTHER
+			// axis (horizontal radius - top/bottom border, vertical radius - left/right border), so the
+			// horizontal radius gets the vertical inset and the other way round (a square highlight
+			// at 16px / 8px with a 2px 10px border, as asked: 6px).
+			border-radius: #{$chromium-menu-item-radius + $_v} / #{$chromium-menu-item-radius + $_h};
 		}
 	}
 }
