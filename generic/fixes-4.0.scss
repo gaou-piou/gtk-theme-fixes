@@ -539,6 +539,30 @@ $_chromium-win-bg: if(variable-exists("chromium-no-window-bg-color"), "@theme_bg
 	}
 }
 
+// Menus of the Chromium browsers (context menu, bookmark folders, app menu). Chromium paints the
+// hovered item with this node over the item's whole rectangle, and the item reaches the menu's edges:
+// the highlight ran flush to both sides, where GTK's popover.menu (Firefox) keeps its padding around
+// the items. The GTK menu padding cannot be reproduced (Chromium lays the menu out itself and takes
+// only the colours and this node's paint), so the inset goes into the node: a transparent border with
+// the background clipped to the padding box, the highlight shrinks by it (2026-11-03).
+// $chromium-menu-item-inset: vertical horizontal (2px 4px default, 0 = as before).
+// The border rounds the highlight by its width, so the theme's radius (on popover.menu modelbutton)
+// loses that much: $chromium-menu-item-radius is the radius the highlight should have (inset added).
+$_chromium-menu-inset: if(variable-exists("chromium-menu-item-inset"), $chromium-menu-item-inset, 2px 4px);
+@if $_chromium-menu-inset != 0 and $_chromium-menu-inset != 0 0 {
+	popover.menu modelbutton.chromium {
+		border: 0 solid transparent;
+		border-width: $_chromium-menu-inset;
+		background-clip: padding-box;
+
+		@if variable-exists("chromium-menu-item-radius") {
+			$_h: if(length($_chromium-menu-inset) > 1, nth($_chromium-menu-inset, 2), $_chromium-menu-inset);
+			$_v: nth($_chromium-menu-inset, 1);
+			border-radius: ($chromium-menu-item-radius + $_h) / ($chromium-menu-item-radius + $_v);
+		}
+	}
+}
+
 // Collapsed toolbar spacing: AdwToolbarView with stacked bars (e.g. Ptyxis with tabs,
 // headerbar + search bar) marks them .collapse-spacing. libadwaita then shrinks a headerbar
 // to button height + 2 * 3px (40px) and the tab bar padding to 3px; the themes keep the full

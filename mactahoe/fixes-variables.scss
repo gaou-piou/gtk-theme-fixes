@@ -52,6 +52,9 @@ $chromium-close-margin: 10px;
 // Chromium browsers (GTK mode): dim the inactive tab text, the tab backgrounds are all the same
 $chromium-inactive-tab-dim: 0.55;
 
+// Chromium menus: the hovered item is inset (generic), keep the 6px radius of popover.menu modelbutton
+$chromium-menu-item-radius: 6px;
+
 // Nautilus file list, measured in the real Nautilus against the selected sidebar row (2026-10-22):
 // rows 10px from the column sides, the list icons as far into the row as the sidebar icons (6px:
 // the 32px file icons carry 4px more empty margin than the 16px symbolic ones; 5px was 1px short).

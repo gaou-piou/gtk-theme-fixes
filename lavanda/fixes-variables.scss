@@ -88,3 +88,6 @@ $chromium-gtk4-glyph-alpha: 1.195;
 
 // Nautilus' location page close button, rounded like the other header buttons (fixes-4.0)
 $nautilus-location-button-radius: $corner-radius;
+
+// Chromium menus: the hovered item is inset (generic), keep the radius of popover.menu modelbutton
+$chromium-menu-item-radius: 10px;
