@@ -87,5 +87,7 @@ $chromium-gtk4-button-padding: 0;
 // Electron (GTK3 nodes, also with --gtk-version=4): 16px circles at top 14, so 14px from the side
 $electron-gtk3-side: 14px;
 
-// Chromium menus: the hovered item is inset (generic), keep the radius of popover modelbutton
-$chromium-menu-item-radius: $corner-radius;
+// Chromium menus: the hovered item is inset (generic), keep the radius of popover modelbutton. The
+// new layout (Catppuccin, Vague) imports this file after its rules, so its item keeps upstream's
+// $roundness * 1px (12px), not the 14px above (themetest rule menu-item, 2026-11-03).
+$chromium-menu-item-radius: if(variable-exists("roundness"), $roundness * 1px, $corner-radius);
