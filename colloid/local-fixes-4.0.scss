@@ -217,18 +217,24 @@
 	}
 }
 
-// Nautilus list view spacing as in Graphite (and Jasper): 8px above and below the cells, 6px above
-// and below the list. Colloid's 3px cells made 43px rows with 32px icons, thin beside the 40px
-// sidebar rows (2026-11-06). Colloid's 3px row gap and 9px cell sides stay.
+// Nautilus list rows as tall as the sidebar rows, with the same 4px gap: 40px rows, 44px apart, so
+// the two columns line up (2026-11-06). Colloid's 4px cell padding is dropped and the height is a
+// minimum: bigger zoom levels grow the rows as before. 6px above and below the list; the 9px cell
+// sides stay.
 .nautilus-list-view {
 	listview.view {
 		padding-top: $space-size;
 		padding-bottom: $space-size;
+		border-spacing: 4px;
 
 		> row.activatable > cell {
+			padding-top: 0;
+			padding-bottom: 0;
+
 			> widget#NautilusViewCell, .nautilus-view-cell {
-				padding-top: 8px;
-				padding-bottom: 8px;
+				padding-top: 0;
+				padding-bottom: 0;
+				min-height: $nautilus-sidebar-row-height;
 			}
 		}
 	}
