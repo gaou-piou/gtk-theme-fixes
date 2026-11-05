@@ -83,6 +83,11 @@ $columnview-header-radius: 6px;
 $nautilus-list-inset: $space-size;
 $nautilus-sidebar-row-padding: 11px;
 
+// Nautilus sidebar rows as in Graphite: the row radius ($corner-radius, 14px) on both ends plus a
+// 2 * $space-size straight side, 40px; the generic 32px read as pills, thin next to the other
+// themes' (2026-11-06)
+$nautilus-sidebar-row-height: 2 * $corner-radius + 2 * $space-size;
+
 // Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22:
 // the 22px circles 36px apart like Nautilus' (22 + 6 + 2 * 4), the browsers' close button
 // (35 - 22) / 2 = 6px from the side, Electron's (42 - 22) / 2 = 10px. The button's own padding (the
