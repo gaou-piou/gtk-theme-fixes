@@ -107,18 +107,30 @@ $chromium-gtk4-button-margin: 4px;
 // modes, Electron.
 $colloid-mac-buttons: if(variable-exists("window_button"), $window_button == 'mac', false);
 $colloid-mac-button-size: 14px;
+// the gap between the mac circles, the same in every app: Electron's (6px, its buttons' spacing,
+// which it does not take from the theme: a padding there stretches the circles into ovals,
+// 2026-11-06); even, as the browsers' gaps are
+$colloid-mac-button-gap: 6px;
+// native GTK3/GTK4: 6px of box spacing plus a margin on either side
+$colloid-mac-button-margin: ($colloid-mac-button-gap - 6px) / 2;
+// declared here, set below for the mac buttons only (`!global` may not declare new variables in
+// future Sass): the inner margin is the generic default, null is unset to the generic fixes
+$windowcontrols-inner-margin: $windowcontrols-hmargin;
+$chromium-gtk3-button-margin: null;
 @if $colloid-mac-buttons {
+	$windowcontrols-inner-margin: $colloid-mac-button-margin !global;
 	$titlebutton-size: $colloid-mac-button-size !global;
 	$gtk3-titlebutton-size: $colloid-mac-button-size !global;
 	$default-decoration-titlebutton-size: $colloid-mac-button-size !global;
 	// below 16px the circles sit $_mac-shrink further in, so the side gaps grow by as much. Chromium
 	// under GTK4 keeps its 16px box (the circle drawn inside, local-fixes-4.0): there the side gap
-	// grows by itself and the margin shrinks, to keep the native pitch; under GTK3 the box is the
-	// circle and keeps the 4px margin (16px: 12px, 12px, 14px, margins 4px)
+	// grows by itself; under GTK3 the box is the circle (16px: sides 12px, 12px, 14px)
 	$_mac-shrink: (16px - $colloid-mac-button-size) / 2;
 	$chromium-gtk4-side: 12px !global;
-	$chromium-gtk4-button-margin: 4px - $_mac-shrink !global;
-	$chromium-gtk3-button-margin: 4px !global;
+	// Chromium GTK4: the 16px box around the circle, plus 6px, plus the margins (may go negative;
+	// Helium's buttons come out 1px closer, as at every gap: 5px)
+	$chromium-gtk4-button-margin: $colloid-mac-button-margin - $_mac-shrink !global;
+	$chromium-gtk3-button-margin: $colloid-mac-button-margin !global;
 	$chromium-gtk3-side: 12px + $_mac-shrink !global;
 	$electron-gtk3-side: 14px + $_mac-shrink !global;
 }

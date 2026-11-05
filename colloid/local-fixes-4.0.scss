@@ -201,3 +201,18 @@
 		}
 	}
 }
+
+// the gap between the mac circles ($colloid-mac-button-gap, fixes-variables): the close button gets
+// it on the side facing the others from the generic gap rules ($windowcontrols-inner-margin)
+@if $colloid-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button.minimize, > button.maximize {
+				&, &:not(.suggested-action):not(.destructive-action) {
+					margin-left: $colloid-mac-button-margin;
+					margin-right: $colloid-mac-button-margin;
+				}
+			}
+		}
+	}
+}

@@ -445,8 +445,10 @@ $_dd-titlebutton-size: if(variable-exists("default-decoration-titlebutton-size")
 // $chromium-gtk4-button-margin / -padding: as in fixes-4.0, for both; $chromium-gtk3-button-margin /
 // -padding when the GTK3 button box differs from the GTK4 one (Orchis: 28px vs 24px).
 @mixin _chromium-gtk3($header, $side, $close-margin: false, $margin: false, $padding: false) {
-	$margin: if($margin != false, $margin, if(variable-exists("chromium-gtk3-button-margin"), $chromium-gtk3-button-margin,
-		if(variable-exists("chromium-gtk4-button-margin"), $chromium-gtk4-button-margin, null)));
+	// null counts as unset: a theme may declare these at the top level and set them only for one
+	// variant (Colloid's mac buttons), as `!global` may not declare new variables in future Sass
+	$margin: if($margin != false, $margin, if(if(variable-exists("chromium-gtk3-button-margin"), $chromium-gtk3-button-margin, null) != null,
+		$chromium-gtk3-button-margin, if(variable-exists("chromium-gtk4-button-margin"), $chromium-gtk4-button-margin, null)));
 	$padding: if($padding != false, $padding, if(variable-exists("chromium-gtk3-button-padding"), $chromium-gtk3-button-padding,
 		if(variable-exists("chromium-gtk4-button-padding"), $chromium-gtk4-button-padding, null)));
 	window.background.csd.chromium > headerbar.#{$header}.titlebar.chromium {

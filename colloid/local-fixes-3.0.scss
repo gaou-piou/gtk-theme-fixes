@@ -17,3 +17,18 @@
 		}
 	}
 }
+
+// the gap between the mac circles ($colloid-mac-button-gap, fixes-variables): the box spacing plus
+// these margins; the close button gets its inner one from the generic gap rules
+@if $colloid-mac-buttons {
+	.background.csd headerbar, .background.csd headerbar.titlebar, headerbar {
+		button.titlebutton.minimize, button.titlebutton.maximize {
+			&:not(.suggested-action):not(.destructive-action) {
+				&, &:backdrop {
+					margin-left: $colloid-mac-button-margin;
+					margin-right: $colloid-mac-button-margin;
+				}
+			}
+		}
+	}
+}
