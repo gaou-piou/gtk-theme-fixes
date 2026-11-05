@@ -1,16 +1,43 @@
-windowcontrols, navigation-split-view headerbar windowcontrols {
-	.background &, .csd &, .background.csd &, &, &.start {
-		> button {
-			&,
-			&:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
-			&.image-button {
-				> image {
-					padding: 3px;
+// the normal buttons' 16px glyph in a 22px circle; the mac circles stay 16px (fixes-variables)
+@if not $colloid-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button {
+				&,
+				&:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+				&.image-button {
+					> image {
+						padding: 3px;
+					}
 				}
 			}
 		}
 	}
+}
 
+// mac circles smaller than upstream's 16px ($colloid-mac-button-size, fixes-variables): the image is
+// the circle, its glyph the icon; the button keeps its 34px box (padding), so the bars keep their
+// height and the gaps computed from $titlebutton-size hold
+@if $colloid-mac-buttons and $colloid-mac-button-size != 16px {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button {
+				&,
+				&:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+				&.image-button {
+					min-width: $colloid-mac-button-size;
+					min-height: $colloid-mac-button-size;
+					padding: (($titlebutton-box-height - $colloid-mac-button-size) / 2) 0;
+
+					> image {
+						min-width: $colloid-mac-button-size;
+						min-height: $colloid-mac-button-size;
+						-gtk-icon-size: $colloid-mac-button-size;
+					}
+				}
+			}
+		}
+	}
 }
 
 // .background.csd {

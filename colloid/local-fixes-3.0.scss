@@ -1,0 +1,19 @@
+// mac circles smaller than upstream's 16px ($colloid-mac-button-size, fixes-variables): in GTK3 the
+// button is the circle and its glyph a 16px icon, which would keep the button 16px: scaled down, its
+// allocation shrunk by a negative margin
+@if $colloid-mac-buttons and $colloid-mac-button-size != 16px {
+	$_shrink: (16px - $colloid-mac-button-size) / 2;
+
+	button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		&, .background.csd headerbar.titlebar.default-decoration & {
+			min-width: $colloid-mac-button-size;
+			min-height: $colloid-mac-button-size;
+			background-size: $colloid-mac-button-size $colloid-mac-button-size;
+
+			> image {
+				margin: (-$_shrink);
+				-gtk-icon-transform: scale($colloid-mac-button-size / 16px);
+			}
+		}
+	}
+}
