@@ -173,3 +173,31 @@
 // 		}
 // 	}
 // }
+
+// Chromium and Helium under GTK4 draw the image node at least as big as the icon, which they always
+// load at 16px (nav_button_provider_gtk.cc: kNavButtonIconSize; min-width, -gtk-icon-size and a
+// border only grow the box), so below 16px the circle is painted as a radial gradient of the
+// smaller size, centred in the 16px box: same colours as %mac_window_button (upstream common-4.0)
+@function _mac-dot($c) {
+	$r: $colloid-mac-button-size / 2;
+	@return radial-gradient(circle, $c ($r - 0.5px), transparentize($c, 1) ($r + 0.5px));
+}
+@if $colloid-mac-buttons and $colloid-mac-button-size != 16px {
+	$_press: rgba(black, if($topbar == 'dark', 0.25, 0.12));
+
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium {
+		@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+			&.#{$type} > image.chromium {
+				background-color: transparent;
+				background-image: _mac-dot($c);
+				box-shadow: none;
+			}
+			&.#{$type}:active > image.chromium {
+				background-image: _mac-dot($_press), _mac-dot(mix($titlebar-text, $c, 25%));
+			}
+			&.#{$type}:backdrop > image.chromium {
+				background-image: _mac-dot($titlebar-track);
+			}
+		}
+	}
+}
