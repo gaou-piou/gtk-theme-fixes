@@ -32,3 +32,27 @@
 		}
 	}
 }
+
+// on hover and press a dot in place of the glyph, in the button's colour darkened
+// (colloid-mac-dot, fixes-variables), also over Firefox's and Electron's glyph images
+// (default-decoration); on backdrop neither
+@if $colloid-mac-buttons {
+	button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		&, .background.csd headerbar.titlebar.default-decoration & {
+			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+				&.#{$type} {
+					&:hover, &:active {
+						color: transparent;
+						background-image: colloid-mac-dot-gtk3($c);
+						background-position: center;
+						background-repeat: no-repeat;
+					}
+					&:backdrop:hover, &:backdrop:active {
+						color: transparent;
+						background-image: none;
+					}
+				}
+			}
+		}
+	}
+}

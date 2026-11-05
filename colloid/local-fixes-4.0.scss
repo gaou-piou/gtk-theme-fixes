@@ -198,6 +198,21 @@
 			&.#{$type}:backdrop > image.chromium {
 				background-image: _mac-dot($titlebar-track);
 			}
+			// the dot in place of the glyph (colloid-mac-dot, fixes-variables)
+			&.#{$type}:hover, &.#{$type}:active {
+				color: transparent;
+			}
+			&.#{$type}:hover > image.chromium {
+				color: transparent;
+				background-image: colloid-mac-dot($c), _mac-dot($c);
+			}
+			&.#{$type}:active > image.chromium {
+				color: transparent;
+				background-image: colloid-mac-dot($c), _mac-dot($_press), _mac-dot(mix($titlebar-text, $c, 25%));
+			}
+			&.#{$type}:backdrop:hover > image.chromium, &.#{$type}:backdrop:active > image.chromium {
+				background-image: _mac-dot($titlebar-track);
+			}
 		}
 	}
 }
@@ -235,6 +250,32 @@
 				padding-top: 0;
 				padding-bottom: 0;
 				min-height: $nautilus-sidebar-row-height;
+			}
+		}
+	}
+}
+
+// on hover and press a dot in place of the glyph, in the button's colour darkened
+// (colloid-mac-dot, fixes-variables); on backdrop neither (Chromium: above)
+@if $colloid-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+				> button.#{$type}:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+					&:hover, &:active {
+						color: transparent;
+
+						> image {
+							color: transparent;
+							background-image: colloid-mac-dot($c);
+						}
+					}
+					&:backdrop:hover, &:backdrop:active {
+						> image {
+							background-image: none;
+						}
+					}
+				}
 			}
 		}
 	}

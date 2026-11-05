@@ -112,6 +112,22 @@ $chromium-gtk4-button-margin: 4px;
 // modes, Electron.
 $colloid-mac-buttons: if(variable-exists("window_button"), $window_button == 'mac', false);
 $colloid-mac-button-size: 14px;
+// on hover (and press) a dot in place of the glyph: the button's colour darkened, the action told by
+// colour and position alone (2026-11-06); none on backdrop
+$colloid-mac-dot-size: 5px;
+$colloid-mac-dot-shade: 50%;
+@function colloid-mac-dot($c) {
+	$r: $colloid-mac-dot-size / 2;
+	$d: mix(black, $c, $colloid-mac-dot-shade);
+	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r + 2px));
+}
+// GTK3 fades the same dot over ~2px from a 0.2px fade (it interpolates the stops unpremultiplied,
+// so the transparent dark end darkens the fade): the soft 5px dot the user chose, FreeTube's
+@function colloid-mac-dot-gtk3($c) {
+	$r: $colloid-mac-dot-size / 2;
+	$d: mix(black, $c, $colloid-mac-dot-shade);
+	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r - 0.3px));
+}
 // the gap between the mac circles, the same in every app: Electron's (6px, its buttons' spacing,
 // which it does not take from the theme: a padding there stretches the circles into ovals,
 // 2026-11-06); even, as the browsers' gaps are
