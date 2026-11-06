@@ -97,6 +97,10 @@ $jasper-mac-button-margin: ($jasper-mac-button-gap - 6px) / 2;
 // declared here, set below for the mac buttons only: the generic default, null is unset
 $windowcontrols-inner-margin: $windowcontrols-hmargin;
 $chromium-gtk3-button-margin: null;
+// the generic fixes fall back to $titlebutton-size when these are unset; declaring them with that
+// value keeps the normal build as it was and lets the mac block assign them without a new !global
+$gtk3-titlebutton-size: $titlebutton-size;
+$default-decoration-titlebutton-size: $gtk3-titlebutton-size;
 @if $jasper-mac-buttons {
 	$windowcontrols-inner-margin: $jasper-mac-button-margin !global;
 	$titlebutton-size: $jasper-mac-button-size !global;
