@@ -50,6 +50,17 @@ uncommitted changes included:
 
     local_build=true makepkg
 
+## Window button styles
+
+Themes whose upstream has a macOS-style button tweak take it from the theme's `$window_button`, so
+one package serves both looks. Jasper builds with them (red/yellow/green circles, 14px, 6px apart,
+a darker dot on hover, in every app, browser and Electron) with:
+
+    mac_buttons=true makepkg
+
+The theme names stay the same. Colloid's `--tweaks` take the same variable (colloid/fixes-variables.scss);
+`themetest --theme Jasper-Mac-Dark-Dracula --all` checks the Jasper build.
+
 ## Releases
 
 There are none: what is on `main` is what the next build of every theme gets, with no package

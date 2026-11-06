@@ -138,3 +138,133 @@ toolbarview > .top-bar .toolbar,
 toolbarview > .bottom-bar .toolbar {
 	background-color: transparent;
 }
+
+// mac circles smaller than upstream's 16px ($jasper-mac-button-size, fixes-variables): the button is
+// the circle (min size, padding 0), its glyph a 16px icon in it
+@if $jasper-mac-buttons and $jasper-mac-button-size != 16px {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button {
+				&,
+				&:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+				&.image-button {
+					min-width: $jasper-mac-button-size;
+					min-height: $jasper-mac-button-size;
+					// upstream's (bar - 16px) / 2 above and below: the button fills what the margins leave
+					margin-top: ($headerbar-height - $jasper-mac-button-size) / 2;
+					margin-bottom: ($headerbar-height - $jasper-mac-button-size) / 2;
+
+					> image {
+						min-width: $jasper-mac-button-size;
+						min-height: $jasper-mac-button-size;
+						-gtk-icon-size: $jasper-mac-button-size;
+					}
+				}
+			}
+		}
+	}
+}
+
+// the same in the default decoration (X11 frames mutter draws for GTK2/X11 apps, SourceGit): its
+// bar is $headerbar-default-decoration-height, upstream's ($medium-size - 16px) / 2 above and below
+@if $jasper-mac-buttons and $jasper-mac-button-size != 16px {
+	headerbar.default-decoration windowcontrols > button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+	.background headerbar.default-decoration windowcontrols > button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+	.background.csd headerbar.default-decoration windowcontrols > button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+		margin-top: ($headerbar-default-decoration-height - $jasper-mac-button-size) / 2;
+		margin-bottom: ($headerbar-default-decoration-height - $jasper-mac-button-size) / 2;
+	}
+}
+
+// Chromium and Helium under GTK4 draw the image node at least as big as the icon, which they always
+// load at 16px (nav_button_provider_gtk.cc: kNavButtonIconSize; min-width, -gtk-icon-size and a
+// border only grow the box), so below 16px the circle is painted as a radial gradient of the
+// smaller size, centred in the 16px box, and the button's own background is dropped: same colours
+// as %mac_window_button (upstream common-4.0)
+@function _mac-dot($c) {
+	$r: $jasper-mac-button-size / 2;
+	@return radial-gradient(circle, $c ($r - 0.5px), transparentize($c, 1) ($r + 0.5px));
+}
+@if $jasper-mac-buttons and $jasper-mac-button-size != 16px {
+	$_press: rgba(black, if($topbar == 'dark', 0.25, 0.12));
+
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium {
+		@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+			&.#{$type}, &.#{$type}:hover, &.#{$type}:active, &.#{$type}:backdrop {
+				background-color: transparent;
+				box-shadow: none;
+				padding: 0;
+				color: transparent;
+			}
+			// the glyph only on hover is the native look: Chromium draws the image node in its
+			// own colour (the generic glyph alpha rule), so it is hidden here, not left to the button's
+			&.#{$type} > image.chromium {
+				color: transparent;
+				background-color: transparent;
+				background-image: _mac-dot($c);
+				box-shadow: none;
+			}
+			&.#{$type}:active > image.chromium {
+				background-image: _mac-dot($_press), _mac-dot(mix($titlebar-text, $c, 25%));
+			}
+			&.#{$type}:backdrop > image.chromium {
+				background-image: _mac-dot($titlebar-track);
+			}
+			// the dot in place of the glyph (jasper-mac-dot, fixes-variables)
+			&.#{$type}:hover, &.#{$type}:active {
+				color: transparent;
+			}
+			&.#{$type}:hover > image.chromium {
+				color: transparent;
+				background-image: jasper-mac-dot($c), _mac-dot($c);
+			}
+			&.#{$type}:active > image.chromium {
+				color: transparent;
+				background-image: jasper-mac-dot($c), _mac-dot($_press), _mac-dot(mix($titlebar-text, $c, 25%));
+			}
+			&.#{$type}:backdrop:hover > image.chromium, &.#{$type}:backdrop:active > image.chromium {
+				background-image: _mac-dot($titlebar-track);
+			}
+		}
+	}
+}
+
+// the gap between the mac circles ($jasper-mac-button-gap, fixes-variables): the close button gets
+// it on the side facing the others from the generic gap rules ($windowcontrols-inner-margin)
+@if $jasper-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button.minimize, > button.maximize {
+				&, &:not(.suggested-action):not(.destructive-action) {
+					margin-left: $jasper-mac-button-margin;
+					margin-right: $jasper-mac-button-margin;
+				}
+			}
+		}
+	}
+}
+
+// on hover and press a dot in place of the glyph, in the button's colour darkened
+// (jasper-mac-dot, fixes-variables): a gradient on the button's own circle; on backdrop neither
+// (Chromium: above)
+@if $jasper-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+				> button.#{$type}:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+					// the dot comes with the hover, not after upstream's transition
+					&, > image { transition: all $jasper-mac-dot-transition ease-out; }
+
+					&:hover, &:active {
+						color: transparent;
+						background-image: jasper-mac-dot($c);
+					}
+					&:backdrop:hover, &:backdrop:active {
+						color: transparent;
+						background-image: none;
+					}
+				}
+			}
+		}
+	}
+}

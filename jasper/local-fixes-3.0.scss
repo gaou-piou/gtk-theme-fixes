@@ -9,3 +9,66 @@
 		}
 	}
 }
+
+// mac circles smaller than upstream's 16px ($jasper-mac-button-size, fixes-variables): the button is
+// the circle and shrinks with its min size; Firefox's and Electron's glyph svg backgrounds
+// (default-decoration) scale with background-size
+@if $jasper-mac-buttons and $jasper-mac-button-size != 16px {
+	button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		&, .background.csd headerbar.titlebar.default-decoration & {
+			min-width: $jasper-mac-button-size;
+			min-height: $jasper-mac-button-size;
+			background-size: $jasper-mac-button-size $jasper-mac-button-size;
+
+			// the glyph is a 16px icon that would keep the button 16px: scaled down, its allocation
+			// shrunk by a negative margin
+			> image {
+				margin: (-(16px - $jasper-mac-button-size) / 2);
+				-gtk-icon-transform: scale($jasper-mac-button-size / 16px);
+			}
+		}
+	}
+}
+
+// the gap between the mac circles ($jasper-mac-button-gap, fixes-variables): the box spacing plus
+// these margins; the close button gets its inner one from the generic gap rules
+@if $jasper-mac-buttons {
+	.background.csd headerbar, .background.csd headerbar.titlebar, headerbar {
+		button.titlebutton.minimize, button.titlebutton.maximize {
+			&:not(.suggested-action):not(.destructive-action) {
+				&, &:backdrop {
+					margin-left: $jasper-mac-button-margin;
+					margin-right: $jasper-mac-button-margin;
+				}
+			}
+		}
+	}
+}
+
+// on hover and press a dot in place of the glyph, in the button's colour darkened
+// (jasper-mac-dot, fixes-variables), also over Firefox's and Electron's glyph images
+// (default-decoration); on backdrop neither. GTK3 rasterises a gradient's stops ~3px soft, so the
+// dot is the button's own circle in the dot colour, covered by an inset ring (cairo, antialiased
+// 1px) in the button colour, at once (no transition)
+@if $jasper-mac-buttons {
+	button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		&, .background.csd headerbar.titlebar.default-decoration & {
+			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+				&.#{$type} {
+					transition: none;
+
+					&:hover:not(:backdrop), &:active:not(:backdrop) {
+						color: transparent;
+						background-color: mix(black, $c, $jasper-mac-dot-shade);
+						background-image: none;
+						box-shadow: inset 0 0 0 ($jasper-mac-button-size - $jasper-mac-dot-size) / 2 $c;
+					}
+					&:backdrop:hover, &:backdrop:active {
+						color: transparent;
+						background-image: none;
+					}
+				}
+			}
+		}
+	}
+}
