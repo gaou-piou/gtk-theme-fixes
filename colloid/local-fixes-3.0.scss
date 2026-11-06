@@ -41,11 +41,18 @@
 		&, .background.csd headerbar.titlebar.default-decoration & {
 			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
 				&.#{$type} {
-					&:hover, &:active {
+					// at once: upstream's 1200ms for background-image (the ripple's) made the dot late, and
+					// fading the colour and the ring separately would flash the whole circle on the way
+					transition: none;
+
+					// GTK3 rasterises a gradient's stops ~3px soft, and has no data: urls, so the dot
+					// is the button's own circle in the dot colour, covered by an inset ring (cairo,
+					// antialiased 1px) in the button colour
+					&:hover:not(:backdrop), &:active:not(:backdrop) {
 						color: transparent;
-						background-image: colloid-mac-dot-gtk3($c);
-						background-position: center;
-						background-repeat: no-repeat;
+						background-color: mix(black, $c, $colloid-mac-dot-shade);
+						background-image: none;
+						box-shadow: inset 0 0 0 ($colloid-mac-button-size - $colloid-mac-dot-size) / 2 $c;
 					}
 					&:backdrop:hover, &:backdrop:active {
 						color: transparent;

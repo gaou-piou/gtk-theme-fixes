@@ -262,6 +262,9 @@
 		.background &, .csd &, .background.csd &, &, &.start {
 			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
 				> button.#{$type}:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+					// the dot comes with the hover, not after upstream's 75ms (button) / 1200ms (ripple)
+					&, > image { transition: all $colloid-mac-dot-transition ease-out; }
+
 					&:hover, &:active {
 						color: transparent;
 

@@ -113,20 +113,19 @@ $chromium-gtk4-button-margin: 4px;
 $colloid-mac-buttons: if(variable-exists("window_button"), $window_button == 'mac', false);
 $colloid-mac-button-size: 14px;
 // on hover (and press) a dot in place of the glyph: the button's colour darkened, the action told by
-// colour and position alone (2026-11-06); none on backdrop
-$colloid-mac-dot-size: 5px;
+// colour and position alone (2026-11-06); none on backdrop.
+// An EVEN diameter: the 14px / 16px circle's centre sits on a pixel boundary, so an odd dot (5px)
+// covered the pixels around it halfway and read as blurred, as did its 2.5px soft edge (2026-11-06,
+// user: "the dots look blurred"): now the edge is the 1px of antialiasing only.
+$colloid-mac-dot-size: 6px;
 $colloid-mac-dot-shade: 50%;
+// How long the dot takes to appear: a feel, not a visible fade. Upstream's button (GTK3: 1200ms for
+// background-image, the ripple's; GTK4: the headerbar's `all 75ms`) made it come late on hover.
+$colloid-mac-dot-transition: 40ms;
 @function colloid-mac-dot($c) {
 	$r: $colloid-mac-dot-size / 2;
 	$d: mix(black, $c, $colloid-mac-dot-shade);
-	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r + 2px));
-}
-// GTK3 fades the same dot over ~2px from a 0.2px fade (it interpolates the stops unpremultiplied,
-// so the transparent dark end darkens the fade): the soft 5px dot the user chose, FreeTube's
-@function colloid-mac-dot-gtk3($c) {
-	$r: $colloid-mac-dot-size / 2;
-	$d: mix(black, $c, $colloid-mac-dot-shade);
-	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r - 0.3px));
+	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r + 0.5px));
 }
 // the gap between the mac circles, the same in every app: Electron's (6px, its buttons' spacing,
 // which it does not take from the theme: a padding there stretches the circles into ovals,
