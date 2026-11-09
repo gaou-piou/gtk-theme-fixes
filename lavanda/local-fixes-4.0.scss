@@ -290,3 +290,115 @@ headerbar splitbutton.image-button > button:not(.suggested-action):not(.destruct
 		padding-right: 4px;
 	}
 }
+
+// Mac window buttons ($lavanda-mac-buttons, fixes-variables): the button is the circle, 14px, no
+// padding, its glyph a 14px icon in it, hidden; red / yellow / green always (upstream colours them
+// on hover only), grey in a backdrop window (upstream: opacity 0.65), darker when pressed; on hover
+// and press a dot in place of the glyph, in the button's colour darkened (lavanda-mac-dot). The
+// vertical margins are the generic $windowcontrols-margin rules (fixes-variables)
+$_mac-buttons: (minimize: $lavanda-mac-min, maximize: $lavanda-mac-max, close: $lavanda-mac-close);
+@if $lavanda-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button {
+				&,
+				&:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+				&.image-button {
+					min-width: $lavanda-mac-button-size;
+					min-height: $lavanda-mac-button-size;
+					padding: 0;
+
+					// upstream pads the 16px glyph to the 24px circle
+					> image {
+						min-width: $lavanda-mac-button-size;
+						min-height: $lavanda-mac-button-size;
+						padding: 0;
+						-gtk-icon-size: $lavanda-mac-button-size;
+					}
+				}
+			}
+
+			// the gap between the circles ($lavanda-mac-button-gap): the close button gets it on
+			// the side facing the others from the generic gap rules ($windowcontrols-inner-margin)
+			> button.minimize, > button.maximize {
+				&, &:not(.suggested-action):not(.destructive-action) {
+					margin-left: $lavanda-mac-button-margin;
+					margin-right: $lavanda-mac-button-margin;
+				}
+			}
+
+			@each $type, $c in $_mac-buttons {
+				> button.#{$type}:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+					// the dot comes with the hover, not after upstream's transition
+					&, > image { transition: all $lavanda-mac-dot-transition ease-out; }
+
+					&, &:focus, &:checked {
+						color: transparent;
+						background-color: $c;
+						background-image: none;
+						box-shadow: none;
+						opacity: 1;
+					}
+					&:hover {
+						color: transparent;
+						background-color: $c;
+						background-image: lavanda-mac-dot($c);
+					}
+					&:active {
+						color: transparent;
+						background-color: mix($titlebar-text, $c, 25%);
+						background-image: lavanda-mac-dot($c);
+					}
+					&:backdrop, &:backdrop:hover, &:backdrop:active {
+						color: transparent;
+						background-color: $titlebar-track;
+						background-image: none;
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Chromium and Helium under GTK4 draw the image node at least as big as the icon, which they always
+// load at 16px (nav_button_provider_gtk.cc: kNavButtonIconSize; min-width, -gtk-icon-size and a
+// border only grow the box), so the circle is painted as a radial gradient of its size, centred in
+// the 16px box, and the button's own background is dropped (as in jasper/local-fixes-4.0)
+@function _mac-circle($c) {
+	$r: $lavanda-mac-button-size / 2;
+	@return radial-gradient(circle, $c ($r - 0.5px), transparentize($c, 1) ($r + 0.5px));
+}
+@if $lavanda-mac-buttons {
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium {
+		@each $type, $c in $_mac-buttons {
+			&.#{$type}, &.#{$type}:hover, &.#{$type}:active, &.#{$type}:backdrop {
+				background-color: transparent;
+				background-image: none;
+				box-shadow: none;
+				padding: 0;
+				color: transparent;
+				opacity: 1;
+			}
+			&.#{$type} > image.chromium {
+				color: transparent;
+				background-color: transparent;
+				background-image: _mac-circle($c);
+				box-shadow: none;
+			}
+			&.#{$type}:hover > image.chromium {
+				color: transparent;
+				background-image: lavanda-mac-dot($c), _mac-circle($c);
+			}
+			&.#{$type}:active > image.chromium {
+				color: transparent;
+				background-image: lavanda-mac-dot($c), _mac-circle(mix($titlebar-text, $c, 25%));
+			}
+			&.#{$type}:backdrop > image.chromium,
+			&.#{$type}:backdrop:hover > image.chromium,
+			&.#{$type}:backdrop:active > image.chromium {
+				background-image: _mac-circle($titlebar-track);
+			}
+		}
+	}
+}

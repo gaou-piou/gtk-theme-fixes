@@ -9,3 +9,67 @@
 // 		}
 // 	}
 // }
+
+// Mac window buttons ($lavanda-mac-buttons, fixes-variables), as in local-fixes-4.0: the button is the
+// 14px circle (its 16px glyph scaled down, its allocation shrunk by a negative margin), red / yellow /
+// green always, grey in a backdrop window (upstream: opacity 0.65), no glyph. The contexts are those
+// of the theme's and the generic window button rules, so these outrank them. Firefox's and
+// Electron's glyph svg backgrounds (default-decoration) scale with background-size
+$_mac-buttons: (minimize: $lavanda-mac-min, maximize: $lavanda-mac-max, close: $lavanda-mac-close);
+@if $lavanda-mac-buttons {
+	button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		&, .titlebar &, headerbar &, .background.csd headerbar &, .background.csd headerbar.titlebar &,
+		.titlebar.default-decoration &, .background.csd headerbar.titlebar.default-decoration & {
+			min-width: $lavanda-mac-button-size;
+			min-height: $lavanda-mac-button-size;
+			padding: 0;
+			background-size: $lavanda-mac-button-size $lavanda-mac-button-size;
+
+			> image {
+				margin: (-(16px - $lavanda-mac-button-size) / 2);
+				-gtk-icon-transform: scale($lavanda-mac-button-size / 16px);
+			}
+
+			// on hover and press a dot in place of the glyph, in the button's colour darkened (as
+			// lavanda-mac-dot, fixes-variables): GTK3 rasterises a gradient's stops ~3px soft, so the
+			// dot is the button's own circle in the dot colour, covered by an inset ring (cairo,
+			// antialiased 1px) in the button colour, at once (no transition)
+			@each $type, $c in $_mac-buttons {
+				&.#{$type} {
+					&, &:hover, &:active, &:backdrop, &:backdrop:hover, &:backdrop:active {
+						transition: none;
+						color: transparent;
+						background-color: $c;
+						background-image: none;
+						box-shadow: none;
+						opacity: 1;
+					}
+					&:hover:not(:backdrop) {
+						background-color: mix(black, $c, $lavanda-mac-dot-shade);
+						box-shadow: inset 0 0 0 ($lavanda-mac-button-size - $lavanda-mac-dot-size) / 2 $c;
+					}
+					&:active:not(:backdrop) {
+						background-color: mix(black, $c, $lavanda-mac-dot-shade);
+						box-shadow: inset 0 0 0 ($lavanda-mac-button-size - $lavanda-mac-dot-size) / 2 mix($titlebar-text, $c, 25%);
+					}
+					&:backdrop, &:backdrop:hover, &:backdrop:active {
+						background-color: $titlebar-track;
+					}
+				}
+			}
+		}
+	}
+
+	// the gap between the circles ($lavanda-mac-button-gap): the box spacing plus these margins; the
+	// close button gets its inner one from the generic gap rules
+	.background.csd headerbar, .background.csd headerbar.titlebar, headerbar {
+		button.titlebutton.minimize, button.titlebutton.maximize {
+			&:not(.suggested-action):not(.destructive-action) {
+				&, &:backdrop {
+					margin-left: $lavanda-mac-button-margin;
+					margin-right: $lavanda-mac-button-margin;
+				}
+			}
+		}
+	}
+}

@@ -60,7 +60,9 @@ a darker dot on hover, in every app, browser and Electron) with:
 
 The theme names stay the same. Colloid and Orchis take the same `mac_buttons` variable
 (colloid/ and orchis/fixes-variables.scss); `themetest --theme Jasper-Mac-Dark-Dracula --all` (or
-`Orchis-Mac-Dark-Dracula`) checks the mac build.
+`Orchis-Mac-Dark-Dracula`) checks the mac build. Lavanda has no such tweak upstream: its package
+adds `$mac_buttons: 'true'` to the theme's `_options.scss`, and lavanda/local-fixes-3.0 / 4.0 paint
+the circles themselves (same size, gap, colours and dot).
 
 ## Releases
 
