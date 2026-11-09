@@ -68,11 +68,14 @@ $chromium-titlebar-padding: 0;
 $chromium-close-margin: 7px;
 
 // Nautilus file list, measured in the real Nautilus against the selected sidebar row (2026-10-22):
-// rows 6px from the column sides (as Lavanda already had them), the list icons 5px into the row
-// like the sidebar icons (1px: the 32px file icons carry 4px more empty margin than the 16px
-// symbolic ones; the list had 6px, 10px in).
+// rows 6px from the column sides (as Lavanda already had them). Inside the row the icons and the
+// last column sat 5-6px from the row ends, cramped next to the sidebar (its icons 18px into the
+// row, the eject button 13px from its end): 12px at both ends ($lavanda-nautilus-row-padding,
+// local-fixes-4.0 pads the last column and the headers to match), the file icons' glyphs ~16px
+// in (2026-11-09).
 $nautilus-list-inset: $space-size;
-$nautilus-sidebar-row-padding: 1px;
+$lavanda-nautilus-row-padding: $space-size * 2;
+$nautilus-sidebar-row-padding: $lavanda-nautilus-row-padding;
 
 // Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22:
 // Nautilus' circles are 24px, Chromium's box 22px: 1px padding makes it 24, 38px apart like

@@ -79,6 +79,29 @@ headerbar .nautilus-pathbar {
 	}
 }
 
+// Row ends: the first column's padding comes from $nautilus-sidebar-row-padding (fixes-4.0); the
+// last column gets the same at the right end (Nautilus' cell padding is 6px), and the first/last
+// column headers too, so "Name" starts over the icons. Same scope as fixes-4.0 to outrank it.
+window.nautilus-window, window.nautilus-file-chooser {
+	.nautilus-list-view columnview.view {
+		> listview.view > row.activatable > cell:last-child {
+			padding-right: 0;
+
+			> widget#NautilusViewCell, .nautilus-view-cell {
+				padding-right: $lavanda-nautilus-row-padding;
+			}
+		}
+
+		> header > button:first-child {
+			padding-left: $lavanda-nautilus-row-padding;
+		}
+
+		> header > button:last-child {
+			padding-right: $lavanda-nautilus-row-padding;
+		}
+	}
+}
+
 // Tab bar inside a header bar (Black Box): the tab close button also matches
 // `headerbar button:not(.suggested-action):not(.destructive-action)`, which wins
 // over the tab rules and paints it white, under the white icon of the selected tab.
