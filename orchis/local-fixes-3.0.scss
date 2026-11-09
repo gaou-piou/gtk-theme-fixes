@@ -5,7 +5,74 @@
 // its left edge: $gtk3-titlebutton-inset in variables.scss accounts for it (14px -> 10px).
 // Not the default decoration (Electron's titlebar): its buttons are already 24x24 with no padding,
 // and this selector outranks that rule (Electron's buttons spread apart, 2026-10-09).
-headerbar:not(.default-decoration) button.titlebutton:not(.suggested-action):not(.destructive-action) {
-	padding-left: 6px;
-	padding-right: 6px;
+// (The mac circles are the button itself with no padding: only the flat glyph buttons need this.)
+@if not $orchis-mac-buttons {
+	headerbar:not(.default-decoration) button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		padding-left: 6px;
+		padding-right: 6px;
+	}
+}
+
+// mac circles smaller than upstream's 16px ($orchis-mac-button-size, fixes-variables): in GTK3 the
+// button is the circle and its glyph a 16px icon, which would keep the button 16px: scaled down, its
+// allocation shrunk by a negative margin; Firefox's and Electron's glyph svg backgrounds
+// (default-decoration) scale with background-size
+@if $orchis-mac-buttons and $orchis-mac-button-size != 16px {
+	$_shrink: (16px - $orchis-mac-button-size) / 2;
+
+	// `headerbar button...` like upstream's own rule (min 16px), which this must outrank
+	headerbar button.titlebutton:not(.suggested-action):not(.destructive-action),
+	.background.csd headerbar.titlebar.default-decoration button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		min-width: $orchis-mac-button-size;
+		min-height: $orchis-mac-button-size;
+		background-size: $orchis-mac-button-size $orchis-mac-button-size;
+
+		> image {
+			margin: (-$_shrink);
+			-gtk-icon-transform: scale($orchis-mac-button-size / 16px);
+		}
+	}
+}
+
+// the gap between the mac circles ($orchis-mac-button-gap, fixes-variables): the box spacing plus
+// these margins; the close button gets its inner one from the generic gap rules
+@if $orchis-mac-buttons {
+	.background.csd headerbar, .background.csd headerbar.titlebar, headerbar {
+		button.titlebutton.minimize, button.titlebutton.maximize {
+			&:not(.suggested-action):not(.destructive-action) {
+				&, &:backdrop {
+					margin-left: $orchis-mac-button-margin;
+					margin-right: $orchis-mac-button-margin;
+				}
+			}
+		}
+	}
+}
+
+// on hover and press a dot in place of the glyph, in the button's colour darkened
+// (orchis-mac-dot, fixes-variables), also over Firefox's and Electron's glyph images
+// (default-decoration); on backdrop neither. GTK3 rasterises a gradient's stops ~3px soft, so the
+// dot is the button's own circle in the dot colour, covered by an inset ring (cairo, antialiased
+// 1px) in the button colour, at once (no transition)
+@if $orchis-mac-buttons {
+	// `headerbar button...` like upstream's own rule (min 16px), which this must outrank
+	headerbar button.titlebutton:not(.suggested-action):not(.destructive-action),
+	.background.csd headerbar.titlebar.default-decoration button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+			&.#{$type} {
+				transition: none;
+
+				&:hover:not(:backdrop), &:active:not(:backdrop) {
+					color: transparent;
+					background-color: mix(black, $c, $orchis-mac-dot-shade);
+					background-image: none;
+					box-shadow: inset 0 0 0 ($orchis-mac-button-size - $orchis-mac-dot-size) / 2 $c;
+				}
+				&:backdrop:hover, &:backdrop:active {
+					color: transparent;
+					background-image: none;
+				}
+			}
+		}
+	}
 }

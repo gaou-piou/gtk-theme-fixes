@@ -37,3 +37,113 @@ window.background.csd.nautilus-file-chooser .content-pane {
 // Headerbar hairline: the stray 1px line above the pathbar (2026-10-26) is fixed in the generic
 // fixes-4.0 now (a collapsed top bar's 3px gap moved into the headerbar, so its `inset 0 1px`
 // highlight sits on the window's edge), so Orchis keeps its own highlight in Nautilus.
+
+// mac circles smaller than upstream's 16px ($orchis-mac-button-size, fixes-variables): the image is
+// the circle, its glyph the icon; the button keeps its box height (padding), so the bars keep their
+// height and the gaps computed from $titlebutton-size hold
+@if $orchis-mac-buttons and $orchis-mac-button-size != 16px {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button {
+				&,
+				&:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque),
+				&.image-button {
+					min-width: $orchis-mac-button-size;
+					min-height: $orchis-mac-button-size;
+					padding: (($titlebutton-box-height - $orchis-mac-button-size) / 2) 0;
+
+					> image {
+						min-width: $orchis-mac-button-size;
+						min-height: $orchis-mac-button-size;
+						-gtk-icon-size: $orchis-mac-button-size;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Chromium and Helium under GTK4 draw the image node at least as big as the icon, which they always
+// load at 16px (nav_button_provider_gtk.cc: kNavButtonIconSize; min-width, -gtk-icon-size and a
+// border only grow the box), so below 16px the circle is painted as a radial gradient of the
+// smaller size, centred in the 16px box: same colours as %mac_window_button (upstream common-4.0)
+@function _mac-dot($c) {
+	$r: $orchis-mac-button-size / 2;
+	@return radial-gradient(circle, $c ($r - 0.5px), transparentize($c, 1) ($r + 0.5px));
+}
+@if $orchis-mac-buttons and $orchis-mac-button-size != 16px {
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium {
+		@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+			&.#{$type} > image.chromium {
+				background-color: transparent;
+				background-image: _mac-dot($c);
+				box-shadow: none;
+			}
+			&.#{$type}:active > image.chromium {
+				background-image: _mac-dot(mix(black, $c, 25%));
+			}
+			&.#{$type}:backdrop > image.chromium {
+				background-image: _mac-dot($titlebar-track);
+			}
+			// the dot in place of the glyph (orchis-mac-dot, fixes-variables)
+			&.#{$type}:hover, &.#{$type}:active {
+				color: transparent;
+			}
+			&.#{$type}:hover > image.chromium {
+				color: transparent;
+				background-image: orchis-mac-dot($c), _mac-dot($c);
+			}
+			&.#{$type}:active > image.chromium {
+				color: transparent;
+				background-image: orchis-mac-dot($c), _mac-dot(mix(black, $c, 25%));
+			}
+			&.#{$type}:backdrop:hover > image.chromium, &.#{$type}:backdrop:active > image.chromium {
+				background-image: _mac-dot($titlebar-track);
+			}
+		}
+	}
+}
+
+// the gap between the mac circles ($orchis-mac-button-gap, fixes-variables): the close button gets
+// it on the side facing the others from the generic gap rules ($windowcontrols-inner-margin)
+@if $orchis-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			> button.minimize, > button.maximize {
+				&, &:not(.suggested-action):not(.destructive-action) {
+					margin-left: $orchis-mac-button-margin;
+					margin-right: $orchis-mac-button-margin;
+				}
+			}
+		}
+	}
+}
+
+// on hover and press a dot in place of the glyph, in the button's colour darkened
+// (orchis-mac-dot, fixes-variables); on backdrop neither (Chromium: above)
+@if $orchis-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+				> button.#{$type}:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+					// the dot comes with the hover, not after upstream's 75ms (button) / 1200ms (ripple)
+					&, > image { transition: all $orchis-mac-dot-transition ease-out; }
+
+					&:hover, &:active {
+						color: transparent;
+
+						> image {
+							color: transparent;
+							background-image: orchis-mac-dot($c);
+						}
+					}
+					&:backdrop:hover, &:backdrop:active {
+						> image {
+							background-image: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}

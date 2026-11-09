@@ -52,14 +52,15 @@ uncommitted changes included:
 
 ## Window button styles
 
-Themes whose upstream has a macOS-style button tweak take it from the theme's `$window_button`, so
-one package serves both looks. Jasper builds with them (red/yellow/green circles, 14px, 6px apart,
+Themes whose upstream has a macOS-style button tweak take it from the theme's own variable
+(`$window_button`, Orchis: `$mac_style`), so one package serves both looks. Jasper builds with them (red/yellow/green circles, 14px, 6px apart,
 a darker dot on hover, in every app, browser and Electron) with:
 
     mac_buttons=true makepkg
 
-The theme names stay the same. Colloid's `--tweaks` take the same variable (colloid/fixes-variables.scss);
-`themetest --theme Jasper-Mac-Dark-Dracula --all` checks the Jasper build.
+The theme names stay the same. Colloid and Orchis take the same `mac_buttons` variable
+(colloid/ and orchis/fixes-variables.scss); `themetest --theme Jasper-Mac-Dark-Dracula --all` (or
+`Orchis-Mac-Dark-Dracula`) checks the mac build.
 
 ## Releases
 
