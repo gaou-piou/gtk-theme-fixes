@@ -192,6 +192,15 @@ headerbar tabbar.inline {
 	}
 }
 
+// A view switcher in a headerbar (Adw.PreferencesWindow: every extension's settings, GNOME
+// Settings-style apps) sets the row height itself: libadwaita gives the widget a 34px minimum, as tall
+// as its own headerbar buttons. With smaller ones (Lavanda: 32px) the row is 34px and, header bar
+// children filling it, every other button stops being square: the menu and search buttons 32x34 and
+// the window buttons (the mac circles: 14x16) ovals. The view switcher fills the row like the rest.
+headerbar viewswitcher.wide {
+	min-height: 0;
+}
+
 // Window buttons taller than the other headerbar buttons: header bar children fill the
 // row height, so when the window controls (button + vertical margin) set it, every other
 // headerbar button is stretched and stops being square (Lavanda: 32x34, Catppuccin: 34x36).
