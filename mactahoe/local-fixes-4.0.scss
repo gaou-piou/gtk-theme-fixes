@@ -506,3 +506,17 @@ window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > window
 		}
 	}
 }
+
+// Black Box: its headerbar sits over the terminal, which paints over everything below the bar's
+// 48px. The theme's button shadow (0 6px 20px) reaches 26px below a 36px button, so it was cut off
+// in a hard line at the bottom of the bar, as if the buttons had a box of their own (focused window,
+// 2026-11-11). A shadow that fits the 6px around the buttons fades out inside the bar. Same
+// states and highlights as the theme's `header-normal` / `header-hover`; not in :backdrop, pressed,
+// checked or insensitive (no shadow there) and not on the window buttons.
+#blackbox-main-window headerbar.custom-headerbar button:not(.flat):not(.close):not(.minimize):not(.maximize):not(:backdrop):not(:active):not(:checked):not(:disabled) {
+	box-shadow: 0 1px 5px rgba(black, if($variant == 'light', 0.1, 0.15)), inset 1px 2px 1px -1px $button_outline, inset -1px -1px 1px 0 $button_outline;
+
+	&:hover {
+		box-shadow: 0 2px 5px rgba(black, if($variant == 'light', 0.15, 0.2)), inset 1px 2px 1px -1px $button_outline, inset -1px -1px 1px 0 $button_outline;
+	}
+}
