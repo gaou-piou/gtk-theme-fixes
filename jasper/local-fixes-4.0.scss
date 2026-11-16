@@ -190,8 +190,11 @@ toolbarview > .bottom-bar .toolbar {
 
 	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium {
 		@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+			// background-image: upstream's svg glyph on the button itself (close, maximize) showed
+			// through the translucent backdrop circle of the image (2026-11-17)
 			&.#{$type}, &.#{$type}:hover, &.#{$type}:active, &.#{$type}:backdrop {
 				background-color: transparent;
+				background-image: none;
 				box-shadow: none;
 				padding: 0;
 				color: transparent;
