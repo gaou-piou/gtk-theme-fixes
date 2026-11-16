@@ -520,3 +520,22 @@ window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > window
 		box-shadow: 0 2px 5px rgba(black, if($variant == 'light', 0.15, 0.2)), inset 1px 2px 1px -1px $button_outline, inset -1px -1px 1px 0 $button_outline;
 	}
 }
+
+// Nautilus: the location entry (edit the path) sits in a 54px headerbar, which clips what is painted
+// below it. The theme's entry shadow (0 3px 8px, hover and focus 0 5px 12px) reaches up to 17px below a
+// 36px entry, the bar leaves 9px, so it ended in a hard line (2026-11-13; same cause as the Black Box
+// buttons above). 0 1px 5px (hover and focus 0 2px 5px) fades out inside the bar. Same highlights
+// and focus ring as the theme's `headerbar entry` rules.
+$_entry-highlight: if($variant == 'light', white, rgba(white, 0.1));
+.nautilus-window headerbar entry:not(:backdrop):not(:disabled),
+.nautilus-file-chooser headerbar entry:not(:backdrop):not(:disabled) {
+	box-shadow: 0 1px 5px rgba(black, 0.15), inset 1px 1px 1px -1px $_entry-highlight, inset -1px -1px 1px -1px $_entry-highlight, inset 0 0 0 2px transparent;
+
+	&:hover {
+		box-shadow: 0 2px 5px rgba(black, 0.2), inset 1px 1px 1px -1px $_entry-highlight, inset -1px -1px 1px -1px $_entry-highlight, inset 0 0 0 2px transparent;
+	}
+
+	&:focus {
+		box-shadow: 0 2px 5px rgba(black, 0.2), inset 0 0 0 2px #{"alpha(mix(white,#0088FF,0.75),0.75)"};
+	}
+}
