@@ -425,3 +425,10 @@ $_mac-buttons: (minimize: $lavanda-mac-min, maximize: $lavanda-mac-max, close: $
 		}
 	}
 }
+
+// Collapsed tab bars (Ptyxis, Console with tabs): the tabs fill the bar, with the tabbox's 1px
+// bottom border under them only: flush with the headerbar, 1px off the content (2026-11-17). The
+// content starts right below, it is the edge already: flush on both sides.
+toolbarview > .top-bar .collapse-spacing tabbar tabbox {
+	border-bottom-width: 0;
+}

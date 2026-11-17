@@ -539,3 +539,11 @@ $_entry-highlight: if($variant == 'light', white, rgba(white, 0.1));
 		box-shadow: 0 2px 5px rgba(black, 0.2), inset 0 0 0 2px #{"alpha(mix(white,#0088FF,0.75),0.75)"};
 	}
 }
+
+// Collapsed tab bars (Ptyxis, Console with tabs): the tab box keeps the theme's 2px top margin and
+// gets 6px below, so the tabs sat 4px under the headerbar and 8px above the content (2026-11-17).
+// Same height, centred.
+toolbarview > .top-bar .collapse-spacing tabbar .box {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}

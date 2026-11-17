@@ -271,3 +271,17 @@ toolbarview > .bottom-bar .toolbar {
 		}
 	}
 }
+
+// Collapsed tab bars (Ptyxis, Console with tabs): the tab box pads 1px below for its bottom line on
+// top of the tabbox's 2px, so the tabs sat 2px under the headerbar and 3px above the content
+// (2026-11-17). 2px on both sides, the line included.
+toolbarview > .top-bar .collapse-spacing tabbar tabbox {
+	padding-bottom: 1px;
+}
+
+// Inline tab bars in headerbars (Black Box): the same 1px below the tab box raised the tabs, 5px
+// under the top edge, 6px above the bottom one (2026-11-17). Its line lies on the headerbar's bottom
+// edge there and needs no room.
+headerbar tabbar.inline .box {
+	padding-bottom: 0;
+}
