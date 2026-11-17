@@ -15,11 +15,10 @@ $headerbar-size-right: 1 * $space-size;
 
 $button_fix_multiplier: 0.2 0.2;
 
-// Black Box: (44px headerbar - 26px titlebutton) / 2
-$blackbox-windowcontrols-margin: 9px;
-
-// Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
-$headerbar-tab-margin: 6px;
+// Inline tab bar in headerbars (e.g. Black Box): 0, the headerbar box padding (6px) already spaces
+// the row, as in Lavanda. 6px stacked on it: 25px tabs + 12px = a 37px row (bar 49px, not 44px),
+// and the window buttons, which fill the row, came out 26x31 ovals (2026-11-17)
+$headerbar-tab-margin: 0;
 
 // Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
 // screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
