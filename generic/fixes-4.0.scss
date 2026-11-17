@@ -664,6 +664,14 @@ fullscreenbox > toolbarview > revealer.top-bar > windowhandle > box.collapse-spa
 		margin-top: 0;
 		padding-top: 0;
 	}
+
+	// Fluent pulls a collapsed tab bar 3px down (`.collapse-spacing tabbar { margin-bottom: -3px }`)
+	// over the bar's bottom padding, so its tabs meet the content. Here that padding is gone, and
+	// the tabs reached 3px into the terminal (user report 2026-11-17). Nothing to pull over.
+	tabbar {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
 }
 
 // With the tab bar shown (window.has-tab-bar, Ptyxis 50) that 3px sits above and below the
