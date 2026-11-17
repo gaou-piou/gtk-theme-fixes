@@ -192,6 +192,16 @@ headerbar tabbar.inline {
 	}
 }
 
+// Folder tabs (Orchis, Orianin, Fluent: rounded top, open bottom) stand on the content, as they do
+// in Ptyxis; centred in the row they floated 6px above the headerbar edge (Black Box, user report
+// 2026-11-17). $headerbar-folder-tab-drop = the headerbar box's bottom padding: the tab bar reaches
+// over it, the row keeps its height, the window buttons their size.
+@if variable-exists("headerbar-folder-tab-drop") {
+	headerbar tabbar.inline {
+		margin-bottom: -$headerbar-folder-tab-drop;
+	}
+}
+
 // A view switcher in a headerbar (Adw.PreferencesWindow: every extension's settings, GNOME
 // Settings-style apps) sets the row height itself: libadwaita gives the widget a 34px minimum, as tall
 // as its own headerbar buttons. With smaller ones (Lavanda: 32px) the row is 34px and, header bar

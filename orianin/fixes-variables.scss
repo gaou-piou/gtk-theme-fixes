@@ -54,6 +54,10 @@ $chromium-close-margin: 4px;
 // toolbars (Ptyxis, Console with tabs) keep that gap instead of zeroing it
 $collapse-tab-padding-top: 4px;
 
+// In headerbars (Black Box) they reach over the headerbar box's 6px bottom padding to stand on the
+// content (generic fixes-4.0)
+$headerbar-folder-tab-drop: 6px;
+
 // Chromium browsers and Electron (fixes-4.0 / fixes-3.0, themetest:chromium-gtk4), 2026-10-22. The
 // visible part is the glyph Chromium takes from the icon theme (Tela: 8px under GTK4, 10px under
 // GTK3 and in Electron), centred in the button box: the side gap is set for the glyph, between

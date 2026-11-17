@@ -20,6 +20,10 @@ $button_fix_multiplier: 0.2 0.2;
 // and the window buttons, which fill the row, came out 26x31 ovals (2026-11-17)
 $headerbar-tab-margin: 0;
 
+// Its tabs are folder tabs (rounded top, open bottom): in headerbars (Black Box) they reach over the
+// box's 6px bottom padding to stand on the content, as in Ptyxis (generic fixes-4.0)
+$headerbar-folder-tab-drop: 6px;
+
 // Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
 // screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
 // to the side than to the top, close->minimize as far apart as minimize->maximize.
