@@ -533,3 +533,19 @@ $_chromium-tab-lift: if(variable-exists("chromium-active-tab-lift"), $chromium-a
 		}
 	}
 }
+
+// Window bottom corners: square in GTK3, as in Adwaita (decoration 8px 8px 0 0). GTK3 does not clip
+// a window's children to its rounded corners, so content reaching the bottom edge with a background
+// of its own (Marker's WebKit preview and editor, text views, lists) painted its square corners
+// past the rounded outline and shadow (relic 22px, Jasper 19px, Fluent 16px; 2026-11-18). Window
+// background and decoration both: rounded on only one of them, GTK3 made the opaque region from the
+// decoration and the compositor drew the corners outside the background black (LXAppearance, relic).
+// Message dialogs, popups and tooltips keep their own corners; GTK4 clips its children itself.
+.background.csd:not(tooltip):not(.popup):not(messagedialog) {
+	&, > decoration {
+		&, &:backdrop {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+}
