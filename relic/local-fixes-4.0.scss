@@ -54,6 +54,19 @@
 
 			border-radius: $corner-radius;
 			margin: $space-size 0;
+
+			// The menu button at its end (the three dots) took the shape of the last button of a linked
+			// group on hover: square on the left, the bar's curve on the right, against the bar's
+			// edge (2026-11-18). Shaped like the path buttons: their corners, 3px off the last one.
+			> menubutton {
+				margin-left: $space-size / 2;
+
+				> button {
+					&, &:hover, &:active, &:checked, &:backdrop, &:focus, &:focus-visible {
+						border-radius: $corner-radius;
+					}
+				}
+			}
 		}
 
 		.nautilus-path-button {
