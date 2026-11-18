@@ -1,0 +1,30 @@
+// Mac window buttons ($relic-mac-buttons, fixes-variables): on hover and press a dot in place of
+// upstream's white glyph, in the button's colour darkened (as local-fixes-4.0), also over Firefox's
+// and Electron's glyph images (default-decoration); on backdrop neither. GTK3 rasterises a
+// gradient's stops ~3px soft, so the dot is the button's own 16px circle in the dot colour, covered
+// by an inset ring (cairo, antialiased 1px) in the button colour, at once; pressed like hovered, as
+// in Jasper (2026-11-18)
+@if $relic-mac-buttons {
+	$_ring: ($titlebutton-size - $relic-mac-dot-size) / 2;
+
+	button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		&, .background.csd headerbar.titlebar.default-decoration & {
+			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+				&.#{$type} {
+					transition: none;
+
+					&:hover:not(:backdrop), &:active:not(:backdrop) {
+						color: transparent;
+						background-color: mix(black, $c, $relic-mac-dot-shade);
+						background-image: none;
+						box-shadow: inset 0 0 0 $_ring $c;
+					}
+					&:backdrop:hover, &:backdrop:active {
+						color: transparent;
+						background-image: none;
+					}
+				}
+			}
+		}
+	}
+}

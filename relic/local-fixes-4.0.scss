@@ -112,3 +112,62 @@ headerbar .linked:not(.vertical) > entry:not(:only-child) + button {
 	border-radius: $corner-radius;
 	margin-left: $space-size;
 }
+
+// Mac window buttons ($relic-mac-buttons, fixes-variables): on hover and press a dot in place of the
+// glyph (relic-mac-dot), none in a backdrop window. The dot is a gradient on the 16px image, which
+// is the circle in both upstream layouts: the coloured image itself in the classic one (Everforest
+// & co.), a transparent image over the coloured button in the new one (Catppuccin, Vague), so the
+// dot sits on the circle either way, and on the image Chromium draws as well (2026-11-18)
+@if $relic-mac-buttons {
+	windowcontrols, navigation-split-view headerbar windowcontrols {
+		.background &, .csd &, .background.csd &, &, &.start {
+			@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+				> button.#{$type}:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+					// the dot comes with the hover, not after upstream's transition
+					&, > image { transition: all $relic-mac-dot-transition ease-out; }
+
+					&:hover, &:active {
+						color: transparent;
+
+						> image {
+							color: transparent;
+							background-image: relic-mac-dot($c);
+						}
+					}
+					&:backdrop:hover, &:backdrop:active {
+						color: transparent;
+
+						> image {
+							color: transparent;
+							background-image: none;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Chromium and Helium under GTK4: upstream's .chromium titlebutton rules (Catppuccin, Vague)
+	// colour the glyph on hover and outrank the rule above, and Chromium draws the image node in its
+	// own colour: the glyph hidden at the Chromium node path, the dot as above
+	window.background.csd.chromium > headerbar.header-bar.titlebar.chromium > windowcontrols.chromium > button.titlebutton.chromium {
+		@each $type, $c in (minimize: $titlebutton-min, maximize: $titlebutton-max, close: $titlebutton-close) {
+			&.#{$type}:hover, &.#{$type}:active {
+				color: transparent;
+
+				> image.chromium {
+					color: transparent;
+					background-image: relic-mac-dot($c);
+				}
+			}
+			&.#{$type}:backdrop:hover, &.#{$type}:backdrop:active {
+				color: transparent;
+
+				> image.chromium {
+					color: transparent;
+					background-image: none;
+				}
+			}
+		}
+	}
+}

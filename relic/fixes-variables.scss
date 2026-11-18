@@ -91,3 +91,19 @@ $electron-gtk3-side: 14px;
 // new layout (Catppuccin, Vague) imports this file after its rules, so its item keeps upstream's
 // $roundness * 1px (12px), not the 14px above (themetest rule menu-item, 2026-11-03).
 $chromium-menu-item-radius: if(variable-exists("roundness"), $roundness * 1px, $corner-radius);
+
+// Mac window buttons (install.sh --tweaks macos, every relic package): upstream's 16px coloured
+// circles show a glyph on hover and press (GTK4: white over the circle). As in Jasper, Colloid and
+// Orchis, a dot in place of the glyph, in the button's colour darkened, none in a backdrop window
+// (local-fixes-4.0, local-fixes-3.0). The dot: an EVEN diameter (the circle's centre sits on a pixel boundary), a
+// 1px antialiased edge
+$relic-mac-buttons: if(variable-exists("window_button"), $window_button == 'mac', false);
+$relic-mac-dot-size: 6px;
+$relic-mac-dot-shade: 50%;
+// how long the dot takes to appear: a feel, not a visible fade
+$relic-mac-dot-transition: 40ms;
+@function relic-mac-dot($c) {
+	$r: $relic-mac-dot-size / 2;
+	$d: mix(black, $c, $relic-mac-dot-shade);
+	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r + 0.5px));
+}
