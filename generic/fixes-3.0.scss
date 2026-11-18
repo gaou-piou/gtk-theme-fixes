@@ -549,3 +549,13 @@ $_chromium-tab-lift: if(variable-exists("chromium-active-tab-lift"), $chromium-a
 		}
 	}
 }
+
+// Titlebar made of a container holding headerbars (Marker's box, gedit's paned): the theme rounds
+// the container (.titlebar) but not the headerbars in it, and GTK3 does not clip them to its
+// corners, so the outer ones painted square top corners past the window outline (Marker, relic
+// 22px; 2026-11-18). They take the container's top radius: inherit follows each theme's titlebar
+// radius, 0 when tiled, maximized or fullscreen.
+.background.csd .titlebar:not(headerbar) > headerbar {
+	&:first-child { border-top-left-radius: inherit; }
+	&:last-child { border-top-right-radius: inherit; }
+}
