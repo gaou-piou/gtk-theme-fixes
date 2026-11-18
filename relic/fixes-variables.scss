@@ -95,8 +95,8 @@ $chromium-menu-item-radius: if(variable-exists("roundness"), $roundness * 1px, $
 // Mac window buttons (install.sh --tweaks macos, every relic package): upstream's 16px coloured
 // circles show a glyph on hover and press (GTK4: white over the circle). As in Jasper, Colloid and
 // Orchis, a dot in place of the glyph, in the button's colour darkened, none in a backdrop window
-// (local-fixes-4.0, local-fixes-3.0). The dot: an EVEN diameter (the circle's centre sits on a pixel boundary), a
-// 1px antialiased edge
+// (local-fixes-4.0, local-fixes-3.0). The dot: an EVEN diameter (the circle's centre sits on a
+// pixel boundary), a 1px antialiased edge
 $relic-mac-buttons: if(variable-exists("window_button"), $window_button == 'mac', false);
 $relic-mac-dot-size: 6px;
 $relic-mac-dot-shade: 50%;
