@@ -171,3 +171,10 @@ headerbar .linked:not(.vertical) > entry:not(:only-child) + button {
 		}
 	}
 }
+
+// libadwaita's window radius (its window, sheet and sidebar corners) is the one of the window
+// (relic-window-radius): Catppuccin and Vague set it to $modal-radius + 6 (15px), the classic themes
+// leave libadwaita's own (2026-11-18)
+:root {
+	--window-radius: #{$window-radius};
+}
