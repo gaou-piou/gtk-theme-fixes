@@ -28,3 +28,15 @@
 		}
 	}
 }
+
+// Window corners: the theme rounds a window's bottom corners on its background (`.background.csd`,
+// 0 0 $window-radius $window-radius) but leaves its decoration square there (Adwaita's 8px 8px 0 0).
+// GTK3 makes the window's opaque region from the decoration's corners, so the compositor drew the
+// square corners outside the rounded background black, without blending (LXAppearance, user report
+// 2026-11-18). Round the decoration's bottom corners as well, as every other family does; tiled,
+// maximized, fullscreen, solid-csd, popup windows and tooltips keep their own. No node name: the
+// rule must reach dialogs too (GtkDialog is `dialog`, LXAppearance's window), as `.background.csd` does.
+.background.csd:not(tooltip):not(.popup):not(.tiled):not(.tiled-top):not(.tiled-right):not(.tiled-bottom):not(.tiled-left):not(.maximized):not(.fullscreen):not(.solid-csd) > decoration {
+	border-bottom-left-radius: $window-radius;
+	border-bottom-right-radius: $window-radius;
+}
