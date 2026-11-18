@@ -1,3 +1,29 @@
+// Mac window buttons (install.sh --tweaks macos, every relic package): upstream's 16px coloured
+// circles show a glyph on hover and press (GTK4: white over the circle). As in Jasper, Colloid and
+// Orchis, a dot in place of the glyph, in the button's colour darkened, none in a backdrop window
+// (local-fixes-4.0, local-fixes-3.0). The dot: an EVEN diameter (the circle's centre sits on a
+// pixel boundary), a 1px antialiased edge
+$relic-mac-buttons: if(variable-exists("window_button"), $window_button == 'mac', false);
+// $relic-mac-button-size = the mac circle: 16px (upstream's), or smaller, e.g. 14px like Colloid's,
+// Jasper's and Orchis' (about 2/3 of their normal 22px; even sizes, so the circles stay on whole
+// pixels). Every size and gap below follows it: the GTK4 buttons are the circle in both layouts
+// (padding 0), the margin fills the 46px row; GTK3 shrinks the button and scales its glyph
+// (local-fixes-3.0); Chromium and Helium in GTK4 mode keep a 16px image box whatever the CSS says,
+// so there the circle is a gradient in it (local-fixes-4.0). Unused with the normal buttons.
+$relic-mac-button-size: 14px;
+$_relic-titlebutton-size: if($relic-mac-buttons, $relic-mac-button-size, 16px);
+// below 16px the circle sits this much further into a 16px box (Chromium GTK4, Electron's glyph)
+$_relic-mac-shrink: (16px - $_relic-titlebutton-size) / 2;
+$relic-mac-dot-size: 6px;
+$relic-mac-dot-shade: 50%;
+// how long the dot takes to appear: a feel, not a visible fade
+$relic-mac-dot-transition: 40ms;
+@function relic-mac-dot($c) {
+	$r: $relic-mac-dot-size / 2;
+	$d: mix(black, $c, $relic-mac-dot-shade);
+	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r + 0.5px));
+}
+
 // Radiuses
 @import 'relic-window-radius';
 $modal-radius: 12px;
@@ -38,25 +64,25 @@ $default-decoration-button-offset: 7px;
 // 1px closer to the side than to the top. The 16px circle is the button's icon; its vertical
 // padding (9px in Everforest & co., 0 in Catppuccin and Vague) goes, so the button is the circle
 // in every theme here
-$titlebutton-size: 16px;
+$titlebutton-size: $_relic-titlebutton-size;
 $titlebutton-default-decoration-vpadding: 0;
 $titlebutton-inset: 0;
 $headerbar-default-decoration-height: 44px;
-$titlebutton-box-height: 16px;
+$titlebutton-box-height: $_relic-titlebutton-size;
 $titlebar-corner-radius: $window-radius;
 
 // Window buttons in GTK4 headerbars (Ptyxis etc.), measured 2026-10-12: the close circle 16px from
 // the top and 9px from the side, close->minimize 14px vs minimize->maximize 6px, and in
 // Catppuccin/Vague the window controls 48px tall, stretching the headerbar buttons (34x36).
-// The 16px circle in a 46px row like the other headerbar buttons (34px + 2 * 6px margin):
-// margin (46 - 16) / 2, no padding; the close button 1px closer to the side than to the top
+// The circle ($relic-mac-button-size) in a 46px row like the other headerbar buttons (34px + 2 * 6px
+// margin): margin (46 - circle) / 2, no padding; the close button 1px closer to the side than to the top
 // (generic close gap rules) and as far from its neighbour as the others are (no own margin)
 $headerbar-height: 46px;
 // GTK3 headerbars (gnome-terminal etc.) as well, measured 2026-10-12: 42px, the close circle 8px
 // from the side and 13px from the top, close->minimize 13px vs 6px. Their image buttons are
 // 34px like the GTK4 ones, so the generic GTK3 rules make the bar 46px and place the close button
 $headerbar-button-height: 34px;
-$windowcontrols-margin: 15px;
+$windowcontrols-margin: ($headerbar-height - $_relic-titlebutton-size) / 2;
 $windowcontrols-vpadding: 0;
 $windowcontrols-inner-margin: 0;
 
@@ -80,30 +106,19 @@ $button-radius: if(variable-exists("roundness"), ($roundness - 3) * 1px, $corner
 // tests/themetest: the 16px circles 6px apart like the native ones (button margin 0), the close
 // button as far from the side as Chromium's tab strip puts it from the top, 12px (2026-10-23;
 // Helium's lower strip puts it 3px higher with the same CSS).
+// Smaller mac circles ($relic-mac-button-size): GTK4 keeps the 16px box (the circle drawn inside),
+// so its side gap grows by itself and the margins pull the boxes together by the shrink, to keep
+// 6px between the circles; under GTK3 the box is the circle, so the sides grow by the shrink.
 $chromium-gtk4-side: 12px;
-$chromium-gtk3-side: 12px;
-$chromium-gtk4-button-margin: 0;
+$chromium-gtk3-side: 12px + $_relic-mac-shrink;
+$chromium-gtk4-button-margin: -$_relic-mac-shrink;
+$chromium-gtk3-button-margin: 0;
 $chromium-gtk4-button-padding: 0;
 // Electron (GTK3 nodes, also with --gtk-version=4): 16px circles at top 14, so 14px from the side
-$electron-gtk3-side: 14px;
+$electron-gtk3-side: 14px + $_relic-mac-shrink;
 
 // Chromium menus: the hovered item is inset (generic), keep the radius of popover modelbutton. The
 // new layout (Catppuccin, Vague) imports this file after its rules, so its item keeps upstream's
 // $roundness * 1px (12px), not the 14px above (themetest rule menu-item, 2026-11-03).
 $chromium-menu-item-radius: if(variable-exists("roundness"), $roundness * 1px, $corner-radius);
 
-// Mac window buttons (install.sh --tweaks macos, every relic package): upstream's 16px coloured
-// circles show a glyph on hover and press (GTK4: white over the circle). As in Jasper, Colloid and
-// Orchis, a dot in place of the glyph, in the button's colour darkened, none in a backdrop window
-// (local-fixes-4.0, local-fixes-3.0). The dot: an EVEN diameter (the circle's centre sits on a
-// pixel boundary), a 1px antialiased edge
-$relic-mac-buttons: if(variable-exists("window_button"), $window_button == 'mac', false);
-$relic-mac-dot-size: 6px;
-$relic-mac-dot-shade: 50%;
-// how long the dot takes to appear: a feel, not a visible fade
-$relic-mac-dot-transition: 40ms;
-@function relic-mac-dot($c) {
-	$r: $relic-mac-dot-size / 2;
-	$d: mix(black, $c, $relic-mac-dot-shade);
-	@return radial-gradient(circle, $d ($r - 0.5px), transparentize($d, 1) ($r + 0.5px));
-}

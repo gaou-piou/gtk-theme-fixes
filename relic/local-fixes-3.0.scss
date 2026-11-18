@@ -29,6 +29,28 @@
 	}
 }
 
+// Mac circles smaller than upstream's 16px ($relic-mac-button-size, fixes-variables): in GTK3 the
+// button is the circle in both layouts and shrinks with its min size; Firefox's and Electron's glyph
+// svg backgrounds (default-decoration) scale with background-size. Chromium and Brave in GTK3 mode:
+// upstream's `window.background.chromium headerbar.titlebar button.titlebutton` sets 16px and
+// outranks the plain selector (the circles stayed 16px there, 2026-11-18)
+@if $relic-mac-buttons and $relic-mac-button-size != 16px {
+	button.titlebutton:not(.suggested-action):not(.destructive-action) {
+		&, .background.csd headerbar.titlebar.default-decoration &, window.background.chromium headerbar.titlebar & {
+			min-width: $relic-mac-button-size;
+			min-height: $relic-mac-button-size;
+			background-size: $relic-mac-button-size $relic-mac-button-size;
+
+			// the glyph is a 16px icon that would keep the button 16px: scaled down, its allocation
+			// shrunk by a negative margin
+			> image {
+				margin: (-(16px - $relic-mac-button-size) / 2);
+				-gtk-icon-transform: scale($relic-mac-button-size / 16px);
+			}
+		}
+	}
+}
+
 // Window corners: the theme rounds a window's bottom corners on its background (`.background.csd`,
 // 0 0 $window-radius $window-radius) but leaves its decoration square there (Adwaita's 8px 8px 0 0).
 // GTK3 makes the window's opaque region from the decoration's corners, so the compositor drew the
