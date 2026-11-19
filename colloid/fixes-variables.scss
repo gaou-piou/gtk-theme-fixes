@@ -163,3 +163,8 @@ $nautilus-location-button-radius: $corner-radius;
 
 // Chromium menus: the hovered item is inset (generic), keep the radius of popover.menu modelbutton
 $chromium-menu-item-radius: 6px;
+
+// Side gap of the tabs in collapsed toolbars (Nautilus, Ptyxis): libadwaita's 5px plus 1px of tab
+// bar box padding. The same gap goes above and below them (generic fixes-4.0, measured with
+// themetest tabgeom, 2026-11-19).
+$collapse-tab-gap: 6px;

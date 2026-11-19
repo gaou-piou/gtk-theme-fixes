@@ -65,3 +65,8 @@ $chromium-gtk4-glyph-alpha: 1.195;
 
 // Chromium menus: the hovered item is inset (generic), keep the radius of popover modelbutton
 $chromium-menu-item-radius: 6px;
+
+// Side gap of the tabs in collapsed toolbars (Nautilus, Ptyxis): libadwaita's 5px plus its tab bar
+// box padding 3px; 11px on the start side, past the pinned tabs. The same gap goes above and below
+// them (generic fixes-4.0, measured with themetest tabgeom, 2026-11-19).
+$collapse-tab-gap: 6px;

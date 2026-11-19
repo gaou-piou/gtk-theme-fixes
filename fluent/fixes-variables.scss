@@ -24,6 +24,9 @@ $headerbar-tab-margin: 0;
 // box's 6px bottom padding to stand on the content, as in Ptyxis (generic fixes-4.0)
 $headerbar-folder-tab-drop: 6px;
 
+// The same folder tabs in collapsed toolbars (Ptyxis, Nautilus): the side gap above them only
+$folder-tabs: true;
+
 // Window button geometry (generic close gap rules), measured 2026-10-09 on headless gnome-shell
 // screenshots (Electron, GTK3 and GTK4 windows side by side): the visible close button 1px closer
 // to the side than to the top, close->minimize as far apart as minimize->maximize.

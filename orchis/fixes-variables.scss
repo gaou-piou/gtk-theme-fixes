@@ -53,9 +53,9 @@ $chromium-close-margin: 5px;
 // so the generic sidebar spacing rules stay out
 $nautilus-sidebar-spacing: false;
 
-// Tabs (AdwTabBar) are folder tabs: 4px above them, flush with the content below. Collapsed
-// toolbars (Ptyxis, Console with tabs) keep that gap instead of zeroing it
-$collapse-tab-padding-top: 4px;
+// Tabs (AdwTabBar) are folder tabs: in collapsed toolbars (Ptyxis, Nautilus, Console with tabs)
+// the side gap goes above them only, they stand on the content (generic fixes-4.0)
+$folder-tabs: true;
 
 // In headerbars (Black Box) they reach over the headerbar box's 6px bottom padding to stand on the
 // content (generic fixes-4.0)

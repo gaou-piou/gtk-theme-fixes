@@ -426,9 +426,8 @@ $_mac-buttons: (minimize: $lavanda-mac-min, maximize: $lavanda-mac-max, close: $
 	}
 }
 
-// Collapsed tab bars (Ptyxis, Console with tabs): the tabs fill the bar, with the tabbox's 1px
-// bottom border under them only: flush with the headerbar, 1px off the content (2026-11-17). The
-// content starts right below, it is the edge already: flush on both sides.
+// Collapsed tab bars (Nautilus, Ptyxis): the tab box's 1px bottom border added to the gap below the
+// tabs, 6px under 5px at the sides and above (2026-11-19). The content edge is the line already.
 toolbarview > .top-bar .collapse-spacing tabbar tabbox {
 	border-bottom-width: 0;
 }

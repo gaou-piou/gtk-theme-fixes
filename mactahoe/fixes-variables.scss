@@ -80,3 +80,8 @@ $splitbutton-text-padding: 12px;
 $splitbutton-arrow-padding: 6px;
 // GTK3 header bar entries (fixes-3.0): the theme pads them 3px top and bottom
 $gtk3-headerbar-entry-vpadding: 6px;
+
+// Side gap of the tabs in collapsed toolbars (Nautilus, Ptyxis): libadwaita's 5px plus its tab bar
+// box is inset 6px, the tab box pulled back 3px. The same gap goes above and below them (generic
+// fixes-4.0, measured with themetest tabgeom, 2026-11-19).
+$collapse-tab-gap: 8px;

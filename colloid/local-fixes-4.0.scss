@@ -283,12 +283,3 @@
 		}
 	}
 }
-
-// Collapsed tab bars (Ptyxis, Console with tabs): Colloid pads the tabs 0 above, 6px below, so the
-// tab pills sat on the headerbar and 6px off the content (2026-11-17). Same height, centred.
-toolbarview > .top-bar .collapse-spacing tabbar {
-	tabbox, .start-action, .end-action {
-		padding-top: 3px;
-		padding-bottom: 3px;
-	}
-}

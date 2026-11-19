@@ -122,3 +122,7 @@ $electron-gtk3-side: 14px + $_relic-mac-shrink;
 // $roundness * 1px (12px), not the 14px above (themetest rule menu-item, 2026-11-03).
 $chromium-menu-item-radius: if(variable-exists("roundness"), $roundness * 1px, $corner-radius);
 
+// Side gap of the tabs in collapsed toolbars (Nautilus, Ptyxis): libadwaita's 5px plus its tabs
+// carry a 2px margin. The same gap goes above and below them (generic fixes-4.0, measured with
+// themetest tabgeom, 2026-11-19).
+$collapse-tab-gap: 7px;

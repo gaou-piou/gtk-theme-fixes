@@ -605,7 +605,14 @@ $_chromium-menu-inset: if(variable-exists("chromium-menu-item-inset"), $chromium
 // buttons sit 3px from the window top (GNOME Extensions with its hidden search bar).
 $_collapse-spacing: 3px;
 $_headerbar-button-margin: if(variable-exists("headerbar-button-margin"), $headerbar-button-margin, 0);
-$_collapse-tab-padding-top: if(variable-exists("collapse-tab-padding-top"), $collapse-tab-padding-top, 0);
+// Tabs in a collapsed bar: as far from the headerbar above and the content below as from the bar's
+// sides (user request 2026-11-19: zeroing the theme's spacing left the tabs 0 from both in relic,
+// Fluent, Lavanda). $collapse-tab-gap = a theme's side gap, from the window edge to the first tab
+// (libadwaita's 5px at the tab box ends plus the theme's own box padding and tab margin), measured
+// with themetest's tabgeom; $folder-tabs: folder tabs (rounded top, open bottom) stand on the
+// content, so the gap goes above them only.
+$_collapse-tab-gap: if(variable-exists("collapse-tab-gap"), $collapse-tab-gap, 5px);
+$_folder-tabs: if(variable-exists("folder-tabs"), $folder-tabs, false);
 
 toolbarview > .top-bar,
 toolbarview > .bottom-bar {
@@ -626,13 +633,24 @@ toolbarview > .bottom-bar {
 			}
 		}
 
-		// only remove spacing: forcing libadwaita's 3px tabbox padding makes some themes taller.
-		// Themes whose tabs keep a gap of their own above them (Orchis: folder tabs, 4px above,
-		// flush with the content below) give it back with $collapse-tab-padding-top; zeroing it
-		// glued the tabs to the headerbar in Ptyxis (2026-10-09)
+		// the whole vertical gap on the tab box (and the new-tab/overview buttons at its ends, to
+		// stay level with the tabs); every other vertical offset in the chain, the theme's or
+		// libadwaita's, is zeroed, so the gap is the same in every theme that sets it
 		tabbar {
+			.box {
+				margin-top: 0;
+				margin-bottom: 0;
+				padding-top: 0;
+				padding-bottom: 0;
+			}
+
+			tabbox, .start-action, .end-action {
+				padding-top: $_collapse-tab-gap;
+				padding-bottom: if($_folder-tabs, 0, $_collapse-tab-gap);
+			}
+
 			tabbox > tabboxchild {
-				padding-top: $_collapse-tab-padding-top;
+				padding-top: 0;
 				padding-bottom: 0;
 			}
 
@@ -663,6 +681,14 @@ toolbarview > .bottom-bar .collapse-spacing headerbar {
 	padding-bottom: $_collapse-spacing;
 }
 
+// The same 3px under a tab bar that ends the top bar (Nautilus) added to the gap below the tabs: 10px
+// under 7px above and at the sides in relic, whose window background matches the bar
+// (2026-11-19). The tab bar reaches over it, so the tab box's gap alone spaces the tabs from the
+// content, whatever colour the window shows there. Folder tabs (Fluent) already did.
+toolbarview > .top-bar .collapse-spacing tabbar:last-child {
+	margin-bottom: -$_collapse-spacing;
+}
+
 // Ptyxis moves that padding inside its .visual-bell-area (app CSS, same selector minus the
 // class); the rule above outranks it at USER priority and would add the 3px twice. Its bar has
 // no gap to move into a headerbar either: nothing for the two rules above to do there.
@@ -677,8 +703,9 @@ fullscreenbox > toolbarview > revealer.top-bar > windowhandle > box.collapse-spa
 
 	// Fluent pulls a collapsed tab bar 3px down (`.collapse-spacing tabbar { margin-bottom: -3px }`)
 	// over the bar's bottom padding, so its tabs meet the content. Here that padding is gone, and
-	// the tabs reached 3px into the terminal (user report 2026-11-17). Nothing to pull over.
-	tabbar {
+	// the tabs reached 3px into the terminal (user report 2026-11-17). Nothing to pull over; also
+	// for the generic `tabbar:last-child` pull above (it outranked a plain tabbar here, 2026-11-19).
+	tabbar, tabbar:last-child {
 		margin-top: 0;
 		margin-bottom: 0;
 	}
