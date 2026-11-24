@@ -116,6 +116,8 @@ $orchis-mac-button-margin: ($orchis-mac-button-gap - 6px) / 2;
 // $titlebutton-box-height (the GTK4 window button box: the generic gap rules use it when the visible
 // circle is a child of it) and $chromium-gtk3-button-margin are set for the mac buttons only: declaring
 // them for the flat glyphs too changes the generic fallbacks (Chromium GTK3 pitch 42 -> 46, Avalonia top)
+// null is unset to the generic fixes; set for the mac buttons below
+$chromium-gtk4-button-padding: null;
 @if $orchis-mac-buttons {
 	$titlebutton-box-height: $medium-size !global;
 	$windowcontrols-inner-margin: $orchis-mac-button-margin !global;
@@ -131,6 +133,10 @@ $orchis-mac-button-margin: ($orchis-mac-button-gap - 6px) / 2;
 	$_mac-shrink: (16px - $orchis-mac-button-size) / 2;
 	$chromium-gtk4-side: 12px !global;
 	$chromium-gtk4-button-margin: $orchis-mac-button-margin - $_mac-shrink !global;
+	// no padding: the button box is transparent (the circle is its image), and the theme's 11px
+	// above and below made it 36px, taller than the top area of a Chrome window without a tab strip
+	// (an undocked DevTools, --app): Chromium scaled all three down until they touched (2026-11-24)
+	$chromium-gtk4-button-padding: 0 !global;
 	$chromium-gtk3-button-margin: $orchis-mac-button-margin !global;
 	$chromium-gtk3-side: 12px + $_mac-shrink !global;
 	$electron-gtk3-side: 14px + $_mac-shrink !global;
