@@ -24,6 +24,8 @@ $button_fix_multiplier: 0.55 0.4;
 
 // Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
 $headerbar-tab-margin: 3px;
+// ...and its rounded track (tabbar .box: 3px margin, 17px radius) stays behind the tabs there
+$headerbar-tab-track: true;
 
 // Nautilus sidebar rows: the row radius ($corner-radius, 14px with --round 14px) on both ends plus
 // a 2 * $space-size straight side (Jasper: 12px radius, 36px rows): 40px (32px read as pills)

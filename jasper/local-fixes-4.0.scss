@@ -273,8 +273,7 @@ toolbarview > .bottom-bar .toolbar {
 }
 
 // Inline tab bars in headerbars (Black Box): the same 1px below the tab box raised the tabs, 5px
-// under the top edge, 6px above the bottom one (2026-11-17). Its line lies on the headerbar's bottom
-// edge there and needs no room.
+// under the top edge, 6px above the bottom one (2026-11-17). The box draws no line there (fixes-4.0).
 headerbar tabbar.inline .box {
 	padding-bottom: 0;
 }

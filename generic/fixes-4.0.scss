@@ -192,6 +192,26 @@ headerbar tabbar.inline {
 	}
 }
 
+// The headerbar paints the row; libadwaita leaves an inline tab bar's box clear
+// (`tabbar.inline .box { background-color: transparent; box-shadow: none }`). The themes' own
+// `tabbar .box` (a top-bar strip) wins over it here, so the box filled the row between the window
+// buttons and the end buttons in its own colour and drew its bottom line there only: Black Box's red
+// root headerbar stayed red only at the two ends (Jasper, user report 2026-11-25), and a 1px light
+// line ran under the tabs alone (Jasper, Orchis, Orianin). Colloid and MacTahoe already clear it.
+// $headerbar-tab-track: true keeps the theme's fill, where it is a rounded track the tabs sit in
+// rather than a strip (Graphite, Magnetic); the line goes either way.
+$_headerbar-tab-track: if(variable-exists("headerbar-tab-track"), $headerbar-tab-track, false);
+
+headerbar tabbar.inline .box {
+	&, &:backdrop {
+		@if not $_headerbar-tab-track {
+			background-color: transparent;
+			background-image: none;
+		}
+		box-shadow: none;
+	}
+}
+
 // Folder tabs (Orchis, Orianin, Fluent: rounded top, open bottom) stand on the content, as they do
 // in Ptyxis; centred in the row they floated 6px above the headerbar edge (Black Box, user report
 // 2026-11-17). $headerbar-folder-tab-drop = the headerbar box's bottom padding: the tab bar reaches

@@ -11,6 +11,8 @@ $button_fix_multiplier: 0.5 0.5;
 
 // Inline tab bar in headerbars (e.g. Black Box): (headerbar row height - button height) / 2
 $headerbar-tab-margin: 3px;
+// ...and its rounded track (tabbar .box: 3px margin, 9px radius) stays behind the tabs there
+$headerbar-tab-track: true;
 // Vertical margin the theme puts on headerbar buttons (collapsed toolbars, e.g. Ptyxis with tabs)
 $headerbar-button-margin: 6px;
 
